@@ -1,0 +1,17 @@
+Item ID: 4112 Item Name: Potion Item Price: 130
+Item ID: 4116 Item Name: Hi-Potion Item Price: 250
+Item ID: 4120 Item Name: X-Potion Item Price: 362
+Item ID: 4124 Item Name: Max-Potion Item Price: 5162
+Item ID: 4128 Item Name: Ether Item Price: 604
+Item ID: 4132 Item Name: Hi-Ether Item Price: 1000
+Item ID: 4136 Item Name: Super Ether Item Price: 1325
+Item ID: 4140 Item Name: Pro-Ether Item Price: 1450
+Item ID: 4144 Item Name: Hi-Elixir Item Price: 9500
+Item ID: 4145 Item Name: Elixir Item Price: 7000
+Item ID: 4148 Item Name: Antidote Item Price: 79
+Item ID: 4149 Item Name: Panacea Item Price: 3900
+Item ID: 4150 Item Name: Eye Drops Item Price: 519
+Item ID: 4151 Item Name: Echo Drops Item Price: 200
+Item ID: 4153 Item Name: Antacid Item Price: 355
+Item ID: 4154 Item Name: Holy Water Item Price: 145
+Item ID: 4155 Item Name: Remedy Item Price: 480
