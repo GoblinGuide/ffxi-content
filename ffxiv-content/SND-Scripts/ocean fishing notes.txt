@@ -1,0 +1,606 @@
+big ol' optimal fishing list:
+GENERAL: hook everything outside spectral, don't fuck around with intuitions except where noted
+ALL ZONES, VERY START OF Z1: patience 2 to build AA stacks (probably just once? haven't considered whether a second use is optimal) then hi-cordial and let's go
+
+
+1) jellyfish route (galadion day, southern merlthor sunset, rhotano night)
+first mission: 5 sharks
+1-1) galadion day
+before spectral:
+	mission 3 !!!, ragworm [more Tarnished Sharks from Ragworm without much impact on spectral bite chance]
+	weather = showers, plump worm [Tarnished Shark cannot bite.]
+	else krill
+	
+during spectral:
+	ragworm
+	DH-IC-PC-TH Nimble Dancer (! 12+) if at least 3 AA stacks to have the GP for it [otherwise just blind TH]
+	if no Nimble Dancers after 1m has elapsed (aka halfway through aka you have GP), also DH Casket Oyster (! 7-11) and Merman's Mane (!! 2-3)
+	[perhaps I want to care about sharks, in which case also DH Ghost Shark (!! 3-4) we will return to check this later]
+	late in current: TH over DH if have GP, or IC a Nimble Dancer if one somehow ends late
+	
+after spectral: mission bait
+	!!! -> plump [sharks can bite regardless of earlier weather, it's clear now]
+	!! -> krill
+	! -> krill
+
+1-2) southern merlthor sunset
+before spectral:
+	mission 3 !!!, plump worm
+	mission 3 !!, krill
+	mission 3 !, ragworm
+	
+during spectral:
+	ragworm
+	mooch if able (Hi-Aetherlouse)
+		TH !!! Roguesaurus
+	TH Sea Nettle (! 6.1+)
+	late in current: also TH 2-3 !! from Mooch (if mission 3 !!!, save for DHing outside spectral)
+	
+after spectral:
+	mission 3 !!!, plump worm [consider DHing Momora Mora if we're in panic mode for mission]
+	mission 3 !!, krill
+	mission 3 !, ragworm
+
+1-3) rhotano night
+before spectral:
+	!!! for spectral and sharks both
+	
+during spectral:
+	krill
+	DH Floating Saucer (! 7+) -> IC PC TH
+	late in current: also DH Silencers (! 3+)
+
+after spectral:
+	sharks -> plump (DH ok)
+	mission 3 !!!, plump (same)
+	mission 3 !!, plump
+	mission 3 !, rag
+
+2) crabs/toad (cieldalaes sunset, northern merlthor night, bloodbrine day)
+first mission: 13 crabs
+2-1) cieldales sunset
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	TH Titanshell Crab (! 2-3) and Flaming Eel (!! 6+)
+	late in current: mission 3 !!! -> also DH Jetborne Manta (!!! 2-3) [or just burn gp in general]
+
+after spectral:
+	mission 3 !!!, plump
+	mission 3 !!, krill and abort cast at 12s
+	mission 3 !, ragworm
+
+2-2) northern merlthor night
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	DH Mopbeard (!! 5+) -> IC PC TH
+	late in current: also DH Gugrusaurus (!!!)
+	below 400 gp optimization: can switch to ragworm and try to raw catch bartholomew
+
+after spectral:
+	need crabs -> krill
+	!! -> krill
+	!!! -> krill for crabs, can't catch anything but the intuition fish here
+	! -> ragworm
+	
+2-3) bloodbrine day
+before spectral:
+	krill
+	if badly need crabs, use rag instead and DH 16-26 !
+
+during spectral:
+	ragworm
+	DH Exterminator (! 5+) (also a crab!) -> IC PC TH
+	late in current: also DH Oracular Crab (! 2-3)
+	[if mission !! and low on !! you can DH Beatific Vision 2-3 and then also switch to Pill Bug to try for Toad !!! 9+ but I do not want to bother with it]
+
+after spectral:
+	crabs -> ragworm, DH ! 16-26
+	!!! -> ragworm
+	!! -> plump
+	! -> ragworm
+
+3) fugu/mantas (cieldales sunset, rhotano night, rothlyt day)
+first mission: 13 fugu
+3-1) cieldales sunset
+before spectral:
+	ragworm
+	
+during spectral:
+	krill
+	TH Titanshell Crab (! 2-3) and Flaming Eel (!! 6+)
+	late in current: mission 3 !!! -> also DH Jetborne Manta (!!! 2-3)
+		else mission ! or fugu desire -> DH Metallic Boxfish (! 2-3)
+
+after spectral:
+	!!! -> plump
+	!! -> krill
+	! -> ragworm, Metallic Boxfish stops biting at 11 if focusing fugus turns out better
+
+3-2) rhotano night
+before spectral:
+	plump
+
+during spectral:
+	krill
+	DH Floating Saucer (! 7+) -> IC PC TH
+	late in current: also DH Silencer (! 3-4) (fugu)
+
+after spectral:
+	!!! -> plump
+	!! -> plump
+	! -> rag (12-16 ! is fugu)
+
+3-3) rothlyt day
+before spectral:
+	plump
+
+during spectral:
+	krill
+	DH Pearl Bombfish (!! 5-6) -> IC PD TH
+	DH Knifejaw (!! 7+) [higher base point value but yields 2 on DH]
+	late in current: also DH Garum Jig (2-3 !!) (fugu)
+	no mooch the rothlyt mussels
+
+after spectral:
+	fugu -> ragworm (DH ! 14-23)
+	!!! -> krill
+	!! -> plump
+	! -> ragworm (DH ! 14-23) (if short on bites, also DH ! 7-11)
+
+4) sothis/elasmosaurus (southern merlthor sunset, galadion night, northern merlthor day)
+first mission: 7 jellyfish or crabs
+4-1) southern merlthor sunset
+before spectral:
+	krill
+
+during spectral:
+	ragworm
+	mooch if able (Hi-Aetherlouse)
+		TH !!! Roguesaurus
+	TH Sea Nettle (! 6.1+)
+	late in current: also TH 2-3 !! from Mooch (if mission 3 !!!, save for DHing outside spectral)
+
+after spectral:
+	jellyfish -> ragworm, DH La Noscean Jelly (! 2-5)
+	!!! -> plump
+	!! -> krill and yes mooch
+	! -> ragworm (can also DH 10-16 ! for 4)
+
+4-2) galadion night
+before spectral:
+	showers -> plump worm
+	else krill
+
+during spectral:
+	krill
+	TH Merman's Mane (!! 2-3) and also Ghost Shark (!! 3-4) but they're not as good (94 vs 78 base, still better than everything else)
+	if intuition, swap to glowworm, cast for sothis twice (no th)
+
+after spectral:
+	!!! -> plump
+	!! -> krill
+	! -> ragworm
+	if mission looking good: krill and keep it under intuition
+
+4-3) northern merlthor day
+before spectral:
+	ragworm
+
+during spectral:
+	plump
+	TH Gugrusaurus (!!! 5-8 seconds)
+	intuition -> Heavy Steel Jig (Elasmosaurus !!! 9+)
+	first bite don't TH
+	second bite if there's [3s or less on intuition, check this timeframe] TH !!! 5-8 because it's Gugrusaurus and will land in inventory late enough to refresh the intuition and repeat
+	late in current: burn all GP on literally any fish
+
+after spectral:
+	crab -> krill
+	!!! -> ragworm and yes mooch because only !!! is int fish
+	!! -> plump
+	! -> ragworm
+
+5) sharks/coral manta (galadion sunset, southern merlthor night, rhotano day)
+first mission: 5 sharks
+5-1) galadion sunset
+before spectral:
+	showers -> plump
+	else krill
+
+during spectral:
+	plump worm
+	DH Funnel Shark (!!!) -> IC PC TH
+	late in current: DH Merman's Mane (2-3 !!), moving to TH as it runs out
+
+after spectral:
+	shark -> plump (is this even worth it? spectral should cover it if you get a single desired bite... look at rest of route later)
+	!!! -> plump 
+	!! -> plump
+	! -> ragworm (can use krill to DH Rosy Bream 12-13 but fewer overall bites)
+	hold AA stacks here for next stop
+
+5-2) southern merlthor night
+before spectral:
+	krill
+	(explicitly hold AA stacks here)
+
+during spectral:
+	makeshift bait
+	patience ONE if no msb after mooch 2 but should be fine bceause this is second stop
+	ragworm
+	mooch every time, DH on !! 2-3 and 3.5-4
+	intuition -> shrimp cage feeder and raw cast twice to attempt to catch manta
+
+after spectral:
+	!!! -> plump
+	!! -> krill and mooch
+	! -> ragworm
+
+5-3) rhotano day
+before spectral:
+	plump (blind DH < 20 for 4 sharks if needed)
+
+during spectral:
+	plump
+	Executioner (!!!) DH -> IC PC TH
+	late in current: DH silencer (3-4 !)
+
+after spectral:
+	sharks -> plump (can DH for 4)
+	!!! ->  plump (can DH for 4)
+	!! -> plump
+	! -> ragworm
+
+6) hafgufa/elasmosaurus (cieldales night, northern merlthor day, bloodbrine sunset)
+first mission: 13 crabs
+6-1) cieldales night
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	Titanshell Crab (2-3 !!) TH or DH (don't bother with IC)
+	intuition -> Squid Strip for two casts, but not trying for it
+
+after spectral:
+	!!! -> plump
+	!! -> krill (possibly recast after 12s, since crab goes away then)
+	! -> ragworm
+
+6-2) northern merlthor day
+before spectral:
+	ragworm
+
+during spectral:
+	plump
+	TH Gugrusaurus (!!! 5-8 seconds)
+	intuition -> Heavy Steel Jig (Elasmosaurus !!! 9+)
+	first bite don't TH
+	second bite if there's [3s or less on intuition, check this timeframe] TH !!! 5-8 because it's Gugrusaurus and will land in inventory late enough to refresh the intuition and repeat
+	late in current: burn all GP on literally any fish
+
+after spectral:
+	crab -> krill
+	!!! -> ragworm, yes mooch because only !!! is int fish
+	!! -> plump
+	! -> ragworm
+
+6-3) bloodbrine sunset
+before spectral:
+	krill
+
+during spectral:
+	plump worm
+	DH Quartz Hammerhead (!!! 7+ sec) -> IC PC TH
+	late in current: DH Beatific Vision (2-3 !!)
+
+after spectral:
+	crab -> ragworm (16-26 ! DH for 4)
+	!!! -> ragworm
+	!! -> plump
+	! -> ragworm
+
+7) hafgufa/placodus (cieldales night, rhotano day, rothlyt sunset)
+first mission: 13 fugu
+7-1) cieldales night
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	Titanshell Crab (2-3 !!) TH or DH (don't bother with IC)
+	intuition -> Squid Strip for two casts, but not trying for it
+	late in current: DH 2-3 ! for 4 fugu, less points
+
+after spectral:
+	fugu -> ragworm
+	!!! -> plump
+	!! -> krill (possibly recast after 12s, since crab goes away then)
+	! -> ragworm
+
+7-2) rhotano day
+before spectral:
+	plump
+
+during spectral:
+	plump
+	Executioner (!!!) DH -> IC PC TH
+	late in current: DH silencer (3-4 !)
+
+after spectral:
+	fugu -> ragworm
+	!!! ->  plump (can DH for 4)
+	!! -> plump
+	! -> ragworm
+
+7-3) rothlyt sunset
+before spectral:
+	plump
+
+during spectral:
+	krill
+	DH Knifejaw (!! 7+)
+	late in current: also mooch the rothlyt mussels, DH ! for Trollfish
+
+after spectral:
+	fugu -> ragworm
+	!!! -> krill
+	!! -> plump
+	! -> ragworm
+
+8) seadragons/coral manta (southern merlthor night, galadion day, northern merlthor sunset)
+first mission: 7 jellyfish or crabs
+8-1) southern merlthor night
+before spectral:
+	krill
+	DH ! 2-5 (jellyfish) even before spectral
+
+during spectral:
+	makeshift bait if have AA stacks
+	patience ONE if no msb after mooch 2
+	ragworm
+	mooch every time, DH on !! 2-3 and 3.5-4
+	intuition -> shrimp cage feeder and cast twice
+
+after spectral:
+	!!! -> plump
+	!! -> krill
+	! -> rag
+
+8-2) galadion day
+before spectral:
+	!!! -> plump [more Tarnished Sharks from Ragworm without much impact on spectral chance]
+	weather = showers -> plump [Tarnished Shark can't bite, higher raw rate on spectral]
+	else krill
+	
+during spectral:
+	ragworm
+	DH-IC-PC-TH Nimble Dancer (! 12+) if at least 3 AA stacks to have the GP for it [otherwise uh. DH IC PC DH?]
+	if no Nimble Dancers after 1m has elapsed (aka halfway through aka you have GP), also DH Casket Oyster (! 7-11) and Merman's Mane (!! 2-3)
+	[perhaps I want to care about sharks, in which case also DH Ghost Shark (!! 3-4) we will return to check this later]
+	late in current: TH over DH if have GP, or IC a Nimble Dancer if one somehow ends late
+	
+after spectral: mission bait
+	!!! -> plump
+	!! -> plump
+	! -> krill
+
+8-3) northern merlthor sunset
+before spectral:
+	ragworm
+
+during spectral:
+	ragworm
+	DH Coral Seadragon (! 7+) -> IC PC TH
+	late in current: also DH Gugrusaurus (!!!)
+	below 400 gp -> Krill to catch The Fallen One, because base points 374 vs 189 (but DH for 2 vs 4, so GP use would be about the same)
+
+after spectral:
+	crab -> krill
+	!!! -> ragworm, mooch
+	!! -> plump
+	! -> rag
+
+9) sothis/stonescale (galadion night, southern merlthor day, rhotano sunset)
+first mission: 5 sharks
+9-1) galadion night
+before spectral:
+	showers -> plump worm
+	!!! -> plump worm
+	else krill
+
+during spectral:
+	krill
+	TH Merman's Mane (!! 2-3) and also Ghost Shark (!! 3-4) are fine but they're not as good (ghost shark is a shark, though, so TH the first one)
+	if intuition, swap to glowworm, cast for sothis, no TH
+
+after spectral:
+	shark -> plump
+	!!! -> plump
+	!! -> krill
+	! -> ragworm (krill with int I guess)
+
+9-2) southern merlthor day
+before spectral:
+	!!! -> plump worm (can DH !!! early if desired)
+	else krill
+	
+during spectral:
+	krill
+	TH Mythril Sovereign (!! 5+)
+	mooch hi-aetherlouse -> TH great grandmarlin (!! 2-3)
+
+after spectral:
+	!!! -> plump 
+	!! -> krill and mooch
+	! -> ragworm
+
+9-3) rhotano sunset
+before spectral:
+	plump
+	(if sharks/!!!, can blind DH before 20)
+
+during spectral:
+	ragworm
+	TH Silencer (! 3-4)
+	intuition -> Rat Tail and cast twice
+	below 400 GP, Rat Tail to aim for Deep-sea Eels for intuition
+	late in current: DH literally anything
+
+after spectral:
+	sharks -> plump
+	!!! -> plump, DH gives 4
+	!! ->  plump
+	! -> ragworm
+
+10) mantas (cieldales day, northern merlthor sunset, bloodbrine night)
+first mission: 13 crabs
+10-1) cieldales day
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	DH Titanshell Crab (!! 2-3) and also DH Devil's Sting (!! 6+) is more points but not common
+	late in current: DH metallic boxfish (! 2-3) or jetborne manta (!!! 2-3) if needed for missions (crab's common enough to not do this unless current is literally ending or missions)
+
+after spectral:
+	!!! -> plump
+	crab and !! -> krill and recast at 12
+	! -> ragworm
+
+10-2) northern merlthor sunset
+before spectral:
+	ragworm
+
+during spectral:
+	ragworm
+	DH Coral Seadragon (! 7+) -> IC PC TH
+	late in current: also DH Gugrusaurus (!!!) [also for mission]
+	below 400 gp -> Krill to catch The Fallen One, because base points 374 vs 189 (but DH for 2 vs 4, so GP use would be about the same)
+
+after spectral:
+	crab -> krill
+	!!! -> ragworm, mooch on
+	!! -> plump
+	! -> rag
+
+10-3) bloodbrine night
+before spectral:
+	krill
+	if need crabs, DH long !s (like real long. we're talking 20+)
+
+during spectral:
+	krill (I am never going to pick the risky strat)
+	DH Skaldminni (!! 5-7) -> IC PC TH
+	below 400 GP, plump for Quartz Hammerhead (!!! 7+)
+
+after spectral:
+	crab -> ragworm
+	!!! -> ragworm
+	!! -> plump
+	! -> ragworm
+
+11) fugu/stonescale (cieldales day, rhotano sunset, rothlyt night)
+first mission: 13 fugu
+11-1) cieldales day
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	DH Titanshell Crab (!! 2-3) and also DH Devil's Sting (!! 6+) is more points but not common
+	late in current: DH metallic boxfish (! 2-3) (fugu) (but crab's common enough to not do this unless current is literally ending or you're hurting for fugu... yeah actually that's kind of prudent)
+
+after spectral:
+	!!! -> plump
+	!! -> krill
+	! -> ragworm (can recast at 11 for fugu only but next route has a fugu target spectral fish so don't bother)
+
+11-2) rhotano sunset
+before spectral:
+	plump
+	(if !!!, can blind DH before 20)
+
+during spectral:
+	ragworm
+	TH Silencer (! 3-4) (fugu)
+	intuition -> Rat Tail and cast twice
+	below 400 GP, Rat Tail to aim for Deep-sea Eels for intuition
+	late in current: DH literally anything
+
+after spectral:
+	fugu -> ragworm
+	!!! -> plump, DH gives 4
+	!! ->  plump
+	! -> ragworm
+
+11-3) rothlyt night
+before spectral:
+	plump
+
+during spectral:
+	krill
+	DH Pearl Bombfish (!! 5-6) -> IC PC TH (fugu)
+	also DH Knifejaw (!! 6+)
+	late in current: DH garum jug (! 2-3) (fugu)
+
+after spectral:
+	!!! -> krill
+	!! -> plump worm
+	! -> ragworm
+
+12) octopus (southern merlthor day, galadion sunset, northern merlthor night)
+first mission: 7 jellyfish or crab
+12-1) southern merlthor day
+before spectral:
+	krill
+	DH La Noscean Jelly (! 2-5) because there's nothing better later
+	
+during spectral:
+	krill
+	TH Mythril Sovereign (!! 5+)
+	mooch hi-aetherlouse -> TH great grandmarlin (!! 2-3)
+
+after spectral:
+	jellyfish -> any bait, recast at 5 for more La Noscean Jelly
+	!!! -> plump 
+	!! -> krill and mooch and pray
+	! ->ragworm
+
+12-2) galadion sunset
+before spectral:
+	showers -> plump
+	else krill
+
+during spectral:
+	plump worm
+	DH Funnel Shark (!!!) -> IC PC TH
+	late in current: DH Merman's Mane (2-3 !!), moving to TH as it runs out
+
+after spectral:
+	!!! -> plump 
+	!! -> plump or krill
+	! -> ragworm (can use krill to DH Rosy Bream 12-13 but fewer overall bites)
+
+12-3) northern merlthor night
+before spectral:
+	ragworm
+
+during spectral:
+	krill
+	DH Mopbeard (!! 5+) -> IC PC TH
+	late in current: also DH Gugrusaurus (!!!)
+	below 400 gp optimization: switch to Rag, try to catch Bartholomew
+	if somehow not crab yet, aim for Bartholomew fulltime instead (! 5-6, DH at 6)
+	
+after spectral:
+	!!! or need crabs -> krill
+	!! -> krill
+	! -> ragworm

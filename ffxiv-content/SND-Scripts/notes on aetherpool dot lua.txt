@@ -1,0 +1,66 @@
+aetherpool grip farming notes:
+Treasure Coffer is named Treasure Coffer, can we tell them apart by model? if not it's fine because pomander
+have to handle "you just got a duplicate pomander" because otherwise the coffer does not go away (store coffer coordinates and add to a list of coffers to ignore after opening them, it's fine)
+rotationsolver can handle most everything
+	possibly not the floor 10 boss depending on aetherpool level but if you use mch, keep it at 25 yalms, which you can do with snd telling visland/vnavmesh to move you away from it
+	that way you can cash in your aetherpools
+
+functions I want:
+path to next room, preferring a clockwise rotation so that we use the left hand rule
+clear room (should... honestly, not be relevant. if we clear every room we can just run a full loop again, or alternate between "room we came from" and "exit room" until enough mobs have spawned)
+open coffer (silver)
+	open coffer (all) (this is much more likely than the above)
+use pomanders (on floor 10 before boss, or instantly either is fine whatever)
+get pylon position
+
+functional loop:
+enter potd
+walk through every room in floor 1 looking for any coffer and opening it
+	assumption: walking process will aggro mobs. kill them via rotation solver and don't move while in combat
+go to the pylon, which I assume we can get somehow
+repeat for floors 2-9
+get to boss, use all pomanders as needed, attack it, use visland to stay 25 yalms from it in a mostly-random direction (get coordinates of center of room and keep a ninety degree angle relative to it at all times?!)
+after clear, check aetherpool levels
+(can do bonus bronze sack pickups once I get everything else working, that's just using an intuition if the toastnodetext has intuition in it and then using pomander's functionality as well)
+
+relevant potd text is
+GetToastNodeText(2, 3) == "The Cairn of Passage is activated!"
+
+opening a coffer and getting a pomander will take that text away
+
+yield("/echo " .. GetObjectRawXPos("Cairn of Passage"))
+yield("/echo " .. GetObjectRawYPos("Cairn of Passage"))
+yield("/echo " .. GetObjectRawZPos("Cairn of Passage"))
+works when it's in range, except it might not be named that in potd obviously
+
+
+size of a potd room:
+one corner 300, 0, -258.5, opposite is 300, -8, -225
+316, 0, -241 to 283, 0, -242
+
+assume we spawn in the center? it looks like we do
+
+middle of one room
+-366 0 300
+
+middle of next room over
+-419 0 300
+
+prediction: somewhere around -316
+actually more like 300 aw fuck geometry
+
+boss positioning notes:
+player spawn on floor 10:
+-300 0 -200 (approx)
+
+middle on floor 10:
+-300 0 -220
+
+so the four corners will be
+-300 -200 (south)
+-300 -240 (north)
+-320 -220 (this is west I think)
+-280 -220 (which makes this east but I should test)
+
+
+https://github.com/Jukkales/NecroLens/blob/1d3a8a091686ccef65ffb1a86371b77d3b10d17c/NecroLens/Model/ESPObject.cs#L268
