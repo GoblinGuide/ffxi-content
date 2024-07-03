@@ -1,6 +1,6 @@
 _addon.name = 'pirates'
 _addon.author = 'Suteru and me' --I took Suteru's work in zone ID and changed it from a gui to something a little more... manual
-_addon.version = '0.2' --v0.2: turned this from a simple checker into an automated ferry reboarder, because I absolutely. hate. paying. attention.
+_addon.version = '0.3' --v0.3: opensesame breaks fishing. oops. fixed.
 _addon.language = 'English' --this exists?!
 _addon.commands = {'pirates', 'pirate', 'boat'}; --rather than automatically on zone change, I made this manual.
 
@@ -9,17 +9,12 @@ require('logger') --used to generate notices in the in-game chat. I prefer this 
 --DEPENDENCIES:
 --FISHER, available at https://gitlab.com/svanheulen/fisher
 --OPENSESAME, available at https://github.com/z16/Addons/blob/master/OpenSesame/ --I am never going to write a door opening packet function in my life, sorry)
---make sure you start this bot from inside the ferry lobby having paid for a ticket (no idea if you can tako your way in without paying, don't risk it)
+--make sure you start this bot from inside the ferry lobby in either Selbina or Mhaura having paid for a ticket (no idea if you can tako your way in without paying, don't risk it)
 
 --LIMITATIONS:
---this thing is hardcoded to fish on the selbina/mhaura ferry when there are, or are not, pirates. or possibly both if I fix that.
---currently only fishes in one of those two cases, since I assume you are only after a fish that only shows up in one of those two cases. if you are after ryugu titans for some godforsaken reason, I cannot help you, pal.
---...okay, probably gonna fix that.
---doesn't buy bait for you or repair a broken rod or really do any error checking.
+--this thing is hardcoded to fish on the selbina/mhaura ferry.
+--doesn't buy bait for you or repair a broken rod (get an Ebisu) or fight mobs for Ice Spikes (lmao) or do any real error checking.
 
---zone 248 selbina
---zone 249 mhaura
---windower.ffxi.get_info().time returns vana'diel time (there's also day and moon and weather but we care about 0 of those)
 
 windower.register_event('addon command', function (...)
 	args = T{...} --parse arguments input
@@ -107,6 +102,10 @@ function main()
         run_to_pos(18, -70) --then run onto the ferry
         run_to_pos(10, -70) --and into the room because that's how we used to do it in 2005, though I think the hallway is just fine
         
+        --reload opensesame before we get on the ferry (because it's unloaded because it breaks fishing.)
+        windower.send_command('lua r opensesame')
+        coroutine.sleep(1)
+
         wait_for_zone_change() --wait for the ferry to depart. no need to track in-game time for this.
 
     elseif zone == 249 then  --Mhaura
@@ -130,17 +129,24 @@ function main()
         run_to_pos(8.5, -9) --run onto the ferry
         run_to_pos(0, -8.5) --and into the room
 
+        --reload opensesame before we get on the ferry (because it's unloaded because it breaks fishing.)
+        windower.send_command('lua r opensesame')
+        coroutine.sleep(1)
+
         wait_for_zone_change() --wait for the ferry to depart. no need to track in-game time for this.
 
     elseif S{220,221}:contains(zone) then  --non-pirate boats. also, I am not a big fan of this notation. why is it not "zone in {220, 221}" or something
         
-        --TODO: THIS WORKS ON 221, TEST ON 220.
+        --TODO: TEST ON 220. (this works on 221)
 
         --wait for the zone to load
         wait_for_mob_by_prefix('Door')
 
         --only fish on no-pirate boats if we told ourselves that we wanted to fish on no-pirate boats
         if S{'no','both'}:contains(string.lower(PiratesOrNot)) then
+
+            notice('This is a non-pirate boat, and we want to fish on non-pirate boats. Beginning fishing process.')
+
             run_to_pos(2, 7) --navigate the room with the pillars
             run_to_pos(2, 0) 
             run_to_pos(6, -2.9) --arrive in front of the door
@@ -163,7 +169,11 @@ function main()
             
             run_to_pos(0, 12) --now we're on the deck
             run_to_pos(-9, 12) --and now we can theoretically fish, i.e. we're pointed outwards
-            
+
+            --oh my god. opensesame breaks fisher because the door packet is an action.
+            windower.send_command('lua u opensesame')
+            coroutine.sleep(1)
+
             windower.send_command('fisher start') --deliberately with no number on it. you can fix that if you want.
 
         else
@@ -174,13 +184,16 @@ function main()
 
     elseif S{227,228}:contains(zone) then  --pirate boats.
 
-        --TODO: TESTED 227, NOT 228
+        --TODO: TEST ON 228 (this works on 227)
         --TODO: WHY DID THIS CRASH
 
         wait_for_mob_by_prefix('Door') --wait for zone load
 
-        --this is what we're all here for, really. but still, if you want to fish on non-pirate boats, don't fish here.
+        --only fish on pirate boats if we want to fish on pirate boats
         if S{'yes','both','pirates'}:contains(string.lower(PiratesOrNot)) then
+
+            notice('This is a pirate boat, and we want to fish on pirate boats. Beginning fishing process.')
+
             run_to_pos(2, 7) --navigate the room with the pillars
             run_to_pos(2, 0) 
             run_to_pos(6, -2.9) --arrive in front of the door
@@ -204,6 +217,10 @@ function main()
             run_to_pos(0, 12) --now we're on the deck
             run_to_pos(-9, 12) --and now we can theoretically fish, i.e. we're pointed outwards
             
+            --well, now that I know I have to unload this here it's no big deal, lmao
+            windower.send_command('lua u opensesame')
+            coroutine.sleep(1)
+
             windower.send_command('fisher start') --deliberately with no number on it. you can fix that if you want.
 
         else
@@ -227,17 +244,17 @@ function wait_for_the_ferry()
 
     CurrentTime = windower.ffxi.get_info().time
 
-    CurrentHour = math.floor(CurrentTime / 60)
-    CurrentMinutes = CurrentTime % 60
+    CurrentHour = math.floor(CurrentTime / 60) --for human readability
+    CurrentMinutes = (CurrentTime % 60) --same
 
     --there are three ferries. they arrive at 06:30, 14:30, and 22:30 and depart an hour and a half after that at 8:00, 16:00, and 0:00
     if
-        ((CurrentHour == 14 and CurrentMinutes > 30)
-        or (CurrentHour == 15)
-        or (CurrentHour == 22 and CurrentMinutes > 30)
-        or (CurrentHour == 23)
-        or (CurrentHour == 6 and CurrentMinutes > 30)
-        or (CurrentHour == 7))
+        ((CurrentHour == 14 and CurrentMinutes > 35) --ferry "arrives" at :30 but you run forward like an idiot if you go right away
+        or (CurrentHour == 15) --this one can fail by being loaded at like 15:59 and running into the wall like a moron until the next ferry, so don't do that
+        or (CurrentHour == 22 and CurrentMinutes > 35) --see note two lines above
+        or (CurrentHour == 23) --seriously, I don't know what'll happen if you do, you'll run onto the next ferry and then... yeah you should be ok
+        or (CurrentHour == 6 and CurrentMinutes > 35) --see note four lines above
+        or (CurrentHour == 7)) --but, having not tested it, I can't recommend it
     then
         return true
     
@@ -247,7 +264,6 @@ function wait_for_the_ferry()
     end
 
 end
-
 
 --below this point is things that really belong in a single file in windower\addons\libs that I am often copypasting because there's no sense reinventing the wheel
 function run_to_pos(x, y)
@@ -280,7 +296,7 @@ function run_to_pos(x, y)
 	return true
 end
 
---DT again. not gonna reinvent the wheel, I know how to get a Euclidean distance
+--not gonna reinvent the wheel, I know how to get a Euclidean distance
 function get_distance(x, y)
 	
 	--if you call this any time that you don't absolutely KNOW that the zone has loaded, me can be nil, and this will fail. that's fine. we aren't moving in an unloaded zone.
@@ -334,7 +350,7 @@ function get_nearest_mob_by_prefix(prefix)
 		end
 	end
 
-	return ret and ret.id --someday I'll know how this works with the "and". doesn't a function only return one thing?
+	return ret and ret.id --someday I'll know how this works with the "and". doesn't a function only return one thing? or does it mean I can reference .id of this function or what?
 end
 
 --this one literally just waits. like that's its entire functionality.
@@ -342,11 +358,11 @@ function wait_for_zone_change()
 	ZoneThatWeAreInRightNow = windower.ffxi.get_info().zone
 	
 	while ZoneThatWeAreInRightNow == windower.ffxi.get_info().zone do
-		coroutine.sleep(1) --sleep one second. no need to be faster.
+		coroutine.sleep(1) --sleep one second. no need to check more often than that, this is not time-sensitive content.
 	end
 end
 
-
+--testing function is down here, but everything else's done
 
 --at the bottom for easy editing
 function testing_function()

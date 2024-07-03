@@ -21,14 +21,14 @@ windower.add_to_chat(208, "BuzzOff has loaded. Chat filter is currently toggled 
 
 --Each of the five below lists take priority over all the lists below them.
 --1) Any username in this list is blocked in all chat modes. This is the king and overrides everything else.
-local blocked_users = T{''}
+local blocked_users = T{'Spicyryan','Spicedryan','Somewhatspicyryan'}
 
 --2) Any word in this list will always be shown as long as it's not coming from a name on list 1. This is for mercs, content, or items that you actively want to see every time.
-local always_visible_words = T{'segment','Crepuscular','Vagary','card','Dynamis'}
+local always_visible_words = T{'segment','Crepuscular','card','Dynamis','pool','Trove'}
 
---3) Any username in this list is blocked in all chat modes like the blocked users list, but only when BO is toggled on.
+--3) Any username in this list is only blocked when BO is toggled on. This takes precedence over the toggled words list.
 --People you don't always want to see but will want to see when filter is off go here. So mercs you want to use, but only sometimes, and so on.
-local toggled_users = T{'Casasi','Wakakillofu'}
+local toggled_users = T{'Wakakillofu'}
 
 --4) Any yell or shout containing these words is visible only when BO is toggled off. Takes priority over the blocked word list to make these shouts show up when BO is toggled off.
 --Things that you DO want to see when you turn the filter off go here - content you want to do for example ("Aeonic" both here AND in the blocked word list means you'll see it only when it's time to buy one and you toggle off.)
