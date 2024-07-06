@@ -1,5 +1,5 @@
 _addon.name = 'Sandworm'; --not renaming this even though I'm broadening its scope as I type this
-_addon.version = '0.6'; --20240621 ACTUALLY made the direct mob status check work. theoretically this is actually 1.0 because there aren't any more functional changes I want to implement.
+_addon.version = '0.7'; --20240621 ACTUALLY made the direct mob status check work. --20240705 see previous note? I was wrong. now I did. maybe. it does but we aren't done yet I suspect.
 _addon.author = 'DACK';
 _addon.commands = { 'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE
 
@@ -16,12 +16,12 @@ require('tables') --I'm gonna be honest with you. I don't know what this damn th
 --MYHOME (this is in the default Windower launcher, but if you're curious that means you can find its code at https://github.com/Windower/Lua/tree/dev/addons/MyHome)
 --DON'T START THIS IN, OR HAVE YOUR HOME POINT SET TO, ANYWHERE IN TAVNAZIAN SAFEHOLD. I'M VERY LAZY. SORRY, BUT ALSO NOT SORRY.
 
---set these variables to true for two levels of debug logging in the chat log. major is very spammy, minor is only "mostly" spammy.
+--set these variables to true for two levels of debug logging in the chat log. Verbose is used when you have NO idea what's broken to display everything. Debug is used when I think I know what's wrong. You can use Verbose.
 DebugVariable = true
-VerboseDebugVariable = true
+VerboseDebugVariable = false
 
 --set this variable to true to also log all output to the file location defined by the second variable here - that's currently "output.txt" in the same folder as this addon (but you can give it an entire path if you want, allegedly)
-WriteResultsToFile = true
+WriteResultsToFile = false
 FileOutputLocation = 'output.txt'
 
 --the loop frequency, in MINUTES. this is not seconds. that means this whole thing will loop every "sixty times this number" seconds (or when the previous loop ends - this is a floor, not a ceiling.)
@@ -184,13 +184,13 @@ windower.register_event("incoming text", function(original)
 		CurrentZone = windower.ffxi.get_info().zone --global variable storing zone ID
 		CurrentZoneName = res.zones[windower.ffxi.get_info().zone].english --grabs english name from zone ID
 		
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Current zone ID: ' .. CurrentZone .. ' (' .. CurrentZoneName .. ')')
 		end
 
 		--the format is 'Found entity with name: MOB NAME GOES HERE.' so we go from 'name: ' to '.' (unique period, formatting's weird.)
 		--we add two to the second parameter because that tells us not where ": " starts, but two places after that, as in the text after it
-		--we subtract one from the third parameter to get "mob name" rather than "mob name.". and the percent sign is an escape cahracter, we're looking for an actual period "." and not a wildcard
+		--we subtract one from the third parameter to get "mob name" rather than "mob name.". and the percent sign is an escape character, we're looking for an actual period "." and not a wildcard
 		TargetName = string.sub(original,string.find(original,': ')+2,string.find(original,'%.')-1)
 		TargetIndex = string.sub(original,string.find(original,'0x'),string.len(original)) --string.find returns start AND end coordinates, but if you call with just one variable you only get the start character.
 		notice(TargetName .. ' entity index: ' .. TargetIndex)
@@ -200,7 +200,7 @@ windower.register_event("incoming text", function(original)
 		CurrentZone = windower.ffxi.get_info().zone --global variable storing zone ID
 		CurrentZoneName = res.zones[windower.ffxi.get_info().zone].english --grabs english name from zone ID
 		
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Current zone ID: ' .. CurrentZone .. ' (' .. CurrentZoneName .. ')')
 		end
 
@@ -226,7 +226,7 @@ function main_function()
 	--start the loop, so get to a known SG location
 	startup_function()
 
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Startup function complete. Beginning mob search loop.')
 	end
 
@@ -236,14 +236,14 @@ function main_function()
 		--store start time for this loop, so we can wait until the waiting interval is over after it's done
 		LoopStartTime = os.clock()
 
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Starting search loop.')
 		end
 	
 		--scan all the zones
 		for LoopVariable = 1, NumberOfTargets, 1 do
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: New value of search loop variable is ' .. LoopVariable)
 			end
 	
@@ -260,14 +260,14 @@ function main_function()
 
 		end
 
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Single iteration of the search loop complete at ' .. os.date("%X",os.time()) .. '. Returning to Tavnazian Safehold.')
 		end
 
 		startup_function()
 
 		if DebugVariable then
-			notice('Waiting another ' .. math.ceiling((60*LoopFrequency) - (os.clock() - LoopStartTime)) .. ' seconds to begin the next loop.') --does this even work? pretty sure it should...
+			notice('Waiting another ' .. math.ceil((60*LoopFrequency) - (os.clock() - LoopStartTime)) .. ' seconds to begin the next loop.') --does this even work? pretty sure it should...
 		end
 
 		--now wait until [10 minutes] have elapsed and do it again
@@ -284,7 +284,7 @@ end
 --navigate to Tavnazian Safehold HP #1. hardcoded because I am a lazy man.
 function startup_function()
 
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Started startup function.')
 	end
 
@@ -298,13 +298,13 @@ function startup_function()
 		if get_distance(windower.ffxi.get_mob_by_id(nearest_home_point_id).x, windower.ffxi.get_mob_by_id(nearest_home_point_id).y) < 6 then
 	    
 			--then we do not have to warp
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Started within interact distance of a Home Point. No Warp needed.')
 			end
 
 		else 
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice("Debug: Started close enough to see a Home Point, but far enough away that we can't interact with it. Warping to be sure we're at a Home Point we CAN interact with.")
 			end
 		
@@ -316,7 +316,7 @@ function startup_function()
 	--also warp if we don't find a home point, obviously
 	else
 
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice("Debug: Didn't start near a Home Point. Warping to get to a guaranteed Home Point.")
 		end
 
@@ -330,13 +330,13 @@ function startup_function()
 	windower.send_command('sw hp Tavnazian Safehold 1') --this is more comprehensible than my usual 'sw hp taf sav'. you're welcome :P
 	wait_for_zone_change()
 
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Should be loading into Tavnazian Safehold. Waiting to find the Survival Guide.')
 	end
 
 	wait_for_mob_by_prefix('Survival Guide') --wait for SG to load so we know we're in Tav Saf
 
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Ended startup function. We should be in Tavnazian Safehold.')
 	end
 
@@ -348,7 +348,7 @@ end
 --variable passed in is a position on the targets list table that holds a zone ID
 function GetToZone(TargetsListID)
 	
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Called Get To Zone function with target list table element ID = ' .. TargetsListID)
 		notice('Debug: This means that we are traveling to ' .. res.zones[TargetsList[TargetsListID]].english .. '.')
 	end
@@ -370,7 +370,7 @@ function GetToZone(TargetsListID)
 		if WaitingFor == 'Survival Guide' and PreviousArrivalPoint == 'Survival Guide' then
 			WarpCommand = 'sw sg ' .. DestinationZoneName --Guide to Guide uses Guide
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Sending windower travel command: ' .. WarpCommand)
 			end
 	
@@ -381,7 +381,7 @@ function GetToZone(TargetsListID)
 		elseif WaitingFor == 'Home Point' and PreviousArrivalPoint == 'Home Point' then
 			WarpCommand = 'sw hp ' .. DestinationZoneName --Home Point to Home Point uses Home Point
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Sending windower travel command: ' .. WarpCommand)
 			end
 	
@@ -393,7 +393,7 @@ function GetToZone(TargetsListID)
 
 			WarpCommand = 'sw sg Tavnazian Safehold' --for SG to HP, sg to Tav and transfer lines
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Sending first windower travel command: ' .. WarpCommand)
 			end
 	
@@ -403,7 +403,7 @@ function GetToZone(TargetsListID)
 
 			WarpCommand = 'sw hp ' .. DestinationZoneName --now actually go where we are trying to go
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Sending second windower travel command: ' .. WarpCommand)
 			end
 	
@@ -415,7 +415,7 @@ function GetToZone(TargetsListID)
 
 			WarpCommand = 'sw hp Tavnazian Safehold 1' --for HP to SG, hp to Tav #1 and transfer lines (make sure it's 1 - 2 and 3 are on other floors altogether)
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Sending first windower travel command: ' .. WarpCommand)
 			end
 	
@@ -425,7 +425,7 @@ function GetToZone(TargetsListID)
 
 			WarpCommand = 'sw sg ' .. DestinationZoneName
 
-			if DebugVariable then
+			if VerboseDebugVariable then
 				notice('Debug: Sending second windower travel command: ' .. WarpCommand)
 			end
 	
@@ -444,7 +444,7 @@ function GetToZone(TargetsListID)
 	--otherwise, we're already here from the previous mob, so do nothing.
 	else
 	
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Already here from the previous mob. Not moving.')
 		end
 
@@ -460,7 +460,7 @@ function CheckZone(TargetsListID)
 	--there is a variable above named "target name", but that variable is not updated yet. this is because I am bad at coding and this whole thing is held together with spit and tape.
 	CurrentTargetName = TargetsList[TargetsListID+1]
 
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Called CheckZone for ' .. res.zones[TargetsList[TargetsListID]].english .. '.')
 		notice('Debug: Sending windower command: scanzone name ' .. CurrentTargetName)
 	end
@@ -473,7 +473,7 @@ function CheckZone(TargetsListID)
 	--if this sleep is too short, it'll break everything via an incomplete capture error (because the second scanzone message will come in and trigger the same event before the first instance of that event has finished)
     coroutine.sleep(5)
 
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Sending windower command: scanzone scan ' .. TargetIndex)
 	end
 
@@ -487,14 +487,14 @@ function CheckZone(TargetsListID)
 	--this should now be properly set from those scanzone calls above
 	NewPositionString = TargetPositionString
 	
-	if DebugVariable then
+	if VerboseDebugVariable then
 		notice('Debug: Current coordinates found were ' .. NewPositionString)
 	end
 
 end
 
 
---intended functionality: compare the previous position string to the new position string. if they are different, update the info in the array of positions. this should update the gui accordingly. maybe.
+--compare the previous mob info to the new mob info and keep the most relevant info we have
 function update_target_information()
 
 	if DebugVariable then
@@ -506,11 +506,6 @@ function update_target_information()
 	--"target name" (the name of the mob that we are looking at)
 	--"new position string" (coordinates that mob is currently located at, whether it's dead or alive)
 	--"update time" (the time we got those coordinates, which is around a few seconds ago, but we can just pretend it's "right now" since it will be consistently off the same way every time)
-
-	--we know for a fact that scanzone has gotten us the info packet for that mob, so it's loaded into the array of mobs
-	--therefore, we can just do this
-	TargetStatus = windower.ffxi.get_mob_by_name(TargetName).status
-	TargetHPP = windower.ffxi.get_mob_by_name(TargetName).hpp --using this to disambiguate between "alive and not in combat" and "has never spawned since maintenance". this is actually the only brilliant bit in this entire file.
 
 	--the first (pieces per result) * (current target - 1) entries in the results table are the previous mobs we already looked at
 	--intended output format: 'East Ronfaure [S]', 'Sandworm', time, 'Unchecked', '1, 1, 1', time, 'Unchecked' - i.e. the Nth mob's entries are name, zone, previous time and status and position, relevant time and status
@@ -528,33 +523,62 @@ function update_target_information()
 		notice('Debug: Relevant Status: ' .. ResultsList[(PiecesPerResult*(CurrentTarget-1)) + 7])
 	end
 
+	--we know for a fact that scanzone has gotten us the info packet for that mob, so it's loaded into the array of mobs
+	--therefore, we can just do this
+	TargetStatus = windower.ffxi.get_mob_by_name(TargetName).status
+	TargetHPP = windower.ffxi.get_mob_by_name(TargetName).hpp --using this to disambiguate between "alive and not in combat" and "has never spawned since maintenance". this is actually the only brilliant bit in this entire file.
+	TargetValidTarget = windower.ffxi.get_mob_by_name(TargetName).valid_target --this is a boolean, not a string. if it's false, the target is not currently able to be targeted, i.e. dead
+
+	if DebugVariable then
+		notice('Debug: Zone: ' .. ResultsList[(PiecesPerResult*(CurrentTarget-1)) + 1])
+		notice('Debug: Mob: ' .. ResultsList[(PiecesPerResult*(CurrentTarget-1)) + 2])
+		notice('Debug: New status: ' .. TargetStatus)
+		notice('Debug: Target HPP: ' .. TargetHPP)
+		notice('Debug: Target valid: ' .. tostring(TargetValidTarget)) --remember, it's a boolean. I sure as hell forget
+	end
+
 	--update the variable "new mob status" - because it already existed from my previous version of this - to be words showing the information that I actually want from the status
-	--status 0 is "idle", for sure it's used when the target hasn't spawned since maintenance - this gives coords 0 0 0 too, which is awkward - but also "alive and nobody's killing it"
+	--status 0 is "idle", for sure it's used when the target hasn't spawned since maintenance - this gives coords 0 0 0 too, which is awkward - but also "alive and nobody's killing it" (which is why target valid target exists)
 	--status 1 is engaged but alive, aka "someone else is killing it"
 	--status 2 is "dead", no clue what happens when a sandworm despawns but I wonder if that's relevant here. anyway we can 
 	--status 3 is "died engaged" - that's when someone killed it and it died while in combat
-	if (TargetStatus == 0 and TargetHPP == 0) then
-		NewMobStatus = 'Unspawned' --if it's idle but has no HP, it's not what us measly humans would call "alive". in fact, it's never been alive in this zone since the servers came up.
-	elseif (TargetStatus == 0 and TargetHPP == 100) then
-		NewMobStatus = 'Alive' --specifically, alive and we can go get it right now, since it's at full HP which implies it is not claimed by another human. there's a way to check literally that, but we don't care, this is fine.
+	if (TargetStatus == 0 and TargetHPP == 0) and not TargetValidTarget then
+		NewMobStatus = 'Unspawned' --if it's idle, has no HP, and isn't alive, it's never been alive in this zone since the servers came up.
+
+	elseif (TargetStatus == 0) and TargetValidTarget then
+		NewMobStatus = 'Alive' --it is alive and we can target it. I am not bothering to check whether someone else is killing it because either we kill it or we can get ToD.
+
+	elseif (TargetStatus == 0) and not TargetValidTarget then
+		NewMobStatus = 'Dead' --if it's idle and we can't target it but HPP is not 0, it despawned of its own volition, probably with HPP 100. looking at sandworm/king vinegarroon here
+
 	elseif TargetStatus == 1 then
 		NewMobStatus = 'Alive' --specifically, alive fighting. which means it will probably be dead REAL soon, because it is claimed by another human. that's ok, we can work with that.
+
 	elseif TargetStatus == 2 then
 		NewMobStatus = 'Dead' --specifically, died not engaged, so probably King Vinegaroon/Sandworm actively despawning when their windows closed. maybe some other cases I don't know about.
+
 	elseif TargetStatus == 3 then
 		NewMobStatus = 'Dead' --specifically, died engaged, but that's still a death.
+
 	else
 		--if it's any status above 3, I have no idea what it is, but I will log it and figure it the hell out. sandworm better not be crafting. king vinegarroon gone fishing. etc.
 		NewMobStatus = 'Unknown Status. Number = ' .. TargetStatus
 	end
 
+	if DebugVariable then
+		notice('Debug: New Mob Status = ' .. NewMobStatus)
+	end
+
 	--just to show this visually, here's what we're updating. I'm going to use pieces * current target and back-count to avoid showing (X*(N-1))+A when I can use (X*N)-B instead, because it's visually cleaner
     --                            1                    2          3      4            5         6      7
 	--stored information format: 'East Ronfaure [S]', 'Sandworm', time, 'Unchecked', '1, 1, 1', time, 'Unchecked'
-    --                           -6                   -5         -4     -3           -2        -1     -0
-								 
+    --                           -6                   -5         -4     -3           -2        -1     -0					 
 	--I'm going to reference this enough below that I wanted to give it a human-readable name
 	PreviousMobStatus = ResultsList[(PiecesPerResult*CurrentTarget)]
+
+	if DebugVariable then
+		notice('Debug: Previous Mob Status = ' .. PreviousMobStatus)
+	end
 
 	--whether or not to update the final two parameters, "relevant mob status and its time" is conditional. we want to keep the best of: death after life = time of death > time of life > time of any check at all > unchecked
 	--therefore, compare new status to previous status. if it hasn't changed, do nothing. if it has, start evaluating which is better. many such cases!
@@ -568,47 +592,57 @@ function update_target_information()
 	elseif NewMobStatus == 'Dead' and PreviousMobStatus == 'Alive' then
 		
 		--the time at which this happened is actually the previous time, not the current time (because it could have happened one second after we looked and we want to be there when the window opens so we'd rather start early)
-		ResultsList[(PiecesPerResult*CurrentTarget) - 7] = 'Approximate Time of Death Known'
-		ResultsList[(PiecesPerResult*CurrentTarget) - 6] = ResultsList[(PiecesPerResult*CurrentTarget) - 4]
+		ResultsList[(PiecesPerResult*CurrentTarget)] = 'Approximate Time of Death Known'
+		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = ResultsList[(PiecesPerResult*CurrentTarget) - 4]
 	
 	--if it's dead now and was dead before, put the new info in the last two variables so that we know how recent our info is
 	elseif NewMobStatus == 'Dead' and PreviousMobStatus == 'Dead' then
 	
-		ResultsList[(PiecesPerResult*CurrentTarget) - 7] = NewMobStatus
-		ResultsList[(PiecesPerResult*CurrentTarget) - 6] = UpdateTime
+		ResultsList[(PiecesPerResult*CurrentTarget)] = NewMobStatus
+		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = UpdateTime
 	
 	--if the mob is alive right now, but not at full health, someone else is killing it. pretend that it's already dead as of right now and I'll show up to the next window a minute or two early, it's fine
 	elseif NewMobStatus == 'Alive' and TargetHPP < 100 then
 	
-		ResultsList[(PiecesPerResult*CurrentTarget) - 7] = 'Approximate Time of Death Known'
-		ResultsList[(PiecesPerResult*CurrentTarget) - 6] = UpdateTime
+		ResultsList[(PiecesPerResult*CurrentTarget)] = 'Approximate Time of Death Known'
+		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = UpdateTime
 
+	--hey, I'm looking at this, it's a good 
 	elseif NewMobStatus == 'Alive' and TargetHPP == 100 then
 
-		ResultsList[(PiecesPerResult*CurrentTarget) - 7] = 'CURRENTLY ALIVE!!!!!'
-		ResultsList[(PiecesPerResult*CurrentTarget) - 6] = UpdateTime
+		ResultsList[(PiecesPerResult*CurrentTarget)] = 'Alive'
+		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = UpdateTime
+		notice("HEY IDIOT, GO GET THE UNCLAIMED ALIVE NM IF YOU'RE WATCHING THIS") --this message is all caps so I actually see it thank you :)
 
 	elseif NewMobStatus == 'Unspawned' then
 	
-		ResultsList[(PiecesPerResult*CurrentTarget) - 7] = 'Unspawned'
-		ResultsList[(PiecesPerResult*CurrentTarget) - 6] = UpdateTime
+		ResultsList[(PiecesPerResult*CurrentTarget)] = 'Unspawned'
+		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = UpdateTime
 
 	--if we have gotten here, we don't have new mob status as anything we should have set above. which means we have a value for status > 3. which means I have no idea what it is, so document it and move on.
 	else
 
 		notice('This should never happen. Something weird went wrong. Please take notes.')
 
-		--still update these two, but don't change the last two pieces of information? will test later
-		ResultsList[(PiecesPerResult*CurrentTarget) - 7] = NewMobStatus
-		ResultsList[(PiecesPerResult*CurrentTarget) - 6] = UpdateTime
+		ResultsList[(PiecesPerResult*CurrentTarget)] = NewMobStatus
+		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = UpdateTime
 
 	end
 
 	--now we know we have the most relevant ToD info stored, so we don't need the results from the last loop.
 	--overwrite the results from the previous loop with the results from this loop
-	ResultsList[(PiecesPerResult*CurrentTarget) - 5] = NewPositionString --most recent position = the "new position string"
-	ResultsList[(PiecesPerResult*CurrentTarget) - 4] = NewMobStatus --most recent status
-	ResultsList[(PiecesPerResult*CurrentTarget) - 3] = UpdateTime --most recent time = the "update time", aka "right now" ish
+	ResultsList[(PiecesPerResult*CurrentTarget) - 2] = NewPositionString --most recent position = the "new position string"
+	ResultsList[(PiecesPerResult*CurrentTarget) - 3] = NewMobStatus --most recent status
+	ResultsList[(PiecesPerResult*CurrentTarget) - 4] = UpdateTime --most recent time = the "update time", aka "right now" ish
+
+	if DebugVariable then
+		notice('Debug: New information from this mob loop for ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 6] .. ':')
+		notice('Debug: New Time: ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 4])
+		notice('Debug: New Status: ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 3])
+		notice('Debug: New Coords: ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 2])
+		notice('Debug: Relevant Time: ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 1])
+		notice('Debug: Relevant Status: ' .. ResultsList[(PiecesPerResult*CurrentTarget)])
+	end
 
 end
 
@@ -631,9 +665,9 @@ function update_gui()
 	
 	for ResultLoop = 1, NumberOfResults, 1 do
 		
-		--possible statuses at this point are 'Dead', 'Unspawned', 'Approximate Time of Death Known', 'Unchecked', and 'CURRENTLY ALIVE!!!!!'
+		--possible statuses at this point are 'Dead', 'Unspawned', 'Approximate Time of Death Known', 'Unchecked', and 'Alive'
 
-		if ResultsList[(PiecesPerResult*ResultLoop)] == 'CURRENTLY ALIVE!!!!!' then
+		if ResultsList[(PiecesPerResult*ResultLoop)] == 'Alive' then
 			--all of these are broken into multiple lines of text for readability, but are one "new line" total, since it's all concatenated
 			info_display = info_display .. ' \\cs(0, 175, 0)' .. ResultsList[(PiecesPerResult*ResultLoop) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
 			info_display = info_display .. ' IS ALIVE RIGHT NOW, AS OF ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '!' .. '\\cr \n'
@@ -684,7 +718,7 @@ end
 function put_results_in_file()
 
 	if WriteResultsToFile then --technically, this if statement is redundant, but I might call it from some other time at some other point, who knows
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Writing most recent result to file:')
 			notice('Debug: Checked ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*CurrentTarget) - 6] .. ' at ' .. os.date("%X",os.time())
 			.. ' and found that it was ' .. NewMobStatus .. ' at ' .. NewPositionString .. ' at ' .. UpdateTime .. '.')
@@ -697,13 +731,14 @@ function put_results_in_file()
 		)
 		--that string.char is a newline character, the windower documentation is not accurate about whether append natively adds a newline (the third parameter "flush" = true doesn't do it either)
 
-		if DebugVariable then
+		if VerboseDebugVariable then
 			notice('Debug: Wrote result to file. Moving on.')
 		end
 	
 	end
 
 end
+
 
 --below this point I'm confident these functions are fine and should never need to be changed (well, okay, the testing function lives down here too, you can change that)
 --literally just waits for us to be in a different zone than we were before. possible that we want to bake in a second loop to wait for a SG/HP to load and have that be configurable, but meh
@@ -760,22 +795,26 @@ function get_distance(x, y)
 	return math.sqrt(math.pow(me.x - x, 2) + math.pow(me.y - y, 2))
 end
 
+
+
+
+
 --hiding at the bottom (ctrl-end makes this one of the most accessible locations), the testing function that can be changed as needed
 function testing_function()
 
 	notice('Debug: Testing function has been called.')
 
-	--check whether we are near a home point
-	local nearest_home_point_id = get_nearest_mob_by_prefix('Home Point') --local variables still frighten me
+	windower.send_command("scanzone name Sandworm")
+	coroutine.sleep(5)
+	windower.send_command("scanzone scan " .. TargetIndex)
+	coroutine.sleep(2)
 
-	if nearest_home_point_id ~= nil
-	then
-		notice('here is the id? result: ' .. nearest_home_point_id)
-	else
-		notice('did not find a home point')
-	end
-
-	notice('is this a coordinate? ' .. windower.ffxi.get_mob_by_id(nearest_home_point_id).x)
+	TargetStatus = windower.ffxi.get_mob_by_name(TargetName).status
+	TargetHPP = windower.ffxi.get_mob_by_name(TargetName).hpp --using this to disambiguate between "alive and not in combat" and "has never spawned since maintenance". this is actually the only brilliant bit in this entire file.
+	
+	notice('status: ' .. TargetStatus)
+	notice('hpp: ' .. TargetHPP)
+	notice('testing - valid target: ' .. tostring(windower.ffxi.get_mob_by_name(TargetName).valid_target)) --aw yeah this is the piece I was missing
 	
 	--this is the only part I DON'T comment out, so that I know it's working
 	notice('Debug: Testing function complete.')
