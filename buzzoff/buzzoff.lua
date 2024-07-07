@@ -9,7 +9,7 @@
 
 _addon.name = 'buzzoff'
 _addon.version = '0.3.3'
-_addon.author = 'Chiaia (Asura) and also me'
+_addon.author = 'Chiaia (Asura) and also DACK'
 _addon.commands = {'buzzoff','bo'}
 
 require('luau') --the hula is MANDATORY, citizen (seriously, what the hell is lua u in this context)
