@@ -1,0 +1,20 @@
+backslash is the escape character to tell regex to treat the next char literally
+
+"any line not containing the string 'Debug'"
+^((?!Debug).)*$
+
+"everything from line start to the first instance of the string 'Debug'"
+.+?(?=Debug)
+
+"everything starting from the first instance of the '|' character"
+\|(.*)
+
+used for bg wiki editing: "Three capital letters in a row"
+[A-Z]{3}
+
+the same as above, but in a "capture group" to be spat back out in a find-and-replace
+([A-Z]){3}
+
+used for bg wiki editing: "when you find the line above, replace it with the same thing, but with [[double square brackets around it]]"
+\[\[$0\]\]
+NOTE: this is specifically due to notepad++ dev choices - \1 "should" work, but the first capture group is indexed 0 now but was 1 in 2018 according to google - and the $ is used rather than \ for clarity, as both work
