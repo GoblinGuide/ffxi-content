@@ -18,3 +18,73 @@ the same as above, but in a "capture group" to be spat back out in a find-and-re
 used for bg wiki editing: "when you find the line above, replace it with the same thing, but with [[double square brackets around it]]"
 \[\[$0\]\]
 NOTE: this is specifically due to notepad++ dev choices - \1 "should" work, but the first capture group is indexed 0 now but was 1 in 2018 according to google - and the $ is used rather than \ for clarity, as both work
+
+fairly complicated bg wiki replace:
+turn
+|-
+|[[Souveran Schaller +1]]
+into
+_|
+[[Image:Souveran Schaller +1.png|link=Souveran Schaller +1]] [[Souveran Schaller +1]]
+
+to find:
+the starting part is
+-\r\n\|\[\[
+
+then there's an item name that has some combination of letters, numbers, apostrophe, hyphen, and space (thus "[]" for "anything in that character range/set")
+some unknown number of times (thus the final "+" for "repeat any number of times, greedy so as many as possible")
+([A-Za-z0-9 '\+\-]+)
+save this match within the capture group for later use [thus the "()"]
+
+and we want to put that capture group out a few times on that same line, so replace with:
+the starting part
+-\r\n\|\[\[
+
+then the image url, which uses the item name, which is the capture group
+Image:$0
+
+then the rest of the image url and the start of the link
+.png\|link\=
+
+then the page link, which is the item name, which is the capture group
+$0
+
+then finish that link, add a space, and put the item name after it, where it was before
+\]\] \[\[$0\]\]
+
+final find:
+-\r\n\|\[\[([A-Za-z0-9 '\+\-]+)
+
+final replace:
+-\r\n\|\[\[Image:$1.png\|link\=$1\]\] \[\[$1\]\]
+not certain why $0 also included the line breaks, it might be "the match"?
+but $1 works. so that's fine
+
+similarly, to convert
+|[[Image:Chironic_Hat_icon.png|link=Chironic Hat]] [[Chironic Hat]]
+into
+|[[Image:Agwu's_Cap_icon.png|link=Agwu's Cap]] {{tooltip|text=[[Agwu's Cap]]|tooltip=[[File:Agwu's Cap description.png]]}}
+
+find is:
+(.*link\=.*\]\] )(.*)
+to split everything into two capture groups
+
+replace is:
+$1\{\{tooltip\|text=$2\|tooltip\=File\:$2 description.png]]}}
+
+which spits out first the stuff we preserved in the first, and then:
+{{tooltip|text=[[Chironic Hat]]|tooltip=File:[[Chironic Hat]] description.png]]}}
+so then use a regular find-and-replace to turn "]] description" into " description" and boom, done
+
+every line that contains the string "icon" but does not start with "[":
+^[^\[].*icon.*
+that's 
+^ = "start of line"
+[^\[] = "first character NOT literally'['"
+.* = any characters
+icon = the string "icon"
+.* = any more characters
+
+same thing, but we care about a link in that line:
+^[^\[].*link\=([A-Za-z0-9 '\+\-]+)]].*
+this uses the regex from above to fill that capture group of an item name and then I just replaced with $1

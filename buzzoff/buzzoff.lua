@@ -1,4 +1,5 @@
 --changelog:
+--0.5 and 0.4: bunch of toggle fixing. now it's even better
 --0.3.3: added commands "on" and "off" to toggle to a mode
 --0.3.2: added the alias "toggle" to mean "switch"
 --0.3.1: added "always visible" list
@@ -8,38 +9,54 @@
 --To make your own wildcard matching, here's the syntax example link from the original addon author: https://riptutorial.com/lua/example/20315/lua-pattern-matching
 
 _addon.name = 'buzzoff'
-_addon.version = '0.3.3'
+_addon.version = '0.5' --20240715 fixed toggle list to work even better
 _addon.author = 'Chiaia (Asura) and also DACK'
 _addon.commands = {'buzzoff','bo'}
 
-require('luau') --the hula is MANDATORY, citizen (seriously, what the hell is lua u in this context)
+require('luau') --the hula is MANDATORY, citizen (seriously, what the hell is lua u in this context, I cargo cult it every time -DACK)
 packets = require('packets')
+require('logger') --this is only used for the commented-out debug statements
 
 --by default, toggle list words will be filtered out
 local toggle = true
-windower.add_to_chat(208, "BuzzOff has loaded. Chat filter is currently toggled on. Use 'buzzoff switch' to switch.")
+windower.add_to_chat(208, "BuzzOff has loaded. Chat filter is currently toggled on. Use 'buzzoff switch/toggle/on/off' to switch modes.")
 
 --Each of the five below lists take priority over all the lists below them.
 --1) Any username in this list is blocked in all chat modes. This is the king and overrides everything else.
+--Example: whatever Asura garbage human is in yell chat today.
 local blocked_users = T{'Spicyryan','Spicedryan','Somewhatspicyryan'}
 
 --2) Any word in this list will always be shown as long as it's not coming from a name on list 1. This is for mercs, content, or items that you actively want to see every time.
-local always_visible_words = T{'segment','Crepuscular','card','Dynamis','pool','Trove'}
+--Example: Crepuscular, because you want to throw gil at a Crepuscular Cloak trove shout any hour of day or night.
+local always_visible_words = T{'Crepuscular','Volte','pool','Trove',
+'card',
+'Dynamis',
+}
 
---3) Any username in this list is only blocked when BO is toggled on. This takes precedence over the toggled words list.
---People you don't always want to see but will want to see when filter is off go here. So mercs you want to use, but only sometimes, and so on.
+--3) Any username in this list is visible ONLY when BO is toggled OFF. This takes precedence over the blocked words list to guarantee those people show up.
+--Example: Waka, who you want to pay to merc JP when you want that, but don't need to see full-time. This is a special pass out of the "always blocked" list for Waka!
 local toggled_users = T{'Wakakillofu'}
 
---4) Any yell or shout containing these words is visible only when BO is toggled off. Takes priority over the blocked word list to make these shouts show up when BO is toggled off.
+--4) Any yell or shout containing these words is visible ONLY when BO is toggled OF. Takes priority over the blocked word list to make these shouts show up when BO is toggled off.
+--Note that this is checked AFTER the always visible word list above in 2 - so if you have "sortie" here and "segment" above, someone shouting "sortie segments" will be visible.
 --Things that you DO want to see when you turn the filter off go here - content you want to do for example ("Aeonic" both here AND in the blocked word list means you'll see it only when it's time to buy one and you toggle off.)
-local toggled_words = T{'Sortie','Omen','Ambuscade','RP','V25','Shinryu','Odyssey','Sheol'}
+local toggled_words = T{'Omen','Ambuscade','Sortie','gallimaufry','galli','Ambu',
+'seg', --it really bothers me that they don't even shout the word "segment". I really do not like it.
+} --things you could add here: Sheol, Odyssey, V25, Shinryu, and so on.
 
 --5) Any yell or shout containing these words is blocked. Does not take priority over anything.
---Things that you NEVER want to see from ANYONE go here.
+--Things that you NEVER want to see from ANYONE go here. (unless there's something else in the same shout that they're offering that you DO care about)
 --Implicit assumptions: JP sellers shout for level 1-99, 500, and 2100. There's a lot of stupid sheol whack-a-mole to play, so this list got long.
-local blocked_words = T{string.char(0x81,0x69),string.char(0x81,0x99),string.char(0x81,0x9A),'1%-99','Job Points.*2100','Job Points.*500','JP.*2100','JP.*500','500*ml','Master Level',
-'0-20','0-30','0-40','Abyssea','Empyrean','Reisenjima','Aeonic','T1234','T1T2T3','Lilith','V0V1','Sobek','Apademak','2100p','Empy','EMP','500*jp','Mercenary','Fast Cast','Bazaar','Mars Orb'}
---First two are '☆' and '★'. (no idea what the third is, this is the original author's notes - we have a bit more research into this now in the Discord if you poke us and ask)
+local blocked_words = T{
+string.char(0x81,0x69),string.char(0x81,0x99),string.char(0x81,0x9A), --first two are '☆' and '★'. (no idea what the third is - we had research into this in the Discord at some point, ask about special characters in chat)
+string.char(0x81,0x77), string.char(0x81,0x78), string.char(0x82,0x4F), string.char(0x81,0x5E), --『, 』, ０, ／ (the fancy full width ones) because snkonef started using them
+'1%-99','Job Points.*2100','Job Points.*500','JP.*2100','JP.*500','500*ml','Master Level','Alexander',
+'0-20','0-30','0-40','Abyssea','Empyrean','Reisenjima','Aeonic','T1234','T1T2T3','Lilith','V0V1','Sobek','Apademak','2100p','Empy','EMP','500*jp','Mercenary','Fast Cast','Bazaar','Assault','v15','Supercharge','V25',
+'Odyssey','ody c', --remove to see odyssey pick up segment runs (this second one actually happened god help me)
+'Tinnin','Tyger','Sarameya', --remove if you're making a mythic, obviously
+'Ou Item', 'gin fu' --aiming to hit all the main omen mercs
+}
+
 
 
 windower.register_event('addon command', function (...)
@@ -71,28 +88,35 @@ windower.register_event('incoming chunk', function(id,data)
       local chat = packets.parse('incoming', data)
       local cleaned = windower.convert_auto_trans(chat['Message']):lower()
   
-	--case 1: we explicitly want to see these words -> display them no matter what
-  	for k,v in ipairs(always_visible_words) do
-  	  if cleaned:match(v:lower()) then
-  	    break
-  	  end
-  	end
-  
-  	--case 2: sender is on block list -> block message no matter what
+  	--case 1: sender is on block list -> block message no matter what
   	if blocked_users:contains(chat['Sender Name']) then -- Blocks any message from X user in any chat mode.
+		--notice('here was a blocked user message: ' .. cleaned)
   		return true
+	end
+
+	--case 2: we explicitly want to see these words -> display them no matter what
+	for k,v in ipairs(always_visible_words) do
+		if cleaned:match(v:lower()) then
+		  --notice('here was an always visible words message: ' .. cleaned)
+		  return false --OH, this isn't supposed to be a break... but why on earth does return false work?
+		end
+	  end
 
   	--case 3: sender is on the toggle list -> block message if toggle is on
-  	elseif toggled_users:contains(chat['Sender Name']) and toggle then 
+  	if toggled_users:contains(chat['Sender Name']) and toggle then 
+		--notice('here was a toggle user list message that was blocked because toggle is on: ' .. cleaned)
   		return true
-  		
-	--unlike the above, all cases below this point only filter shouts (1) and yells (26). (Tells are mode 3, if you want that too. 12 is GM! This isn't Windower-documented that I know of, so I had to Google it.)
-  	elseif (chat['Mode'] == 1 or chat['Mode'] == 26) then
+	end
+		
+	--unlike the above three cases, these below three only filter shouts (1) and yells (26). (Tells are mode 3, if you want that too. 12 is GM! This isn't Windower-documented that I know of, so I had to Google it.)
+	--party and alliance are 5 and 13 (respectively? the 13 for vwhl looked like party. idk.)
+  	if (chat['Mode'] == 1 or chat['Mode'] == 26) then
   	
-      --case 4: toggle is on (and the message sender is not on the block list, implied by case 1) -> look for toggled words and filter out the message if one is found.
+      --case 4: toggle is on (and the message sender is not on the block list, because this is not case 1) -> look for toggled words and filter out the message if one is found.
   	  if toggle then
   	    for k,v in ipairs(toggled_words) do
   		  if cleaned:match(v:lower()) then
+			--notice('here was a toggle word list message that was blocked because toggle is on: ' .. cleaned)
   		    return true
   	      end
   	    end
@@ -102,7 +126,8 @@ windower.register_event('incoming chunk', function(id,data)
 	  if (not toggle) then
   	    for k,v in ipairs(toggled_words) do
   		  if cleaned:match(v:lower()) then
-  		    break --break the loop, thereby displaying the message rather than blocking it
+			--notice('here was a toggle word list message that was blocked because toggle is off: ' .. cleaned)
+  		    return false --testing this
   	      end
   	    end
   	  end
@@ -110,13 +135,16 @@ windower.register_event('incoming chunk', function(id,data)
   	--case omega: block anything on the word block list that hasn't been specially loopholed by the above word lists (which means this has to go at the end, which is why this is case omega)
   	for k,v in ipairs(blocked_words) do
   	    if cleaned:match(v:lower()) then
+		  --notice('case omega blocked message: ' .. cleaned)
   	      return true
   	    end
   	  end  	
 
 	--if we've made it here, we have failed to hit any triggers, and therefore the message should not be blocked, so do nothing.
     end
+
   end
+
 end)
 
 --[[
