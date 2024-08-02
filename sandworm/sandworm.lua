@@ -1,5 +1,5 @@
 _addon.name = 'Sandworm'; --not renaming this even though I'm broadening its scope as I type this
-_addon.version = '0.7'; --20240621 ACTUALLY made the direct mob status check work. --20240705 see previous note? I was wrong. now I did. maybe. it does but we aren't done yet I suspect.
+_addon.version = '0.8'; --20240621 ACTUALLY made the direct mob status check work. --20240705 see previous note? I was wrong. now I did. maybe. it does but we aren't done yet I suspect. --20240802 added single zone check
 _addon.author = 'DACK';
 _addon.commands = { 'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE
 
@@ -152,8 +152,14 @@ windower.register_event('addon command', function (...)
 
 		testing_function()
     
+	elseif cmd == 'check' then
+
+		notice('Running single zone check.')
+
+		check_for_one_enemy()
+
 	else
-		notice("The only supported command is 'start'. And also 'test' I guess. Use one of those.")
+		notice("Supported commands are 'start' and 'check'. And also technically 'test'. Use one of those.")
 	end
 
 end)
@@ -740,6 +746,75 @@ function put_results_in_file()
 end
 
 
+--made this to just check the zone you're in, it's copying the code from above because I didn't abstract enough if that's what abstraction means, but it's fine
+function check_for_one_enemy()
+
+	if VerboseDebugVariable then
+		notice('Debug: Beginning single zone check.')
+	end
+
+	CurrentZone = windower.ffxi.get_info().zone --global variable storing zone ID
+
+	--this is zero-indexed to prevent me from having to do hacky things with the addition in the below loop
+	for i = 0, NumberOfTargets -1 , 1 do
+
+		--if that zone is the current zone, looky-loo
+		if TargetsList[PiecesPerTarget*i + 1] == CurrentZone then
+
+			--same logic as in the main loop. see comments up there.
+			CurrentTargetName = TargetsList[PiecesPerTarget*i + 2]
+
+			notice('Target found. Scanning for ' .. CurrentTargetName .. ' now.')
+
+			windower.send_command('scanzone name ' .. CurrentTargetName)
+			coroutine.sleep(5)
+		
+			windower.send_command('scanzone scan ' .. TargetIndex)
+			coroutine.sleep(5)
+
+			TargetStatus = windower.ffxi.get_mob_by_name(CurrentTargetName).status
+			TargetHPP = windower.ffxi.get_mob_by_name(CurrentTargetName).hpp
+			TargetValidTarget = windower.ffxi.get_mob_by_name(CurrentTargetName).valid_target
+
+			--set status to echo out
+			if (TargetStatus == 0 and TargetHPP == 0) and not TargetValidTarget then
+				NewMobStatus = 'Has not spawned here since last maintenance.' --if it's idle, has no HP, and isn't alive, it's never been alive in this zone since the servers came up.
+			
+			elseif (TargetStatus == 0) and TargetValidTarget then
+				NewMobStatus = 'Alive RIGHT NOW GO GET IT!!!' --it is alive and we can target it. I am not bothering to check whether someone else is killing it because either we kill it or we can get ToD.
+			
+			elseif (TargetStatus == 0) and not TargetValidTarget then
+				NewMobStatus = 'Dead, probably Vinegaroon style.' --if it's idle and we can't target it but HPP is not 0, it despawned of its own volition, probably with HPP 100. looking at sandworm/king vinegarroon here
+			
+			elseif TargetStatus == 1 then
+				NewMobStatus = 'Alive... but someone else is fighting it. Go get an accurate ToD.' --specifically, alive fighting.
+			
+			elseif TargetStatus == 2 then
+				NewMobStatus = 'Despawned without being killed, is this Sandworm style?.' --specifically, died not engaged, no clue how that happens
+			
+			elseif TargetStatus == 3 then
+				NewMobStatus = 'Dead because somebody killed it.' --specifically, died engaged, but that's still a death.
+
+			else
+				--if it's any status above 3, I have no idea what it is, but I will log it and figure it the hell out. sandworm better not be crafting. king vinegarroon gone fishing. etc.
+				NewMobStatus = 'Unknown Status, number = ' .. TargetStatus
+			end
+
+			notice('Results of investigation: ' .. CurrentTargetName .. ' status: ' .. NewMobStatus)
+
+		else
+			--if not current zone, do nothing. note that this will do two spit-outs when you're in a Sandworm+Ixion zone or whatever. that's fine!
+		end
+
+	end
+
+	if VerboseDebugVariable then
+		notice('Debug: Single zone check complete.')
+	end
+
+end
+
+
 --below this point I'm confident these functions are fine and should never need to be changed (well, okay, the testing function lives down here too, you can change that)
 --literally just waits for us to be in a different zone than we were before. possible that we want to bake in a second loop to wait for a SG/HP to load and have that be configurable, but meh
 function wait_for_zone_change()
@@ -795,11 +870,7 @@ function get_distance(x, y)
 	return math.sqrt(math.pow(me.x - x, 2) + math.pow(me.y - y, 2))
 end
 
-
-
-
-
---hiding at the bottom (ctrl-end makes this one of the most accessible locations), the testing function that can be changed as needed
+--hiding at the bottom (ctrl-end makes this one of the most accessible locations, as I once learned from a very angry man) - the testing function that can be changed as needed
 function testing_function()
 
 	notice('Debug: Testing function has been called.')
