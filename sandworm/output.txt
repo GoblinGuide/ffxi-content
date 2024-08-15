@@ -1,0 +1,1 @@
+Debug: Checked (710.10, 402.21, -60.57) in 06:04:51 at 06:04:55 and found that it was Alive at (710.10, 402.21, -60.57) at 06:04:51.

@@ -1,7 +1,7 @@
 _addon.name = 'Sandworm'; --not renaming this even though I'm broadening its scope as I type this
-_addon.version = '0.8.2'; --20240814 post-maintenance testing revealing interesting things
+_addon.version = '0.8.3'; --20240814 post-maintenance testing revealing interesting things and modified 'list' to work with GUI
 _addon.author = 'DACK';
-_addon.commands = { 'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE
+_addon.commands = { 'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE (sw is taken by superwarp)
 
 res = require('resources') --used to get zone names, to input superwarp commands based on the predefined English names in the results list
 packets = require('packets') --"nice ffxi" "thanks! it has packets."
@@ -40,7 +40,7 @@ LoopFrequency = 10
 HowManyTicksToUpdate = 30
 count = 0 --used to track time for the GUI display
 
---list of targets. order is zone id, target name, method used to teleport there (currently only supports survival guide/home point)
+--list of targets. order is zone id, target name, method used to teleport there (currently only supports survival guide/home point). you can get the zone id from windower\res\zones.lua.
 TargetsList = {
 			81,'Sandworm','Survival Guide', --ronfaure S
 			84,'Sandworm','Survival Guide', --batallia S
@@ -50,7 +50,6 @@ TargetsList = {
 			97,'Sandworm','Survival Guide', --meriphataud s
 			98,'Sandworm','Survival Guide', --sauromugue s
 			166,'Taisaijin','Survival Guide', --ranguemont
-			190,'Vrtra','Survival Guide', --ranperre's
 			205,'Ash Dragon','Survival Guide', --ifrit's cauldtron
 			125,'King Vinegarroon','Survival Guide', --west altepa (do I want to add weather tracking?)
 			110,'Simurgh','Survival Guide', --rolanberry
@@ -66,14 +65,15 @@ TargetsList = {
 			--91,'Dark Ixion','Survival Guide', --rolanberry S
 			--96,'Dark Ixion','Survival Guide', --fort karugo narugo s
 			--61,'Cerberus','Home Point', --zhayolm
+			--190,'Vrtra','Survival Guide', --ranperre's
 			}
 
-NumberOfTargets = 15 --there's no easy way to just "count" a table in lua. manually total up how many mobs you have here. sorry.
+NumberOfTargets = 14 --there's no easy way to just "count" a table in unmodified lua. manually total up how many mobs you have here. sorry.
 PiecesPerTarget = 3 --zone id, mob name, transport method
 TargetsListLength = NumberOfTargets * PiecesPerTarget --magic numbers! yay!
 
---next, an array to store our results. for each mob there are six entries:
---a zone, then a mob in that zone (Ixion and Sandworm are each capable of spawning in Ronfaure/Batallia/Rolanberry so those zones get two lines each)
+--next, an array to store our results. for each mob there are seven entries:
+--a zone, then a mob in that zone (Ixion and Sandworm both spawn in Ronfaure/Batallia/Rolanberry so those zones can have multiple lines)
 --then the time of the most recent check, the status from that check, and the coordinates the mob was found at
 --then the last time the mob was known to be alive (should this be tod instead?)
 ResultsList = {'',''} --to be overwritten, immediately below this. but let's make sure its's an array because sigh, lua
@@ -844,12 +844,17 @@ end
 --I am forgetful. just spit out every target so I know where to go and how:
 function list_all_targets()
 
-	notice("Here's a list of every target and how to get there:")
+	notice("Here's a list of every target and how to get there. Also updating GUI...")
+
+	info_display = '\\cs(1, 1, 1)' .. ' Notorious Monster Hunter (Listing All Targets): \\cr \n'
+	
 
 	for LoopCount = 1, NumberOfTargets, 1 do
 		AlreadyCompletedElements = (LoopCount-1)*PiecesPerResult --the first X-1 mobs are done, so skip the first (X-1) * (elements per mob) elements [for the first one, this is 0, so we don't run into weird index problems]
 	
 			notice('Target number ' .. LoopCount .. ': ' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.')
+
+			info_display = info_display .. ' \\cs(1, 1, 1)' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.\\cr \n'
 	
 	end
 
