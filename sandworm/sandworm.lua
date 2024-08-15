@@ -1,5 +1,5 @@
 _addon.name = 'Sandworm'; --not renaming this even though I'm broadening its scope as I type this
-_addon.version = '0.8'; --20240621 ACTUALLY made the direct mob status check work. --20240705 see previous note? I was wrong. now I did. maybe. it does but we aren't done yet I suspect. --20240802 added single zone check
+_addon.version = '0.8.2'; --20240814 post-maintenance testing revealing interesting things
 _addon.author = 'DACK';
 _addon.commands = { 'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE
 
@@ -17,8 +17,17 @@ require('tables') --I'm gonna be honest with you. I don't know what this damn th
 --DON'T START THIS IN, OR HAVE YOUR HOME POINT SET TO, ANYWHERE IN TAVNAZIAN SAFEHOLD. I'M VERY LAZY. SORRY, BUT ALSO NOT SORRY.
 
 --set these variables to true for two levels of debug logging in the chat log. Verbose is used when you have NO idea what's broken to display everything. Debug is used when I think I know what's wrong. You can use Verbose.
-DebugVariable = true
+DebugVariable = false
 VerboseDebugVariable = false
+
+if DebugVariable then
+	notice('Sandworm dot lua loaded. Debugging is currently ON.')
+end
+
+if VerboseDebugVariable then
+	notice('Sandworm dot lua loaded. Verbose Debugging is currently ON. Prepare for spam!')
+end
+
 
 --set this variable to true to also log all output to the file location defined by the second variable here - that's currently "output.txt" in the same folder as this addon (but you can give it an entire path if you want, allegedly)
 WriteResultsToFile = false
@@ -33,33 +42,33 @@ count = 0 --used to track time for the GUI display
 
 --list of targets. order is zone id, target name, method used to teleport there (currently only supports survival guide/home point)
 TargetsList = {
-			81,'Sandworm','Survival Guide',
-			84,'Sandworm','Survival Guide',
-			88,'Sandworm','Survival Guide',
-			91,'Sandworm','Survival Guide',
-			95,'Sandworm','Survival Guide',
-			97,'Sandworm','Survival Guide',
-			98,'Sandworm','Survival Guide',
-			166,'Taisaijin','Survival Guide',
-			190,'Vrtra','Survival Guide',
-			205,'Ash Dragon','Survival Guide',
-			125,'King Vinegarroon','Survival Guide', --this is just to get tod, probably will never find him alive, because he's a weatherlord and I'm gonna have to babysit this... do I want to track weather? naw.
-			110,'Simurgh','Survival Guide',
-			79,'Khimaira','Home Point', --first of the HPs on the list is in Caedarva Mire, in case that's where this breaks
-			61,'Cerberus','Home Point',
-			7,'Tiamat','Home Point',
-			5,'Jormungand','Home Point',
+			81,'Sandworm','Survival Guide', --ronfaure S
+			84,'Sandworm','Survival Guide', --batallia S
+			88,'Sandworm','Survival Guide', --n gustaberg S
+			91,'Sandworm','Survival Guide', --rolanberry S
+			95,'Sandworm','Survival Guide', --w saruta S
+			97,'Sandworm','Survival Guide', --meriphataud s
+			98,'Sandworm','Survival Guide', --sauromugue s
+			166,'Taisaijin','Survival Guide', --ranguemont
+			190,'Vrtra','Survival Guide', --ranperre's
+			205,'Ash Dragon','Survival Guide', --ifrit's cauldtron
+			125,'King Vinegarroon','Survival Guide', --west altepa (do I want to add weather tracking?)
+			110,'Simurgh','Survival Guide', --rolanberry
+			79,'Khimaira','Home Point', --caedarva (first HP on the list)
+			7,'Tiamat','Home Point', --attohwa
+			5,'Jormungand','Home Point', --uleguerand
 			--102,'Bloodtear Baldurf','Survival Guide', --killed this
 			--51,'Hydra','Survival Guide', --killed this
 			--81,'Dark Ixion','Survival Guide', --killed this WHILE TESTING this dang thing, lmao, talk about a proof of concept
-			--82,'Dark Ixion','Survival Guide',
-			--84,'Dark Ixion','Survival Guide',
-			--89,'Dark Ixion','Survival Guide',
-			--91,'Dark Ixion','Survival Guide',
-			--96,'Dark Ixion','Survival Guide',
+			--82,'Dark Ixion','Survival Guide', --jugner S
+			--84,'Dark Ixion','Survival Guide', --batallia S
+			--89,'Dark Ixion','Survival Guide', --grauberg S
+			--91,'Dark Ixion','Survival Guide', --rolanberry S
+			--96,'Dark Ixion','Survival Guide', --fort karugo narugo s
+			--61,'Cerberus','Home Point', --zhayolm
 			}
 
-NumberOfTargets = 16 --there's no easy way to just "count" a table in lua. manually total up how many mobs you have here. sorry.
+NumberOfTargets = 15 --there's no easy way to just "count" a table in lua. manually total up how many mobs you have here. sorry.
 PiecesPerTarget = 3 --zone id, mob name, transport method
 TargetsListLength = NumberOfTargets * PiecesPerTarget --magic numbers! yay!
 
@@ -80,8 +89,7 @@ for LoopCount = 1, NumberOfTargets, 1 do
 	ResultsList[AlreadyCompletedElements+2] = TargetsList[(PiecesPerTarget*(LoopCount-1))+2] --and the one after that is a mob name
 	ResultsList[AlreadyCompletedElements+3] = os.date("%X",os.time()) --current time, in 24h HH:MM:SS format
 	ResultsList[AlreadyCompletedElements+4] = 'Unchecked' --because we haven't checked it yet
-	ResultsList[AlreadyCompletedElements+5] = '1, 1, 1' --will be overwritten with mob coordinates as of the first check.
-	--a mob that hasn't spawned since maintenance will be at 0, 0, 0 so I absolutely do NOT want to use that, since that's a legitimate result. oops. added that functionality and forgot to actually account for it
+	ResultsList[AlreadyCompletedElements+5] = '1, 1, 1' --will be overwritten with mob coordinates as of the first check. mob that hasn't spawned since maintenance is at 0, 0, 0 so this can't use those coords
 	ResultsList[AlreadyCompletedElements+6] = os.date("%X",os.time()) --just so we know this is a time, for later
 	ResultsList[AlreadyCompletedElements+7] = 'Unchecked' --all we know is that we know nothing
 
@@ -91,7 +99,6 @@ for LoopCount = 1, NumberOfTargets, 1 do
 		notice('Startup array element: ' .. LoopCount .. ': ' .. ResultsList[AlreadyCompletedElements+1] .. ', ' .. ResultsList[AlreadyCompletedElements+2] .. ', ' .. ResultsList[AlreadyCompletedElements+3] .. ', '
 		.. ResultsList[AlreadyCompletedElements+4] .. ', ' .. ResultsList[AlreadyCompletedElements+5] .. ', ' .. ResultsList[AlreadyCompletedElements+6] .. ', ' .. ResultsList[AlreadyCompletedElements+7] ..'.')
 	end
-
 
 end
 
@@ -127,7 +134,7 @@ info_display = info_display .. ' \\cs(200, 00, 0)' .. 'Notorious \\cr \n'
 info_display = info_display .. ' \\cs(0, 200, 0)' .. 'Monster \\cr \n'
 info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Hunter \\cr \n'
 info_display = info_display .. ' \\cs(230, 230, 230)' .. '...Notorious Monster Hunter? \\cr \n'
-info_display = info_display .. ' \\cs(0, 0, 0)' .. 'Yes, Notorious Monster Hunter. \\cr \n'
+info_display = info_display .. ' \\cs(1, 1, 1)' .. 'Yes, Notorious Monster Hunter. \\cr \n'
 
 --start when we put in "worm start"
 windower.register_event('addon command', function (...)
@@ -158,8 +165,12 @@ windower.register_event('addon command', function (...)
 
 		check_for_one_enemy()
 
+	elseif cmd == 'list' then
+
+		list_all_targets()
+
 	else
-		notice("Supported commands are 'start' and 'check'. And also technically 'test'. Use one of those.")
+		notice("Supported commands are 'start' and 'check'. And also technically 'test' and 'list'. Use one of those.")
 	end
 
 end)
@@ -547,7 +558,7 @@ function update_target_information()
 	--status 0 is "idle", for sure it's used when the target hasn't spawned since maintenance - this gives coords 0 0 0 too, which is awkward - but also "alive and nobody's killing it" (which is why target valid target exists)
 	--status 1 is engaged but alive, aka "someone else is killing it"
 	--status 2 is "dead", no clue what happens when a sandworm despawns but I wonder if that's relevant here. anyway we can 
-	--status 3 is "died engaged" - that's when someone killed it and it died while in combat
+	--status 3 is "engaged dead" - that's when someone killed it and it died while in combat, I think.
 	if (TargetStatus == 0 and TargetHPP == 0) and not TargetValidTarget then
 		NewMobStatus = 'Unspawned' --if it's idle, has no HP, and isn't alive, it's never been alive in this zone since the servers came up.
 
@@ -756,6 +767,7 @@ function check_for_one_enemy()
 	CurrentZone = windower.ffxi.get_info().zone --global variable storing zone ID
 
 	--this is zero-indexed to prevent me from having to do hacky things with the addition in the below loop
+	--also note that this will just pick up multiple mobs in same zone, so sandworm + ixion or whatever, doing them one ater another
 	for i = 0, NumberOfTargets -1 , 1 do
 
 		--if that zone is the current zone, looky-loo
@@ -775,25 +787,40 @@ function check_for_one_enemy()
 			TargetStatus = windower.ffxi.get_mob_by_name(CurrentTargetName).status
 			TargetHPP = windower.ffxi.get_mob_by_name(CurrentTargetName).hpp
 			TargetValidTarget = windower.ffxi.get_mob_by_name(CurrentTargetName).valid_target
+			--other variables: claim_id int, facing number, heading number, spawn_type int, entity_type int, index int (useless I think)...
+			--we can get its x y z here too if we'd prefer that to using scanzone to report it, scanzone only has to send the packet to give us the targetindex huh
+
+			--status 0 is "idle", used for "no spawn since maint" (coords 0 0 0) but also "alive and nobody's killing it" and I thiiiiink also "sandworm despawned unclaimed"
+			--status 1 is "engaged", used for "someone else is killing it right now"
+			--status 2 is "dead", used for... honestly? I don't think we EVER hit this. but we might. can't imagine how though.
+			--status 3 is "engaged dead" - that's when someone killed it and it died while in combat, I think.
 
 			--set status to echo out
 			if (TargetStatus == 0 and TargetHPP == 0) and not TargetValidTarget then
-				NewMobStatus = 'Has not spawned here since last maintenance.' --if it's idle, has no HP, and isn't alive, it's never been alive in this zone since the servers came up.
+				NewMobStatus = "UNKNOWN: Idle, HPP = 0, not a valid target. Have not observed yet." --this doesn't seem to happen.
 			
 			elseif (TargetStatus == 0) and TargetValidTarget then
-				NewMobStatus = 'Alive RIGHT NOW GO GET IT!!!' --it is alive and we can target it. I am not bothering to check whether someone else is killing it because either we kill it or we can get ToD.
+				NewMobStatus = 'Alive RIGHT NOW GO GET IT!!!' --it is alive and we can target it. go get it, soldier.
 			
+			--this is awkward, it can either be garbage or the optimal result
 			elseif (TargetStatus == 0) and not TargetValidTarget then
-				NewMobStatus = 'Dead, probably Vinegaroon style.' --if it's idle and we can't target it but HPP is not 0, it despawned of its own volition, probably with HPP 100. looking at sandworm/king vinegarroon here
-			
+
+				if TargetPositionString ~= '(0.00, 0.00, 0.00)' then
+					NewMobStatus = "ALIVE... or else Sandworm/Vinegarroon style despawned. Sorry. Check the Tako entity array."
+
+				else 
+					NewMobStatus = "Hasn't spawned here since maintenance, since its coordinates are all zeroes."
+	
+				end
+
 			elseif TargetStatus == 1 then
 				NewMobStatus = 'Alive... but someone else is fighting it. Go get an accurate ToD.' --specifically, alive fighting.
 			
 			elseif TargetStatus == 2 then
-				NewMobStatus = 'Despawned without being killed, is this Sandworm style?.' --specifically, died not engaged, no clue how that happens
+				NewMobStatus = "UNKNOWN: Despawned without being killed. I think this might be impossible." --will update if it ever happens
 			
 			elseif TargetStatus == 3 then
-				NewMobStatus = 'Dead because somebody killed it.' --specifically, died engaged, but that's still a death.
+				NewMobStatus = 'Dead because somebody killed it.' --specifically, died engaged.
 
 			else
 				--if it's any status above 3, I have no idea what it is, but I will log it and figure it the hell out. sandworm better not be crafting. king vinegarroon gone fishing. etc.
@@ -810,6 +837,20 @@ function check_for_one_enemy()
 
 	if VerboseDebugVariable then
 		notice('Debug: Single zone check complete.')
+	end
+
+end
+
+--I am forgetful. just spit out every target so I know where to go and how:
+function list_all_targets()
+
+	notice("Here's a list of every target and how to get there:")
+
+	for LoopCount = 1, NumberOfTargets, 1 do
+		AlreadyCompletedElements = (LoopCount-1)*PiecesPerResult --the first X-1 mobs are done, so skip the first (X-1) * (elements per mob) elements [for the first one, this is 0, so we don't run into weird index problems]
+	
+			notice('Target number ' .. LoopCount .. ': ' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.')
+	
 	end
 
 end
