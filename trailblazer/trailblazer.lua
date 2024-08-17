@@ -1,5 +1,5 @@
 _addon.name = 'trailblazer'
-_addon.version = '1.0' --20240816 DACK look, it's 1.0! all done!
+_addon.version = '1.1' --20240816 DACK look, it's 1.0! all done! --20240817 better reporting out, I wasn't done
 _addon.author = 'DACK'
 _addon.commands = {'tb', 'trailblazer'}
 
@@ -43,6 +43,10 @@ function buy_tool(cmd, qty)
         notice("Got into the buying function with an improperly specified tool. I'm not certain how, but please unload this addon (and zone because we sent a bad packet here) and try again.")
     end
 
+	--turn the command into a proper item name to make this reporting out cleaner, then inform the user we are starting
+    purchased_item = 'Trailblazing ' .. string.upper(string.sub(cmd, 1, 1)) .. string.sub(cmd, 2) .. ' +1'
+	notice("Beginning to purchase " .. qty .. ' ' .. purchased_item .. '.')
+
     --purchasing loop
     for i = 1, qty, 1 do
         
@@ -59,9 +63,7 @@ function buy_tool(cmd, qty)
     coroutine.sleep(0.1)
 
     --notify the user that we're done
-    --first, turn the command into a proper item name to make this reporting out cleaner
-    purchased_item = 'Trailblazing ' .. string.upper(string.sub(cmd, 1, 1)) .. string.sub(cmd, 2) .. ' +1'
-    notice("We should have purchased " .. qty .. ' ' .. purchased_item .. '.')
+    notice("Finished purchasing " .. qty .. ' ' .. purchased_item .. '.')
   
 end
 
