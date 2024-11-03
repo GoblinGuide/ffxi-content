@@ -8,7 +8,7 @@ SetTitleMatchMode, 2
 ^q::
 loop, 999999
 {
-ControlSend,, 1, XIV ;hit the macro, this prevents "FFXIV" in other window titles from working properly because it steals input, so don't shitpost in the thread with this running, too lazy to fix
+ControlSend,, 1, XIV ;hit the macro, this prevents "FFXIV" in other window titles from working properly because it steals input, so don't double-instance-of-FFXIV with this running, too clueless to fix
 ;ASSUMPTION: YOU HAVE THE MACRO ON THE "1" BUTTON. IF THIS IS NOT TRUE, CHANGE THE PARAMETER AFTER THE PAIR OF COMMAS AND BEFORE THE "XIV" ON THE ABOVE LINE
 sleep, 1000 ;wait to move between points
 ControlSend,, {Enter}, XIV ;hit the point manually - sometimes, for some reason, it ends up too far for Pandora to hit it but 

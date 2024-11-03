@@ -1,5 +1,6 @@
---please note that there are no addon commands. you literally just run this and talk to the bard
---https://www.ffxiah.com/node/433 is a list of every title that was relevant when Mastery Rank was added (people theorize that later titles, i.e. the sortie basement bosses/final boss/RoV chapter 3+, are not counted towards MR)
+--please note that there are no addon commands. you literally just run this and talk to the bard.
+--https://www.ffxiah.com/node/433 is a list of every title that existed when Mastery Rank was added
+--(some posters theorize that later titles, i.e. the sortie basement bosses/final boss/RoV chapter 3+, are not counted towards MR. I am not those people. easier for SE to make raw number matter, right?)
 
 _addon.name = 'inverter'
 _addon.author = 'Bryth'

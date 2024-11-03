@@ -9,7 +9,7 @@ SetTitleMatchMode, 2
 loop, 999999
 {
 ControlSend,, {F12}, XIV ;target enemy, I rebound this just for this. can't send tab for some reason with controlsend, even enclosed in brackets
-;my fallback option which I could also not get working was to send /assist <f> and focus target on someone else beforehand, that was just sending shift modifiers not working right, no big deeal
+;my fallback option which I could also not get working was to send /assist <f> and focus target on someone else beforehand, that was just sending shift modifiers not working right, no big deal
 sleep, 300
 ControlSend,, 1, XIV ;attack
 sleep, 400 ;wait to repeat

@@ -3,17 +3,17 @@
 --0.3.3: added commands "on" and "off" to toggle to a mode
 --0.3.2: added the alias "toggle" to mean "switch"
 --0.3.1: added "always visible" list
---0.3: created buzzoff by forking fuckoff, added toggle settings, reconfigured things to work with toggles
---it's called buzzoff because it means the same as fuckoff, but bees annoy you when they buzz yet serve a useful purpose so you want to be able to have them around. get it? :)
+--0.3: created buzzoff by forking the elsewhere-available fuckoff.lua, added toggle settings, reconfigured things to work with toggles
+--it's called buzzoff because bees annoy you when they buzz yet serve a useful purpose so you want to be able to have them around. get it? :)
 
 --To make your own wildcard matching, here's the syntax example link from the original addon author: https://riptutorial.com/lua/example/20315/lua-pattern-matching
 
 _addon.name = 'buzzoff'
 _addon.version = '0.5' --20240715 fixed toggle list to work even better
-_addon.author = 'Chiaia (Asura) and also DACK'
+_addon.author = 'original lua by Chiaia (Asura)'
 _addon.commands = {'buzzoff','bo'}
 
-require('luau') --the hula is MANDATORY, citizen (seriously, what the hell is lua u in this context, I cargo cult it every time -DACK)
+require('luau') --the hula is MANDATORY, citizen (seriously, I don't know what this does but I cargo cult it every time)
 packets = require('packets')
 require('logger') --this is only used for the commented-out debug statements
 
@@ -34,30 +34,28 @@ local always_visible_words = T{'Crepuscular','Volte','pool','Trove',
 }
 
 --3) Any username in this list is visible ONLY when BO is toggled OFF. This takes precedence over the blocked words list to guarantee those people show up.
---Example: Waka, who you want to pay to merc JP when you want that, but don't need to see full-time. This is a special pass out of the "always blocked" list for Waka!
+--Example: one of Waka's JP merc accounts, who you want to pay for JP when you want that, but don't need to see full-time. This is a special pass out of the "always blocked" list for Waka!
 local toggled_users = T{'Wakakillofu'}
 
 --4) Any yell or shout containing these words is visible ONLY when BO is toggled OF. Takes priority over the blocked word list to make these shouts show up when BO is toggled off.
 --Note that this is checked AFTER the always visible word list above in 2 - so if you have "sortie" here and "segment" above, someone shouting "sortie segments" will be visible.
 --Things that you DO want to see when you turn the filter off go here - content you want to do for example ("Aeonic" both here AND in the blocked word list means you'll see it only when it's time to buy one and you toggle off.)
 local toggled_words = T{'Omen','Ambuscade','Sortie','gallimaufry','galli','Ambu',
-'seg', --it really bothers me that they don't even shout the word "segment". I really do not like it.
+'seg', --it really bothers me that they don't even shout the word "segment" sometimes, so I used "seg" instead.
 } --things you could add here: Sheol, Odyssey, V25, Shinryu, and so on.
 
 --5) Any yell or shout containing these words is blocked. Does not take priority over anything.
 --Things that you NEVER want to see from ANYONE go here. (unless there's something else in the same shout that they're offering that you DO care about)
 --Implicit assumptions: JP sellers shout for level 1-99, 500, and 2100. There's a lot of stupid sheol whack-a-mole to play, so this list got long.
 local blocked_words = T{
-string.char(0x81,0x69),string.char(0x81,0x99),string.char(0x81,0x9A), --first two are '☆' and '★'. (no idea what the third is - we had research into this in the Discord at some point, ask about special characters in chat)
+string.char(0x81,0x69),string.char(0x81,0x99),string.char(0x81,0x9A), --first two are '☆' and '★'. (no idea what the third is - special characters are awful to find without chat parsing)
 string.char(0x81,0x77), string.char(0x81,0x78), string.char(0x82,0x4F), string.char(0x81,0x5E), --『, 』, ０, ／ (the fancy full width ones) because snkonef started using them
 '1%-99','Job Points.*2100','Job Points.*500','JP.*2100','JP.*500','500*ml','Master Level','Alexander',
 '0-20','0-30','0-40','Abyssea','Empyrean','Reisenjima','Aeonic','T1234','T1T2T3','Lilith','V0V1','Sobek','Apademak','2100p','Empy','EMP','500*jp','Mercenary','Fast Cast','Bazaar','Assault','v15','Supercharge','V25',
-'Odyssey','ody c', --remove to see odyssey pick up segment runs (this second one actually happened god help me)
+'Odyssey','ody c', --remove to see odyssey pick up segment runs (this second one actually happened)
 'Tinnin','Tyger','Sarameya', --remove if you're making a mythic, obviously
 'Ou Item', 'gin fu' --aiming to hit all the main omen mercs
 }
-
-
 
 windower.register_event('addon command', function (...)
   local args = T{...}
@@ -174,3 +172,5 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ]]
+
+--subsequent modifications by me, do whatever you want license etc

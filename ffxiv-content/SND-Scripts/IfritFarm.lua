@@ -1,13 +1,10 @@
 --REQUIRED SETUP: HAVE IFRIT TRIAL SELECTED UNSYNC IN THE DUTY FINDER.
---(too lazy to get the stupid duty finder id working and selection and all that)
+--(never did get the duty finder selection by id working)
 
 --DEPENDENCIES:
---YESALREADY is assumed, but should theoretically not be mandatory. however, I have not tested without it -Unfortunate
+--YESALREADY is assumed, but should theoretically not be mandatory. however, I have not tested without it
 --ROTATIONSOLVER set to any sort of "on" and configured to not turn off when you change zones or complete a duty (so that you actually ever kill anything)
---make sure you're autoskipping cutscenes. I didn't bother coding to handle that at any point and I assume everyone already is but I wanted to document that
-
---Unfortunate's dubious "improvements":
---made this as a fork of Lakshmi, lmao
+--make sure you're autoskipping cutscenes. I didn't code to handle that at any point and I assume everyone already is but I wanted to document that
 
 --set to "true" to get a lot of spam in your chat log for debugging purposes. you don't need to turn this on unless someone has specifically asked you to.
 DebugVariable = true
@@ -40,7 +37,7 @@ function EnterIfrit()
     yield("/echo Debug: Beginning the function that enters Ifrit.")
   end
   
-  --repair your gear if it can be repaired. code stolen from flug's diadem, but I think they may have borrowed it from someone else. we really oughta make a canonical SND library, oughtn't we?
+  --repair your gear if it can be repaired. code from flug's diadem, but I think it predates that. go see the SND wiki function library I bet it's there.
   if NeedsRepair(99) then
   
     if DebugVariable then
@@ -71,6 +68,7 @@ function EnterIfrit()
     if DebugVariable then
       yield("/echo Debug: Repair complete.")
     end
+
   end
       
   if DebugVariable then
@@ -79,13 +77,12 @@ function EnterIfrit()
   
   yield("/wait 1") -- trying to nail down this crash
 
-  -- code stolen from flug to enter Diadem, but changed
-  --"While we are not queueing, try to queue" (20230328 Unfortunate added the DF opening/joining to this loop condition)
+  --"While we are not queueing, try to queue"
   while GetCharacterCondition(34, false) and GetCharacterCondition(45, false) do --34 = boundbyduty. 45 = between areas. theoretically if we are neither of these we have successfully entered
     
     --open the DF - specifically with Ifrit visible, except this is not ifrit? but it shouldn't matter anyway because you have to set it up in advance
-    OpenRegularDuty(6) --fuck it, open to haukke manor, whatever
-    yield("/wait 2") --20240415 holy shit the DF takes so long to open this is legit the crash I think sorry about the extra second leak of time -UNFORTUNATE
+    OpenRegularDuty(6) --sure, open to haukke manor, whatever, see above, have Ifrit selected
+    yield("/wait 2") --wow, the DF takes forever to open sometimes? sorry about this wait that does add up, I know how it is
     
     if DebugVariable then
       yield("/echo Debug: Opened Duty Finder.")
@@ -137,7 +134,7 @@ function ClearIfrit()
   --target Ifrit
   TargetClosestEnemy()
   
-  --move to middle of arena, which will kill him via RotationSolver lmao (confirmed that this is the actual coordinates)
+  --move to middle of arena, which will kill him via RotationSolver being on (confirmed that this is the actual coordinates)
   yield("/vnavmesh moveto 0 0 0")
   yield("/wait 0.2") --wait to start moving
   
@@ -179,9 +176,9 @@ function ClearIfrit()
 end
 
 --wrapper function for everything else, called at the start and loops until done
-function BeBotting()
+function MainFunctionLoop()
 
-  --until we have lifer 3, repeat the following. function names self-explanatory imo.
+  --until we have lifer 3, repeat the battle loop
   while not CompletionVariable do
     CheckForAchievements()
 
@@ -196,4 +193,4 @@ function BeBotting()
 end
 
 --this is the only code that actually runs when you start this in SND
-BeBotting()
+MainFunctionLoop()

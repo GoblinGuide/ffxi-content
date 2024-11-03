@@ -1,11 +1,12 @@
---pathing to fishing spots is already solved by someone else's ocean fishing script lmao
---can steal queueing and such too
---https://github.com/plottingCreeper/FFXIV-scripts-and-macros/blob/main/SND/FishingRaid.lua (also saved in the snd folder)
+--this is so unfinished it's honestly useless. I gave up very early into this project. you can imply optimal behavior (taken from that lovely black background white text ocean fishing guide I forget the URL to) from it I guess.
+--pathing to fishing spots and queueing is already solved by someone else's ocean fishing script, because PlottingCreeper is way smarter than I'll ever be, also vnavmesh exists
+--https://github.com/plottingCreeper/FFXIV-scripts-and-macros/blob/main/SND/FishingRaid.lua
+--and remember, when in doubt, https://github.com/Jaksuhn/SomethingNeedDoing is the canonical source
 
 --todo:
 --figure out how to define "late in current" (30s, 45s, 1m? let's say 30s for now)
 --figure out how to get hi-cordial cooldown
---figure out how the *hell* to time my bites and switching and stuff
+--figure out how to time my bites and switching and stuff
 
 --DEPENDENCY: SIMPLETWEAKS "Bait Command" enabled, (creates the command /bait
 
@@ -16,7 +17,7 @@
 --pop patience 2 at start of z1 (actually tell autohook to "use patience" so it will use after first cast, but also it'll be P1 if you don't have P2)
 --then start fishing
 --STATUS ID 48 IS "Well Fed" (242 stack count when it's crab cakes, are they storing information here?)
---STATUS ID 568 is "Fisher's Intuition" (stack count might tell us which fish, possibly? 237 in one place, )
+--STATUS ID 568 is "Fisher's Intuition" (stack count might tell us which fish, possibly? 237 in the one place I tried)
 --STATUS ID 763 IS "Chum"
 --STATUS ID 2569 IS "Cetaceous Speed" (+10 GP regen per tick)
 --CONDITION ID 43 is "Fishing" (a good thing to check for)
@@ -86,18 +87,17 @@ CurrentTime = GetCurrentOceanFishingTimeOfDay()
 end
 
 
---cast, evaluate every 0.1 seconds god help me (has to be that precise, or more because cast time = 3 vs 2.9 is different hooking behavior)
-	--"do we switch to double hook and if so what bite type"
-	--mooch evaluation also goes here
+--cast, evaluate every 0.1 seconds (has to be that precise, or more because cast time = 3 vs 2.9 is different hooking behavior)
+--"do we switch to double hook and if so what bite type"
+--mooch evaluation also goes here
 function CastLoop()
 --cast is governed by AH though? I don't like that
---anyway that's nbd kind of I guess? we'll figure something out
 end
 
 --checks for bait, intuition, weather (and thus spectral), AA stacks, whether we should ICPCTH, and GP level
-	--optimal chum use? I think it's something like 100 GP missing or less, regen is 8/tick every 3 seconds(ish)
-	--don't forget Cetaceous Speed here, can Chum at a lower threshold
-	--STATUS ID 2778 IS "Angler's Art" (you're welcome future self)
+--optimal chum use? I think it's something like 100 GP missing or less, regen is 8/tick every 3 seconds(ish)
+--don't forget Cetaceous Speed here, can Chum at a lower threshold
+--STATUS ID 2778 IS "Angler's Art" (you're welcome future self)
 --ideally can trigger this every time we hook (misses one tick of gp regen tops)
 function StatusCheck()
 PlayerGP = GetGp()
@@ -111,7 +111,6 @@ if PlayerGP + 100 > PlayerMaxGP and not OceanFishingIsSpectralActive() then
 --I'm thinking I want to manually cast it...
 else end
 
-
 end
 
 --when spectral triggers, move to cancel fishing (also cancels patience 2 if we're early in z1 using it)
@@ -124,7 +123,7 @@ FirstMissionProgress = GetCurrentOceanFishingMission1Progress() --currently have
 ThirdMissionProgress = GetCurrentOceanFishingMission3Progress() --see above note
 end
 
---for now, ignoring all timers. this means we are going to double hook the wrong shit lmao.
+--for now, ignoring all timers. this means we are going to double hook the wrong stuff absolutely all the time lmao.
 function SetAutoHookPreset(PresetName)
 SetAutoHookState(true) --make sure autohook is on
 DeleteSelectedAutoHookPreset() --delete the preset you currently have active. be sure that you're not losing anything you don't want to lose.
@@ -142,7 +141,7 @@ end
 
 --timers
 --fishing_start_time = os.time()
---while fishing_start_time + 2400 > os.time() do yield("/wait 1") end --that's actually like a lot of time, it's designed for fish antibot shit, but work with me here
+--while fishing_start_time + 2400 > os.time() do yield("/wait 1") end --that's actually like a lot of time, it's designed for the amiss timer, but work with me here
 
 
 --export autohook presets and put them here:

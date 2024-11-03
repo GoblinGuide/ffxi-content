@@ -1,7 +1,7 @@
 _addon.name = 'monstrosityinstincts'
 _addon.version = '0.1' --really I should just put things as version 0 at some point, huh
 _addon.author = 'me'
-_addon.commands = {'instincts','mi','monstro'}
+_addon.commands = {'instincts','mi','monstrosity','monstro','mon'} --"mon" might have an alias collision somewhere, I don't actually know, but for now it's here
 
 res = require('resources')
 packets = require('packets')
@@ -27,22 +27,24 @@ function test_function()
 
     notice('Attempting to access current Monstrosity information.')
 
-	--this function will also return positive if you're on PUP or BLU. since this is for my own use, I don't care, because I know to only use this in the Feretory.
+	--this function will also return positive if you're on PUP or BLU
+    --therefore, please only use it inside the Feretory or when actively out on Monstrosity.
     if windower.ffxi.get_mjob_data() then
         notice('Success! Parsing...')
         
         species_id=windower.ffxi.get_mjob_data().species
         notice('Current species ID number: ' ..species_id)
 
-        --stolen from gearswap slash refresh dot lua, it works nad that's all I ask for
-        species_name = {} --is this necessary to initialize? I honestly don't know. lua is wild.
+        --stolen from gearswap slash refresh dot lua, it works and that's all I ask for
+        species_name = {} --is this necessary to initialize? I honestly don't know. lua is wild. I don't think it is but I don't want to risk it
+
         for i,v in pairs(res.monstrosity[species_id]) do
             language_variable = i --the value of this is "en" on an English client. why is that? raw data is     [1] = {id=1,en="Rabbit",ja="ウサギ族",tp_moves={[257]=1,[258]=10,[259]=20,[314]=30}} [see below]
             species_name[i] = v
         end
 
 		--no, really, why does that work? you're telling me the first value for "i, v in pairs(id=1,en="Rabbit",ja="ウサギ族",tp_moves={[257]=1,[258]=10,[259]=20,[314]=30})" is... "en"? that's the second value!
-		--I assume the ID is inherently ignored? but then why does it not continue looping and say okay, ja is next, then tp_moves, and then end with tp moves because it's a for loop?
+		--I assume the ID is inherently ignored? but then why does it not continue looping and say okay, ja is next, then tp_moves, and then end with tp moves because it's a for loop? shouldn't it be overwriting language_variable?
 		--summary: no idea why this works. it's a pretty fundamental bit of lua logic, too. but it *does* work and that's all I care about.
 
         notice('Current species name: ' .. species_name[language_variable]) --here's the species you're actually on right now. it works!
@@ -60,24 +62,25 @@ function test_function()
     --the number on that instinct ID is 1 lower than the number in instincts.lua. this is fixable, if I ended up caring. but I stopped working on this altogether.
 
     else
-        notice('we got nothing')
+        notice("Attempting to find MJob data returned nothing. Make sure you're in Monstrosity.")
     end
 
 end
 
-
 --this will show what this windower function is returning, but NOT the contents - you'll have to dig deeper for that with the other for-pairs statement above
 --for i,v in pairs(windower.ffxi.get_mjob_data()) do
 --	notice('looking at pair number: ' .. i )
---	notice('its content is: ' .. tostring(v)) --tostring not needed HERE but if it was to be returning numbers, we'd need it
+--	notice('its content is: ' .. tostring(v)) --tostring not needed HERE but if it was to be returning numbers, we'd need it so it prevents breaking if the contents are not expected
 --end
 --in this specific case, you see it returns 1=species 2=instincts
-
 
 --deeper than I ended up needing to go, for now, but possibly not forever if I want to read those contents if we can't get them from the raw data in the ROM folders
 --instincts raw data is stored in ROM/288/80.DAT. item ID 29699 is the very first instinct after the three blank ones. remove 0x7400 from that to get the ID as used in the file provided with this lua.
 --same statement with monstrosity monsters: ids 0xF000 - 0xF1FF. instincts: 0x7400 - 77FF
 --outgoing 0x102 packet has instinct info
+
+--following are verbatim copypastes from Windower/addons/libs/packets/fields.lua - could parse incoming packets for variant info or something
+--someone more ambitious than me could even use the outgoing 0x102 info to write monchange.lua to work like jobchange!
 -- Untraditional Equip
 -- Currently only commented for changing instincts in Monstrosity. Refer to the doku wiki for information on Autos/BLUs.
 -- https://gist.github.com/nitrous24/baf9980df69b3dc7d3cf
@@ -94,7 +97,6 @@ end
 --    {ctype='unsigned char',     label='Name 2'},                                -- 29
 --    {ctype='char*',             label='_unknown'},                              -- 2A  -- All 00s for Monsters
 --}
-
 
 -- MON
 --func.incoming[0x044][0x17] = L{

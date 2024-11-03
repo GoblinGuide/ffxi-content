@@ -1,6 +1,6 @@
 #SingleInstance force
 
-;this came from some dude on SA
+;this came from some poster on SA
 SetTimer Click, 0
 
 ^q::Toggle := !Toggle

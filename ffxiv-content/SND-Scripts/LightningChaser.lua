@@ -1,4 +1,4 @@
---instance, repair, and move code borrowed from snd community scripts. Plenty of code reused by Unfortunate from his Dauntless Treader umbral fishing script.
+--this is just the Umbral Treader code, but reused to fish up Lightning Chasers to get 500k Fisher points instead.
 
 --DO NOT START THIS SCRIPT FROM ANYWHERE IN THE FIRMAMENT. PLEASE. I'M BEGGING YOU.
 
@@ -18,7 +18,7 @@ FishingPoint = "H4sIAAAAAAAACuXUTWvcMBAG4L8S5uwdRhp9+haSFgJN04TApg09mK6aFdRWWSst
 --Visland route from the entrance of the Firmament to Aurvael
 AurvaelRoute = "H4sIAAAAAAAACuVQy07DMBD8FbRn17KT1HF8QzykHsqjAqWAOFhkUS0RGzUbEIry7zjFVSX6B3CbmR2NZmeAK9siGLj3PoLmZBV6QmBQ26/34Dx1YJ4GuAmdIxc8mAHWYKTgSpVyzuABzEzOecbgMcplxrWQ1RhZ8Lg4B6O1YrCyjetjUM4Fg2X4wBY9gYlk4Qm39oVqR5vryf9LS+Vin24TPveXWCSmvdq3Dg/2XTvJ4KINhPsowjbB050jkdseO0p4Cq6to0PixC7D9iz4Jj0tfsQ71+Iy+sTIjiaZSc2zXGRV2kRNv06bFBUvyqxU/3UUqcq8OF5FxoOq9N9f5Xn8BoYngkRkAwAA"
 
---AutoHook preset: Hook ! 6-10 seconds. Mooch and hook all !!! (Umbral fish is the other !!!). Auto-Cordial, use Makeshift Bait, use Patience when MSB is not active.
+--AutoHook preset: Hook ! 6-10 seconds. Mooch and hook all !!! (the Umbral fish, worth even more points, is the only other !!!). Auto-Cordial, use Makeshift Bait, use Patience when MSB is not active.
 AutoHookPreset = "AH3_H4sIAAAAAAAACu1ZbW/iOBD+K1a+7Bd2RSiwbb9xQFukvqlQ9aTTqXKDIRbBRo7TlkP97ze2E+eVQBe0p5P6ZdWdGU+eZ+yZ8ZiN04sk7+NQhv3Z3DnfOEOGXwLSCwLnXIqINJwBZ7KPmUeCG849PxGrNdeUkXTNNFFdria+IKHPAxA1t3q4IsFqQt6lc+44DecWL8GXhoOUb6SdN5wR+GidnuW89l74K0nxkTDnfYaDEOQ9T1LOJusVWLofBnBssXH0H61d2N3mJ9E/hgRpKzQaJdi7p4djv2PBWluMmIyo0lnTY8femMXYz34eJ+59P1qqYD9HIXnyCbM0hu8eIdNQQ7VMYke/shVGG6J+JARh0rKJGWochlvbbbY/Qc6IK7nxICCezJ2lKgaf3IzErUXrHrYVbQtXTCmG7N44I/ZKRCK4F5QLKtfp4iDgb3dg4eHVqG/Fz56xv6YhAP4LvEiydCEcrW4XslT9D/Kq3Wx+NFJds9l1267VnnSy2ryqsNDtnrmptpXX5nRuzukXnHJ0/j5qtUgOkjmgcbwPOaGt+IRe0NAfrkm4M6M6nWPUBPU5pL9nU61zlMJwgxdk7NOZ/ANTXR6UIEwEY4m9BXDs1G9KZx+GE5+GaEnnvkQeZ7OAehK9UekjXdEnPg4oXnwL0QV+5SJlbgEijdD2q0/xr6n691hSAqbpRtoIpKp4/QOZqc8NsQjWE6rgNXcEpnuMzbc47N53j7L3UE3/IX0szW3j0XQ908FHd6w/sLxBpZr7E+zWaAoAqYcD5aDKQH3olYwDvCp3/6r8gGr5yyH6gZLQIMymyG6cPipwuIIAMS7RC0HQ0qfoDeghTRpp1ghrrJlAp7rMQTtOsOMDHprjDfHOCZJEO2nk5Q/Eg88JXRp1mOOCFl5QkYn/4T29PjtLSRgHrJy1SdDah2YnhG34LgXO3fhThuM3vFJY7CXtEtP0vqk0E65sCvpNgnw4pfImyajvapNKHq95JsIVHo1+h8d7iADZgtLoKnE6353K9TlMleuNhV2vq/gK7mgCUtbkzpZIVVrtEa/Cui1Rq7TaK3Z16LMRqLQrxLEOa42vTEwflFGfR0wSEfsE+9gJ4DaymBZmnD3rf/o+DiGNG466kd7NVFxCfTEtdA+lUL0+E5sBxVOyRFeqDrxxkYwGJ83WqQrUFeeLJ4IXBUeJOB1iqvWDq8nVFpWu6FAyKyp60eT2brLFSqWzslRt6+dZXpaZE1PlWArO5sV0TzVlQiWTLZyMcgervFE9L2OrG/JJUZrjlqivyZywKRbrKuxWWcvQWm0hafU7eJbs6qla8yLbMurEQjWrKJR8aTVqTfbKMOARwC9KJ4KuylJFt3Qfi+WKwtZ7SWIwjsQMe3l218Tc40OYHlOvN/hdXe4GJMBA123+gAZ6Q1lG1lUixQ8mdSUW2bWJMLZNlleJx5KvejOoJH0cQedNm1tefk2X6m7uZhRpGcotUmwom48lAZJ6ljL1Jm60e9WbSwH1BrXReLF+iWgwJSL8hi59KIHQ5ImgSZk+gQevdlUBKtSI2uP8VYL+8xJUUTvqmsZXAfrNBaii/jT/b/XHlJhy+RnNGRcwOpZfjA8sSkdlVtjajX7phvA/MsBRakpJ4saTWu8V00CRzhnAav21P3vL3KcMLCNMwdWOd/BOuc+Apx5JBZ2SEMUHEemTaEc5S1L/sJE8NXTODp9+cwd/c5TXgJRMCXZMp0AyJnP4m9nXjzO//8eZZNKsGCv3mlDjbFZZbidBmL4q5r7SwJguvSVw5vI4teiBBARmu9oy+PEvzaLnK8IcAAA="
 
 --Startup function. Make sure we're on Fisher, leave the Diadem if we're in it, configure Autohook presets, and get to Aurvael's desk
@@ -90,7 +90,7 @@ function InitialStartup()
     end
     
   --It is impossible to "not be in the Diadem", "not be in the Firmament", and "not be in either the Diadem or the Firmament" simultaneously.
-  --Therefore, if we get here, we are already in the Firmament, so we do nothing. This is why you can't start this bot from any random location in the Firmament... until navmesh is publicly released.
+  --Therefore, if we get here, we are already in the Firmament, so we do nothing. This is why you can't start from any random location in the Firmament... though navmesh fixes that
   else
     yield("/echo Began Lightning Chaser script in what should be a literally impossible location. Please tell the developer how you managed this! Quitting for now.")
 	yield("/snd stop")
@@ -98,7 +98,7 @@ function InitialStartup()
   
   --Now we're a Fisher who is either at the entrance to the Firmament or at Aurvael's desk. Either way, we're safe to proceed.
   SetAutoHookState(true) --Enable AutoHook
-  DeleteAllAutoHookAnonymousPresets() --Cleans up after any previous iterations of this bot
+  DeleteAllAutoHookAnonymousPresets() --Cleans up after any previous iterations
   UseAutoHookAnonymousPreset(AutoHookPreset)
   --SetAutoHookPreset('UmbralTreader1') --This does not work, per above notes
   yield("/echo AutoHook preset loaded. Please remember to delete it when you're done!") --Or don't, I'm not the boss of you.
@@ -170,7 +170,7 @@ end
 function InitialDiademEntryMove()
   --yield("/echo Debug: We have entered the Diadem. Moving to the fishing hole.")
   
-  --Record our entry time. Instance timer is 180 minutes = 3 hours > 40 minutes = 2400 seconds, then leave to dodge antibot amiss timer (I coded the movement to dodge amiss status on purpose, then it didn't. "yeah rip.")
+  --Record our entry time. Instance timer is 180 minutes = 3 hours > 40 minutes = 2400 seconds, then leave to dodge the amiss timer (I coded the movement to dodge amiss status on purpose, then it didn't. "yeah rip.")
   DiademEntryTime = os.time()
   
   --Check Diadem Hoverworm count and restock if we're below 500. We're staying for 40 minutes, so that's 12.5 per minute or an average fish bite time of under 5 seconds, which is definitely not happening.
@@ -292,13 +292,13 @@ function FishInTheDiadem()
 end
 
 --Container loop for the whole function, so that we only have to call this function when the script is started to loop until we're done
-function BeBotting()
+function MainFunctionLoop()
   yield("/echo Lightning Chaser auto-fishing script has begun.")
   
   --Make sure we are in the Firmament
   InitialStartup()
   
-  --There ain't no brakes on this train (this will not stop until you stop it manually)
+  --No brakes on this train (this will not stop until you stop it manually)
   while 1 do
     --yield("/echo Debug: Starting (or restarting) Diadem fishing loop.")
     
@@ -315,5 +315,5 @@ function BeBotting()
   end
 end
 
---The purpose of the function immediately above is to make it so the actual "meat" of this script, when run, consists of this single line. consider it a reminder of what you should be doing to get every Diadem achievement:
-BeBotting()
+--The purpose of the function immediately above is to make it so the actual "meat" of this script, when run, consists of this single line.
+MainFunctionLoop()

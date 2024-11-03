@@ -15,6 +15,7 @@ airships = T{223, 224, 225, 226}
 --SUBSEQUENT TODO BECAUSE I KNOW MYSELF send packets to rebuy airship ticket etc rather than hardcode menuing
 
 --note: you can use literally anything here, 'eye' whatever, it doesn't even read the cmd args
+--subsequent note: this is not optimal, if I ever actually do anything with this I'm going to change that
 windower.register_event("addon command", function (...)
     local mob_array = windower.ffxi.get_mob_array()
     local zone = windower.ffxi.get_info()['zone']

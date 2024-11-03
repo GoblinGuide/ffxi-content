@@ -136,7 +136,7 @@ function EnterCorrectDungeon()
 end
 
 --Container loop for the whole function, so that we only have to call this function when the script is started to loop until we're done
-function BeBotting()
+function MainFunctionLoop()
   yield("/echo Trust leveling 71-90 script has begun.")
 
   InitialStartup()
@@ -156,4 +156,33 @@ function BeBotting()
   yield("/snd stop") --end the script
 end
 
-BeBotting()
+MainFunctionLoop()
+
+
+
+--my notes from trying to make this work:
+--when you're in UI debug, go Focused Units -> Dawn to find these
+--Dawn is the name of the pcall for basically everything in this menu
+--pcall Dawn 15 0 selects Holminster Switch, 1 Dohn Mheg 2 Qitana Ravel 3 Malikah's Well 4 Mount Gulg 5 Amaurot
+--pcall Dawn 20 0 switches to Shadowbringers, pcall Dawn 20 1 switches to Endwalker
+--node with all the trusts in it is [#89] Res Node ptr = 1FF8DBEAFF0
+--then nodes 98-101 have child node that has child node that has child node that has child node of type Counter 
+
+--the entire party information, can we pull it all at once? don't think it's loaded when unselected but we'll see
+
+--FOR ENDWALKER:
+--node 64 is the right box with the party showing
+--72-77 are the nongraha trusts left to right, then 71 is graha on the far right
+
+--FOR SHADOWBRINGERS:
+--node 49 is the right box with the party
+--dunno trust numbers
+
+--FOR BOTH:
+--node 86 is the base component node with information on the selected trust member on the right
+--3 is the res node that holds everything
+--14 holds 15 holds 2 holds the trust's level
+--9 holds 12 holds current xp and 13 holds total exp to next level
+--THESE are text nodes, can we make this work?
+
+--getnodetext will return the last index you passed in if it fails, so if you see "2" instead of what you're supposed to get, that's why

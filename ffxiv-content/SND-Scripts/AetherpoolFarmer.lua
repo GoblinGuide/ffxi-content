@@ -1,16 +1,15 @@
+--Intended functionality: automatically reenter Palace of the Dead floors 1-10 repeatedly to farm Aetherpool Arms/Armor pluses, then cash them out for Grips you can use to buy weapons for achievements
+--Actual functionality: uh, um... (seriously though, the vnavmesh pathing is bad, it doesn't use boss pomanders, but it SHOULD function if you babysit it the entire time)
+--Last updated: couple months before Dawntrail dropped, so it's likely incompatible with literally everything written since. Sorry not sorry.
+
 --TODO:
 --add a jiggle function to open the coffer that moves you a small distance away, then back again, to ensure you're 1: facing it 2: not on top of it cause i'm getting sick of not being able to open
 --add movement to the wood wailer npc (copy paste is fine) in the spend aetherpool function in case of death
 --POMANDERS FOR BOSS (get the "is node visible" for strength and steel)
 --POMANDERS FOR EVERY OTHER FLOOR ("is node visible" for pomander of affluence)
---ACTUALLY WATCH THIS THING RUN TO CONFIRM IT WORKS OBVIOUSLY:
-  --AETHERPOOL TRADEIN
-  --RESETTING SAVE
-  --MOVEMENT TIMEOUT
-  --accepting death
 
---Instance, repair, and move loop code stolen from flug, who in turn borrowed some of it from earlier existing SND community scripts
---everything else by Unfortunate. never used a "license" in my life. feel free to steal all of it and modify however you want and leave my name off it altogether. we're all friends here. is this "copyleft"? idk.
+--Instance, repair, and move loop code writte by flug, who I believe borrowed some or all of it from earlier existing SND community scripts
+--everything else by me. feel free to reuse any or all of it and modify however you want and leave my name off it altogether. we're all friends here.
 
 --Required Starting Condition:
 --Whichever PotD save slot you want to use (configured on line 31 below) is empty.
@@ -18,12 +17,12 @@
 --Required Plugins:
 --VNAVMESH is used for all navigation - MANDATORY
 --TELEPORTER is used to teleport to Quarrymill from anywhere.
-  --not needed if you always start this bot from Quarrymill.
+  --not needed if you always start this script from Quarrymill.
 --ROTATION SOLVER (whether reborn: https://github.com/FFXIV-CombatReborn/RotationSolverReborn or the old one) is used to automate combat inside PotD - MANDATORY
   --1) Make sure it's not configured to urn off upon zone change, duty end, or death.
   --2) Make sure that Target -> Configuration is set to "All targets when solo, or previously engaged." in the first dropdown. That way you will kill things that haven't aggroed you yet.
 
---yeah, that's right, we're using math dot random to look marginally less like a bot (...marginally.)
+--yeah, that's right, we're using math dot random. I love it.
 math.randomseed(math.floor(os.clock()*1000000)) --wow, math.randomseed only takes integers? oh well, we ever invented the floor function
 
 --Set this variable to 'true' to spam your log with debug messages. You likely do not need this, unless either 1) someone specifically asked you to or 2) you're trying to modify this script yourself.
@@ -32,7 +31,7 @@ DebugVariable = true
 --Set this variable to 1 to use the first save slot. Set it to 2 to use the second save slot. THIS IS DIFFERENT FROM WHAT THE EXISTING HEAVEN-ON-HIGH ACCURSED HOARD FARMER SND SCRIPT DOES. BE CAREFUL!
 SaveSlot = 2
 
---if you would like the bot to stop on its own when you have a certain number of aetherpool grips, put that number here. it takes 3 per weapon and there are 20 weapons as of dawntrail, so by default this.
+--if you would like this to stop on its own when you have a certain number of aetherpool grips, put that number here. it takes 3 per weapon and there are 20 weapons as of dawntrail, so by default this.
 GripCountToStop = 60
 
 --number of seconds to keep trying to move to a destination before giving up, for when vnavmesh breaks
@@ -54,22 +53,22 @@ function InitialStartup()
 
   --check for being a MCH, but don't actually break if you're not. if you want to be a brd or I guess a smn that probably also works okay?
   if GetClassJobId() ~= 31 then
-    yield("/echo You're not currently a MCH! I hope you know what you're doing. Bot's not stopping for that, just letting you know.")
+    yield("/echo You're not currently a MCH! I hope you know what you're doing. We're not stopping for that, just letting you know.")
   else end --if we're MCH, no need for any message here
     
   --if we are not in South Shroud, teleport to Quarrymill
   if (not IsInZone(153)) then
-    yield("/echo Began Aetherpool farmer script outside South Shroud. Going there.")
+    yield("/echo Began Aetherpool Farmer in any zone but South Shroud. Going there.")
     
     --option 1: we are in a duty. leave it, then wait to leave it, then carry on.
     if GetCharacterCondition(34) then
   
       if DebugVariable then
-        yield("/echo Began bot inside a duty. Leaving duty.")
+        yield("/echo Began inside a duty. Leaving duty.")
       end
     
       LeaveDuty()
-      yield("/wait 10") --this is almost certainly overkill, but that's what you get for starting this bot inside a duty. how rude.
+      yield("/wait 10") --this is almost certainly overkill, but that's what you get for starting this from inside a duty. how rude.
 
       --now we've left the duty.
     end
@@ -102,9 +101,9 @@ function InitialStartup()
     yield("/echo Debug: Moving to the entry NPC.")
   end
     
-  --now we are in South Shroud. you *can* be a punk and start from Camp Tranquil, but then vnavmesh will walk across the damn zone to Quarrymill, because I hate you personally, punk.
+  --now we are in South Shroud. you *can* be a punk and start from Camp Tranquil, but then vnavmesh will walk across the entire zone to Quarrymill, lol
   --move to the Wood Wailer Expeditionary Captain, which is the direction with lower (smaller positive) X and lower (more negative) Z.
-  --we pick a random value in the range (1,3) in both of those directions to look marginally less like a bot. marginally. in practice it took me one minute to write and has almost zero payoff but it's free :)
+  --we pick a random value in the range (1,3) in both of those directions to not always go to the same place. in practice it took me one minute to write and has almost zero payoff but it's free :)
   yield("/vnavmesh moveto "
   .. string.format("%.2f", GetObjectRawXPos("Wood Wailer Expeditionary Captain") - math.random(1,2) - math.random()) --technically, since the Captain does not move, I could hardcode this, but why risk it?
   .. " " .. string.format("%.2f", GetObjectRawYPos("Wood Wailer Expeditionary Captain")) .. " "
@@ -144,11 +143,11 @@ function EnterPalace()
     yield("/pinteract")
     yield("/wait 1")
   
-    --the first menu you can't easily skip with YesAlready, since it has both the option to enter and the option to reset your save, both of which this bot uses.
+    --the first menu you can't easily skip with YesAlready, since it has both the option to enter and the option to reset your save, both of which I assume you use but have written the script to be compatible with not using.
     yield("/pcall DeepDungeonMenu true 0")
     yield("/wait 1")
   
-    --theoretical future improvement: we're in the save slot selection menu now, we can see if our save already exists - this prevents a fail state where the user did not read the directions. but that can wait.
+    --todo: theoretical future improvement: we're in the save slot selection menu now, we can see if our save already exists - this prevents a fail state where the user did not read the directions. but that can wait.
   
     if DebugVariable then
       yield("/echo Debug: Selecting save slot " .. tostring(SaveSlot - 1))
@@ -286,7 +285,7 @@ function InitializeVariables()
   ExitLocation = {'0', '0'} --x coordinate and z coordinate. if the exit isn't in range when we look, it returns 0,0, so save some time and start with that populated (also y=0 but as usual we do not care)
   CairnOfReturnLocation = {'0', '0'} --this is literally unusable in solo play, but it does give us a waypoint to use for navigation in cases without any chests left
   DestinationList = {} --this list will contain all coffers found on the current floor
-  OpenedCofferList = {} --this list will contain every coffer that the bot has already navigated to
+  OpenedCofferList = {} --this list will contain every coffer that we have already navigated to
   LengthOfDestinationList = 0 --lua requires you to iterate all of a table to find its length, so instead we'll update that manually to make adding new destinations to our destination list easier
   LengthOfOpenedCofferList = 0 --same reason as length of destination list
   NumberOfBronzeCoffers = 0 --used to track the contents of the destination list
@@ -461,7 +460,7 @@ function SavePointsToTable()
     yield("/echo Debug: Clear Single Floor: The exit is not yet open. Looking for objects, then selecting the next destination. Current exit progress is ".. ExitProgress .. "%.")
   end
   
-  --destinations we care about finding: silver coffers, cairn of passage (aka "exit"), gold coffers, bronze coffers, cairn of return. these are in priority order of how much we care about them, but they don't need to be!
+  --destinations we care about finding: silver coffers, cairn of passage (aka "the exit"), gold coffers, bronze coffers, cairn of return. these are in priority order of how much we care about them, but they don't need to be!
   LookForCoffers('Silver')
   LookForTheExit()
   LookForCoffers('Gold')
@@ -472,7 +471,7 @@ function SavePointsToTable()
     yield("/echo Debug: Clear Single Floor: Destination choice function complete.")
   end
 
-  --now we should have a fully updated locations list. note that we want to call this every time we go anywhere, in case the floor is big enough that we don't have everything in range from the first search when we enter
+  --now we should have a fully updated locations list. note that we want to call this every time we go anywhere, since floors are often big enough that we don't have everything in loading range from the entry point
 end
 
 --select the appropriate destination from our list. priority order: unopened silver > unopened gold > unopened bronze > cairn of return > closed exit (open exit means we don't call this function again, so we ignore it)
@@ -629,7 +628,7 @@ function LookForCoffers(CofferType)
       for LoopTwoVariable = 0, (LengthOfDestinationList-2), 3 do --coffers are a triple, see comments in move to the next destination if you want the most information I ever wrote (probably still not full information)
   
         if DebugVariable then
-          yield("/echo Debug: Duplicate check beginning. We are on loop iteration number " .. math.floor((LoopTwoVariable+3)/3) .. " out of " .. math.floor((LengthOfDestinationList/3)) .. ".") --floor not needed, but I hate "1.0"
+          yield("/echo Debug: Duplicate check beginning. We are on loop iteration number " .. math.floor((LoopTwoVariable+3)/3) .. " out of " .. math.floor((LengthOfDestinationList/3)) .. ".") --floor not needed, but I dislike "1.0"
         end
   
         --check whether we have already stored this coffer, by checking whether we've found a coffer within one yalm of it. close enough to true dupe check
@@ -731,7 +730,7 @@ function OpenedCheck(CofferType)
         for LoopTwoVariable = 1, (LengthOfOpenedCofferList-2), 3 do
           
           if OpenedCofferList[LoopTwoVariable] == CofferType --if this already-opened coffer is all three of "the same type"...
-          and math.abs(OpenedCofferList[LoopTwoVariable+1] - DestinationList[LoopOneVariable+1]) < 1 --...and "within 1 yalm in X distance of the coffer we're looking at"... (fuck decimal places!)
+          and math.abs(OpenedCofferList[LoopTwoVariable+1] - DestinationList[LoopOneVariable+1]) < 1 --...and "within 1 yalm in X distance of the coffer we're looking at"...
           and math.abs(OpenedCofferList[LoopTwoVariable+2] - DestinationList[LoopOneVariable+2]) < 1 --...and "within 1 yalm in Z distance of the coffer we're looking at"...
           then
             
@@ -870,7 +869,7 @@ function MoveToTheExit()
     yield("/echo Debug: Exit should be open. Waiting to zone.")
   end
 
-  yield("/wait 15") --this can take less than ten seconds, if you start this wait when you're already on the pad, but I hate it.
+  yield("/wait 15") --this can take less than ten seconds, if you start this wait when you're already on the pad, I guess
 
   --just in case we have not yet changed zones, wait a little more...
   while ((math.abs(GetPlayerRawXPos() - tonumber(ExitLocation[1])) < 1) and (math.abs(GetPlayerRawXPos() - tonumber(ExitLocation[2])) < 1)) do
@@ -905,10 +904,9 @@ function JustGoSomewhere()
 
 end
 
---TODO: THIS IS UNTESTED
 --bizarre circle kiting is the best way to survive the boss
---TODO: I THINK THIS NEEDS TO GO FURTHER OUT THAN 20 FROM THE CENTER. IT WORKS TO DODGE THE CHARGED ATTACK, BUT NOT THE AUTOS AS MUCH
---todo 2: running in a circle is a solved problem. generalize the locations and just do an arc idiot
+--TODO: I THINK THIS NEEDS TO GO FURTHER OUT THAN 20 FROM THE CENTER? IT WORKS TO DODGE THE CHARGED ATTACK, BUT NOT THE AUTOS AS MUCH
+--todo 2: running in a circle is a solved problem. generalize the locations and just do an arc, self, you're not a moron, you can do better
 function ClearBossFloor()
 
   if DebugVariable then
@@ -919,8 +917,6 @@ function ClearBossFloor()
   --open pomander menu: if isvisible deepdungeonstatus do nothing else pcall DeepDungeonStatus 13 1 see the affluence function
   --use a steel: pcall DeepDungeonStatus true 11 4
   --use a strength: pcall DeepDungeonStatus true 11 3
-
-
 
   --implicit assumption throughout: we're on MCH. if you're not on a job with a zero-cast-time ranged attack, this will not work for you. I recommend just being mch. kiting is STRONG against this boss. literally one raidwide.
   --player spawn location is -300, -200ish, in case you were wondering. arena's about 30 yalms radius so I used 20 as the distance from the center for the points to run to.
@@ -1139,7 +1135,7 @@ function SpendAetherpool()
 
 end
 
---Moves to a single destination. Takes its destination directly from the global values stored in the Current Destination variable. Name comes from having a timeout, because, frankly, vnavmesh shits the bed.
+--Moves to a single destination. Takes its destination directly from the global values stored in the Current Destination variable. Name comes from having a timeout, because, frankly, vnavmesh.
 function SafeMovementLoop()
   
   --had trouble passing these in so just using globals
@@ -1212,7 +1208,7 @@ function SafeMovementLoop()
         end
     
         yield("/wait 2") --added this because for some reason I needed it. why on earth?
-        yield('/target "Treasure Coffer"') --note: this can fail if you are between targets but still in combat (it's those damn fire sprites) but the fail state is "you just don't open that coffer" so whatever
+        yield('/target "Treasure Coffer"') --note: this can fail if you are between targets but still in combat (it's those sprites, I bet) but the fail state is "you just don't open that coffer" not "entire thing breaks"
         yield("/wait 1")
         yield("/pinteract")
         yield("/wait 1")
@@ -1285,9 +1281,9 @@ function PomanderOfAffluence(FloorNumber)
 end
 
 
---Container loop for the rest of the functions, so that the bot only has to call this function once when the script is started to loop until manually stopped
-function BeBotting()
-  yield('/echo Automatic Palace of the Dead aetherpool farmer has begun. Use "/snd stop" to stop.')
+--Container loop for the rest of the functions, so that we only have to call this function once when the script is started to loop until manually stopped
+function MainFunctionLoop()
+  yield('/echo Aetherpool Farmer has begun. Use "/snd stop" to stop.')
   
   --travel to PotD entrance
   InitialStartup()
@@ -1313,5 +1309,5 @@ function BeBotting()
 
 end
 
---The purpose of the function immediately above this is to make it so that this script, when run, just executes this single line. consider it an elegant reminder of what you should be doing to get this and many other achievements:
-BeBotting()
+--The purpose of the function immediately above this is to make it so that this script, when run, just executes this single line. I think it's elegant, but I bet most other people think it's dumb.
+MainFunctionLoop()

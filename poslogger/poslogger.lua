@@ -7,14 +7,14 @@ packets = require('packets')
 
 _addon.name = 'poslogger'
 _addon.version = '0.3' --made it a notice AND a print, not just one
-_addon.author = 'DACK'
+_addon.author = 'me'
 _addon.commands = {'pl', 'poslogger', 'pos', 'logger'}
 
 --change this number to change how often to log the player's position, in seconds. default is once every ONE second.
 DelayVariable = 1
 
---set this to "true" if you want the addon to also spit things into the windower *and* the in-game chat log.
-PrintVariable = true
+--set this to "true" if you want the addon to also spit things into the windower *and* the in-game chat log, instead of just the .txt file in the addon folder
+PrintVariable = false
 
 --defines windower console addon commands
 windower.register_event('addon command', function (...)
@@ -22,14 +22,21 @@ windower.register_event('addon command', function (...)
 
   if args[1] == 'start' then
     track_path()
+
   elseif args[1] == 'stop' then
+
     --the least elegant way to stop - simply reloads the addon - but that's fine
     windower.send_command('lua r poslogger')
+
   elseif (args[1] == 'single' or args[1] == 'log') then
-    --added this, which will log just the current position. code's gonna be a copypaste but that's fine
+
+    --added this, which will log just the current position.
     log_current_position()
+
   else
-    print("Use 'pl start' to start recording a path. Use 'pl stop' to stop.")
+
+    print("Use 'pl start' to start recording a path. Use 'pl stop' to stop. Use 'pl single' to just spit out your position right now.")
+
   end
 
 end)
@@ -42,7 +49,7 @@ function track_path()
   local Y_Coordinate = string.format("%.2f", windower.ffxi.get_mob_by_target('me').y)
 
   --first, newline twice and mark the start of the path
-  --first parameter is output location - currently hardcoded to append to output.txt in the same folder as this addon - this does NOT create it if it doesn't exist?
+  --first parameter is output location - currently hardcoded to append to output.txt in the same folder as this addon - this does NOT create it if it doesn't exist, apparently!
   --string.char(10) is a newline character, because the windower documentation is not accurate about whether append actually adds a newline by default (the third parameter "flush" = true doesn't do it either?)
   --see https://www.lua.org/pil/22.1.html for time formatting if you want something other than HH:MM:SS here
   files.append('output.txt',string.char(10))
@@ -81,7 +88,7 @@ function track_path()
 
 end
 
---one-off that doesn't loop
+--one-off output that doesn't loop
 function log_current_position()
   
   --get coordinates
@@ -95,6 +102,7 @@ function log_current_position()
 
   if PrintVariable then
     print('Logged:'.. os.date("%X") .. ' Single position recorded in zone ' .. res.zones[windower.ffxi.get_info().zone].en .. '. Position: ' .. X_Coordinate  .. ', ' .. Y_Coordinate .. string.char(10))
+    notice('Logged:'.. os.date("%X") .. ' Single position recorded in zone ' .. res.zones[windower.ffxi.get_info().zone].en .. '. Position: ' .. X_Coordinate  .. ', ' .. Y_Coordinate .. string.char(10))
   end
 
 end

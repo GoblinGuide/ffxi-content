@@ -1,2 +1,4 @@
-A quick and dirty little addon that DACK whipped up to log your position once per second.
-Useful when you need to record a path that doesn't run into anything for... reasons.
+# ffxi-addons/poslogger
+A quick and dirty little addon to log your position once per second.<br/>
+Useful when you need to record a path that doesn't run into anything for... reasons.<br/>
+Also includes functionality to just output your current position one time, in case you need to know where you are.

@@ -6,7 +6,8 @@ _addon.commands = {'tb', 'trailblazer'}
 packets = require('packets')
 resources = require('resources')
 logger = require('logger')
-events = require('events') --this is hackish, apparently, but it works
+events = require('events') --events is a jerk sometimes, you know how it is
+--wait, tables isn't required for the T thing on line 15 below?!
 
 windower.register_event("addon command", function(...)
 
@@ -19,7 +20,7 @@ windower.register_event("addon command", function(...)
     if (cmd == 'pickaxe' or cmd == 'sickle' or cmd == 'hatchet') then
         buy_tool(cmd, qty)
     else
-        notice("Accepted commands are 'pickaxe', 'sickle', and 'hatchet', to buy those three tools from Floralie. (Followed by the number to buy.)")
+        notice("Accepted commands are 'pickaxe', 'sickle', and 'hatchet', to buy those one of those three tools from Floralie, followed by the number to buy.")
     end
 
 end)
@@ -67,7 +68,7 @@ function buy_tool(cmd, qty)
   
 end
 
---below this point is thicket's work, repurposed from others I'm sure
+--below this point is DT's work, repurposed from others I'm sure
 --sends a dialog packet
 function send_dialog_packet(mob_id, menu_id, option_index, automated, unknown_1, unknown_2)
 	local mob = get_mob_by_id(mob_id)
@@ -102,15 +103,18 @@ end
 function start_dialog(mob_id)
 
     interact_with_mob(mob_id)
+
 	local menu_id = wait_for_dialog_start()
+
 	if menu_id then
 		return menu_id
 	end
 	
 end
 
---sends an interact packet to specified mob id
+--sends an interact packet to the specified mob id
 function interact_with_mob(mob_id)
+
 	local mob = get_mob_by_id(mob_id)
 	
     if not mob then
@@ -125,8 +129,9 @@ function interact_with_mob(mob_id)
 	}))
 end
 
---waits for the npc dialog to start so we can intercept it
+--waits for the npc dialog to start so we can intercept it, because sending packets doesn't work right with a visible dialog menu open
 function wait_for_dialog_start()
+
 	local menu_id = nil
 
 	wait_for('incoming chunk', function(id, data)
@@ -141,8 +146,9 @@ end
 
 --block the menu from opening when it's not supposed to be opening (because then we can't send nice packets)
 function wait_for(event_type, f, block, threshold)
+	
 	block = block or false
-	threshold = threshold or 5
+	threshold = threshold or 5 --by default, wait five seconds for the callback below
 	local debug_info = {}
 
 	local success = false
@@ -174,10 +180,12 @@ function wait_for(event_type, f, block, threshold)
 
 	events.unregister_event(event_type, handler)
 	return success
+
 end
 
 --get id for a mob given its name
 function get_nearest_mob_by_name(names)
+	
 	if type(names) == 'string' then
 		names = S{names}
 	end
