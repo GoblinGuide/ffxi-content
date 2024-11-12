@@ -809,7 +809,8 @@ function check_for_one_enemy()
 
 			notice('Target found. Scanning for ' .. CurrentTargetName .. ' now.')
 
-			windower.send_command('scanzone name ' .. CurrentTargetName)
+			--20241112 oops, King Vinegarroon et al have two word names and scanzone's funky with that... added quotes
+			windower.send_command('scanzone name ' .. '"' .. CurrentTargetName .. '"')
 			coroutine.sleep(5)
 		
 			windower.send_command('scanzone scan ' .. TargetIndex)
