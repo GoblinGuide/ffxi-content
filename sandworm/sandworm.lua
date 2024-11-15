@@ -49,10 +49,10 @@ TargetsList = {
 			95,'Sandworm','Survival Guide', --w saruta S
 			97,'Sandworm','Survival Guide', --meriphataud s
 			98,'Sandworm','Survival Guide', --sauromugue s
-			205,'Ash Dragon','Survival Guide', --ifrit's cauldtron
-			125,'King Vinegarroon','Survival Guide', --west altepa (do I want to add weather tracking?)
-			110,'Simurgh','Survival Guide', --rolanberry
-			79,'Khimaira','Home Point', --caedarva (first HP on the list)
+			--205,'Ash Dragon','Survival Guide', --ifrit's cauldron
+			--125,'King Vinegarroon','Survival Guide', --west altepa (do I want to add weather tracking?)
+			--110,'Simurgh','Survival Guide', --rolanberry
+			--79,'Khimaira','Home Point', --caedarva (first HP on the list)
 			7,'Tiamat','Home Point', --attohwa
 			5,'Jormungand','Home Point', --uleguerand
 			--102,'Bloodtear Baldurf','Survival Guide', --killed this
@@ -68,7 +68,7 @@ TargetsList = {
 			--190,'Vrtra','Survival Guide', --ranperre's
 			}
 
-NumberOfTargets = 13 --there's no easy way to just "count" a table in unmodified lua. manually total up how many triplets you have in the above targets list and put that number in this variable. sorry. maybe "tables" fixes this?
+NumberOfTargets = 9 --there's no easy way to just "count" a table in unmodified lua. manually total up how many triplets you have in the above targets list and put that number in this variable. sorry. maybe "tables" fixes this?
 PiecesPerTarget = 3 --zone id, mob name, transport method
 TargetsListLength = NumberOfTargets * PiecesPerTarget --magic numbers! yay!
 
