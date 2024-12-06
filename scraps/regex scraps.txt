@@ -24,7 +24,7 @@ turn
 |-
 |[[Souveran Schaller +1]]
 into
-_|
+-|
 [[Image:Souveran Schaller +1.png|link=Souveran Schaller +1]] [[Souveran Schaller +1]]
 
 to find:
@@ -88,3 +88,9 @@ icon = the string "icon"
 same thing, but we care about a link in that line:
 ^[^\[].*link\=([A-Za-z0-9 '\+\-]+)]].*
 this uses the regex from above to fill that capture group of an item name and then I just replaced with $1
+
+
+
+similar, but updating map.lua for monisette with job information in a comment:
+job="",}, --af one, ([a-z]+), all
+"grab that unknown-character-length job thing I had in that exact string and then in replace use $1 to reference it instead of $0 because ???"
