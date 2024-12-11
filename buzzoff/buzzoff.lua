@@ -28,7 +28,8 @@ local blocked_users = T{'Spicyryan','Spicedryan','Somewhatspicyryan'}
 
 --1.5) Any username in this list is never blocked. I didn't realize I wanted this. (added 20241206)
 --This is a special pass out of the "always blocked" list for Waka!
-local always_visible_users = T{'Wakatiac'
+local always_visible_users = T{
+--'Wakatiac'
 }
 
 --2) Any word in this list will always be shown as long as it's not coming from a name on list 1. This is for mercs, content, or items that you actively want to see every time.
@@ -40,9 +41,10 @@ local always_visible_words = T{
 ,'Dynamis' --dyna RP shouts
 }
 
---3) Any username in this list is visible ONLY when BO is toggled OFF. This takes precedence over the blocked words list to guarantee those people show up.
---Example: A merc that you want to pay but don't need to  see full-time. 
-local toggled_users = T{'Wakatiac'
+--3) Any username in this list is visible ONLY when BO filtering is toggled OFF. This takes precedence over the blocked words list to guarantee those people show up.
+--Example: A merc that you want to pay but don't need to see full-time. 
+local toggled_users = T{
+--'Wakatiac'
 }
 
 --4) Any yell or shout containing these words is visible ONLY when BO is toggled OFF. Takes priority over the blocked word list to make these shouts show up when BO is toggled off.
@@ -62,7 +64,7 @@ local toggled_words = T{
 local blocked_words = T{
 string.char(0x81,0x69),string.char(0x81,0x99),string.char(0x81,0x9A) --first two are '☆' and '★'. (no idea what the third is - we had research into this in the Discord at some point, ask about special characters in chat)
 ,string.char(0x81,0x77), string.char(0x81,0x78), string.char(0x82,0x4F), string.char(0x81,0x5E) --『, 』, ０, ／ (the fancy full width ones) because snkonef started using them
-,'1%-99','Job Points.*2100','Job Points.*500','JP.*2100','JP.*500','500*ml','Master Level','Alexander','Shinryu','beads'
+,'1%-99','Job Points.*2100','Job Points.*500','JP.*2100','JP.*500','500*ml','Master Level','Alexander','Shinryu','beads','500p'
 ,'0-20','0-30','0-40','Abyssea','Empyrean','Reisenjima','Aeonic','Lilith','Sobek','Apademak','2100p','Empy','EMP','500*jp','Mercenary','Fast Cast','Bazaar','Assault','Shank'
 ,'v15','Supercharge','V25','v0','v1','T1234','T1T2T3','Kalunga','Mboze' --various sheol merc terms
 ,'Odyssey','ody c' --remove to see odyssey pick up segment runs (this second one actually happened god help me)
@@ -108,7 +110,7 @@ windower.register_event('incoming chunk', function(id,data)
 
 	--case 1.5: sender is on always visible list -> display message no matter what
 	if always_visible_users:contains(chat['Sender Name']) then -- Blocks any message from X user in any chat mode.
-		--notice('here was an always visible user message: ' .. cleaned)
+		notice('here was an always visible user message: ' .. cleaned)
   		return false
 	end
 
@@ -120,10 +122,10 @@ windower.register_event('incoming chunk', function(id,data)
 		end
 	  end
 
-  	--case 3: sender is on the toggle list -> only block message if toggle is on
+  	--case 3: sender is on the toggle list -> only block message if filter is toggled on
   	if toggled_users:contains(chat['Sender Name']) and toggle then 
-		--notice('here was a toggle user list message that was blocked because toggle is on: ' .. cleaned)
-  		return true
+		notice('here was a toggle user list message that was blocked because toggle is on: ' .. cleaned)
+  		return false
 	end
 		
 	--unlike the above three cases, these below three only filter shouts (1) and yells (26). (Tells are mode 3, if you want that too. 12 is GM! This isn't Windower-documented that I know of, so I had to Google it.)
@@ -140,7 +142,7 @@ windower.register_event('incoming chunk', function(id,data)
   	    end
   	  end
 	  
-	  --case 5: toggle is off -> look for toggled words and break this loop if one is found so that we do NOT filter it out, i.e. we DO display the message normally.
+	  --case 5: toggle is off -> look for toggled words and if one is found display it
 	  if (not toggle) then
   	    for k,v in ipairs(toggled_words) do
   		  if cleaned:match(v:lower()) then
