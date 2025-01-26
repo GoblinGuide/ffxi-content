@@ -1,20 +1,22 @@
+--TODO: fixed how I store data and reformatted the GUI but did NOT change the main functional loop to deal with that
+
 _addon.name = 'Sandworm'; --not renaming this even though I'm broadening its scope as I type this
 _addon.version = '0.9.1'; --fixing ping to respect partial names by grabbing target name from scanzone instead
 _addon.author = 'me';
-_addon.commands = { 'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE (sw is taken by superwarp)
+_addon.commands = {'worm', 'sandworm' , 'sand'}; --DEAD I AM THE ONE (sw is taken by superwarp)
 
 res = require('resources') --used to get zone names, to input superwarp commands based on the predefined English names in the results list
 packets = require('packets') --"nice ffxi" "thanks! it has packets."
 texts = require('texts') --used for the gui
 files = require('files') --used to log output to file
 require('logger') --used to generate notices in the in-game chat. I prefer this to just using a naked windower.add_to_chat() but you can do that instead if you want. it comes in colors and everything.
-require('tables') --I'm gonna be honest with you. I don't know what this damn thing does. apparently it handles turning addon commands into the T thing.
+require('tables') --I'm gonna be honest with you. I don't know what this does. apparently it handles turning addon commands into the T thing, except you can do that without this. but I'm keeping it.
 
 --DEPENDENCIES:
 --SCANZONE (see project tako's repo at https://github.com/ProjectTako/ffxi-addons/tree/master/scanzone/windower)
 --SUPERWARP (see akaden's repo at https://github.com/AkadenTK/superwarp)
 --MYHOME (this is in the default Windower launcher, but you can find its code at https://github.com/Windower/Lua/tree/dev/addons/MyHome)
---DON'T START THIS IN, OR HAVE YOUR HOME POINT SET TO, ANYWHERE IN TAVNAZIAN SAFEHOLD. I'M VERY LAZY. SORRY, BUT ALSO NOT SORRY.
+--DON'T START THIS IN, OR HAVE YOUR HOME POINT SET TO, ANYWHERE IN TAVNAZIAN SAFEHOLD. I'M VERY LAZY.
 
 --set these variables to true for two levels of debug logging in the chat log. Verbose is used when you have NO idea what's broken because it displays everything.
 DebugVariable = false
@@ -106,9 +108,9 @@ end
 windowSettings = T{}
 windowSettings.pos = {}
 windowSettings.pos.x = 50 --not quite at the left edge of the screen
-windowSettings.pos.y = 375 --slightly below the windower console on my monitor, your mileage will vary by resolution, but my console has the black background/red text bomco that makes this hard to read while it's open
+windowSettings.pos.y = 375 --slightly below the windower console on my monitor. your mileage will vary by resolution, but my console has the black background/red text combo that makes this hard to read while it's open
 windowSettings.bg = {}
-windowSettings.bg.alpha = 200 --this is opacity ("alpha" as in brightness of the box background) - 255 opaque, 0 completely transparent
+windowSettings.bg.alpha = 175 --this is opacity ("alpha" as in brightness of the box background) - 255 is opaque, 0 is completely transparent
 windowSettings.bg.red = 150
 windowSettings.bg.green = 150
 windowSettings.bg.blue = 150
@@ -117,24 +119,26 @@ windowSettings.flags = {}
 windowSettings.flags.bold = true
 windowSettings.flags.italic = false
 windowSettings.flags.draggable = true --lets you drag the window with the mouse. lol at that.
-windowSettings.padding = 10 --controls the margin around the edge of the box. this is good to know about even if you probably shouldn't mess with it.
+windowSettings.padding = 5 --controls the margin around the edge of the box. this is good to know about even if you probably shouldn't mess with it too much
 windowSettings.text = {}
 windowSettings.text.size = 12
 windowSettings.text.font = 'Courier New' --courier is the calligraphy of my people
 windowSettings.text.fonts = {}
---windowSettings.text.alpha = 0 --setting this to any number doesn't seem to do anything. just so people know. suspect it has to be defined in the actual text we're displaying?
+--windowSettings.text.alpha = 255 --setting this to any number doesn't seem to do anything. just so people know. suspect it has to be defined in the actual text we're displaying?
 --windowSettings.text.stroke.alpha = 255 --same. commenting these out doesn't change anything either, which I proved by testing it.
 
---DACK note: the function texts dot new creates a text box, unsurprisingly. see roller.lua and omen.lua for what I stole to glean this insight. lmao.
+--note: the function texts dot new creates a text box, unsurprisingly. see roller.lua and omen.lua for what I stole to glean this insight. lmao.
 info = texts.new(windowSettings)
 
---begin with some joke text to show how the UI works so it can be dragged where you want it and whatever and also to show when it gets overwritten shortly afterwards
-info_display = ' \\cs(150, 0, 200)' .. 'Notorious Monster Hunter! \\cr \n'
-info_display = info_display .. ' \\cs(200, 00, 0)' .. 'Notorious \\cr \n'
-info_display = info_display .. ' \\cs(0, 200, 0)' .. 'Monster \\cr \n'
-info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Hunter \\cr \n'
-info_display = info_display .. ' \\cs(230, 230, 230)' .. '...Notorious Monster Hunter? \\cr \n'
-info_display = info_display .. ' \\cs(1, 1, 1)' .. 'Yes, Notorious Monster Hunter. \\cr \n'
+--20250110 actually let's make it the relevant zones for Sandworm, why not?
+info_display = ' \\cs(1, 1, 1)' .. 'Sandworm Zones: \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'East Ronfaure S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Batallia Downs S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'North Gustaberg S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Rolanberry Fields S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'West Sarutabaruta S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Meriphataud Moutains S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Sauromugue Champaign S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
 
 --start when we put in "worm start"
 windower.register_event('addon command', function (...)
@@ -192,8 +196,8 @@ windower.register_event('addon command', function (...)
 end)
 	
 --display the GUI
---dack note: this is "postrender", as in we do it immediately after every rendering tick. other relevant options are "load" (on addon load, so only once ever), "status change" which can work on zoning <-> idle, and "zone change".
---frankly, I have no idea if it's correct to put this in here for sixty times per second even if I'm not UPDATING the content sixty times per second
+--note: this is "postrender", as in we do it immediately after every rendering tick. other relevant options are "load" (on addon load, so only once ever), "status change" which can work on zoning <-> idle, and "zone change".
+--frankly, I have no idea if it's correct to put this in here to run at far too many times per second even if the content itself isn't changed that often
 windower.register_event('postrender', function()
 	
 	--only update as often as we told it to, that's just a modulo function
@@ -210,7 +214,7 @@ end)
 --[ScanZone]Found entity with name: ENTITY NAME. TargetIndex: 0xHEXADECIMAL
 --[ScanZone]Position: (X, Y, Z)
 --this function examines all incoming text to check whether it looks like that. if it does, it formats and stores the information accordingly.
---BIG assumption: there is only one relevant entity ID per zone. this is true for everything that I'm currently hunting, thank god. multiple zones for the mob but each zone only has one entity id for the mob.
+--BIG assumption: there is only one relevant entity ID per zone. this is true for everything that I'm currently hunting. multiple zones for the mob but each zone only has one entity id for the mob.
 windower.register_event("incoming text", function(original)
 	if original:contains("Found entity") then
 
@@ -446,7 +450,7 @@ function GetToZone(TargetsListID)
 
 		elseif WaitingFor == 'Survival Guide' and PreviousArrivalPoint == 'Home Point' then --this one is currently unused, but should be functional, since it's just an inversion of the previous logic
 
-			WarpCommand = 'sw hp Tavnazian Safehold 1' --for HP to SG, hp to Tav #1 and transfer lines (make sure it's 1 - 2 and 3 are on other floors altogether)
+			WarpCommand = 'sw hp Tavnazian Safehold 1' --for HP to SG, hp to Tav #1 and transfer lines (make sure it's #1 because that's the one next to the survival guide)
 
 			if VerboseDebugVariable then
 				notice('Debug: Sending first windower travel command: ' .. WarpCommand)
@@ -454,7 +458,7 @@ function GetToZone(TargetsListID)
 	
 			windower.send_command(WarpCommand)
 			wait_for_zone_change()
-			wait_for_mob_by_prefix(WaitingFor) --I don't care about naming characters so Tav was my male monk protagonist in BG3
+			wait_for_mob_by_prefix(WaitingFor)
 
 			WarpCommand = 'sw sg ' .. DestinationZoneName
 
@@ -464,7 +468,7 @@ function GetToZone(TargetsListID)
 	
 			windower.send_command(WarpCommand)
 			wait_for_zone_change()
-			wait_for_mob_by_prefix(WaitingFor) --Tav gonna beat the shit out of these notorious monsters (by proxy)
+			wait_for_mob_by_prefix(WaitingFor)
 
 		else
 
@@ -514,7 +518,7 @@ function CheckZone(TargetsListID)
 	windower.send_command('scanzone scan ' .. TargetIndex)
 
 	--wait for scanzone result to come in so the chat reading can update the value of the target position variable.
-	--if this sleep is too short ... I thiiiink nothing breaks but this single check? but also it might just not update the variables properly and poop all over the results table. so don't risk it, honestly.
+	--if this sleep is too short ... I thiiiink nothing breaks but this single check? but also it might just not update the variables properly so don't risk it
 	coroutine.sleep(5)
 
 	--this should now be properly set from those scanzone calls above
@@ -605,7 +609,7 @@ function update_target_information()
 
 		ResultsList[(PiecesPerResult*CurrentTarget)] = 'Alive'
 		ResultsList[(PiecesPerResult*CurrentTarget) - 1] = UpdateTime
-		notice("HEY IDIOT, GO GET THE UNCLAIMED ALIVE NM IF YOU'RE WATCHING THIS") --this message is all caps so I actually see it thank you :)
+		notice("GO GET THE UNCLAIMED ALIVE NM IF YOU'RE WATCHING THIS") --this message is all caps so I actually see it thank you :)
 
 	elseif NewMobStatus == 'Unspawned' then
 	
@@ -643,12 +647,22 @@ end
 function update_gui()
 
 	--create the variable that will hold ALL the info we're displaying
-	info_display = ' \\cs(150, 0, 200)' .. 'Notorious Monster Hunter \\cr \n'
+	info_display = ' \\cs(1, 1, 1)' .. 'Sandworm Zones: \\cr \n'
 
 	if DebugVariable then
 		notice('Debug: Re-creating GUI.')
 	end
 
+	--by default, show off the sandworm zones because that's what I'm using this for in general
+	info_display = ' \\cs(1, 1, 1)' .. 'Sandworm Zones: \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'East Ronfaure S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Batallia Downs S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'North Gustaberg S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Rolanberry Fields S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'West Sarutabaruta S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Meriphataud Moutains S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Sauromugue Champaign S: Status: UNKNOWN. Last Update: NEVER. \\cr \n'
+	
 	--update each line individually and concatenate into the same displayed variable repeatedly. each line ends with a Carriage Return and a Newline to move to the next line
 	--the information we're accessing looks like:
 	--                            1                    2          3      4            5         6      7
@@ -656,43 +670,39 @@ function update_gui()
     --(pieces * target) minus:   -6                   -5         -4     -3           -2        -1     -0
 	
 	for ResultLoop = 1, NumberOfResults, 1 do
-		
-		--possible statuses at this point are things that start with 'Dead', 'Alive', and 'Unspawned'. haven't gotten to ToD known yet.
+
+		--we start from just after a line break, so generate a new line
+		--things to determine: color, zone, mob status, update time. update time determines color.
+
+		--going to burn that entire thing down there to the ground to fix it, so let's do that
+
+		--todo: fix the status saving
 		if ResultsList[(PiecesPerResult*ResultLoop)] == 'Alive' then
-			--all of these are broken into multiple lines of text for readability, but are one "new line" total, since it's all concatenated
-			info_display = info_display .. ' \\cs(0, 175, 0)' .. ResultsList[(PiecesPerResult*ResultLoop) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
-			info_display = info_display .. ' IS ALIVE RIGHT NOW, AS OF ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '!' .. '\\cr \n'
-			--this should be green text reading something like "Jormungand in Uleguerand Range IS ALIVE RIGHT NOW, AS OF 12:34:56!"
+			--if it's alive, make it green
+			info_display = info_display .. ' \\cs(0, 200, 0)' .. ResultsList[(PiecesPerResult*ResultLoop) - 6] .. ': Status: ALIVE, GO KILL! Last Update: ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. ' \\cr \n'
 			
 		elseif ResultsList[(PiecesPerResult*ResultLoop)] == 'Dead' then
-			info_display = info_display .. ' \\cs(175, 0, 0)' .. ResultsList[(PiecesPerResult*ResultLoop) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
-			info_display = info_display .. ' was dead with ToD unknown as of ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '.' .. '\\cr \n'
-			--this should be red text reading something like "Jormungand in Uleguerand Range was dead with ToD unknown as of 12:34:56."
+			--if it's dead, make it red
+			info_display = info_display .. ' \\cs(200, 0, 0)' .. ResultsList[(PiecesPerResult*ResultLoop) - 6] .. ': Status: DEAD (tod unknown). Last Update: ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. ' \\cr \n'
 			
 		elseif ResultsList[(PiecesPerResult*ResultLoop)] == 'Approximate Time of Death Known' then
-			info_display = info_display .. ' \\cs(0, 0, 175)' .. ResultsList[(PiecesPerResult*ResultLoop) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
-			info_display = info_display .. ' best known ToD was ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '.' .. '\\cr \n'
-			--since alive and dead are green and red, known tod will be blue, I guess.
-			--should read something like "Jormungand in Uleguerand Range best known ToD was: 12:34:26."
-			--message is different since Sandworm could be in any of the zones. will never do: check values across all with same name cause any one tod means they're all dead, etc (already killed ixion while I tested this)
+			--if we know the ToD, that's fine. blue is neutral.
+			info_display = info_display .. ' \\cs(0, 0, 200)' .. ResultsList[(PiecesPerResult*ResultLoop) - 6] .. ': Status: ToD approximately ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '. \\cr \n'
+			--Sandworm only dies in one of its zones. will never do: check values across all with same name cause any one means they're all dead, etc (already killed ixion while I tested this, the need is diminshing)
 		
 		elseif ResultsList[(PiecesPerResult*ResultLoop)] == 'Unspawned' then
-			info_display = info_display .. ' \\cs(50, 50, 50)' .. ResultsList[(PiecesPerResult*ResultLoop) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
-			info_display = info_display .. ': Unspawned since maintenance as of ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '.' .. '\\cr \n'
-			--gray text, for when we don't know enough to make confident statements.
-			--should read something like "Jormungand in Uleguerand Range: Unspawned since maintenance as of 12:34:26."
-
+			--blue neutral here is not actually good. let's make it uh. grey? no the background's grey. purple time I guess.
+			info_display = info_display .. ' \\cs(150, 0, 175)' .. ResultsList[(PiecesPerResult*ResultLoop) - 6] .. ': Status: Unspawned. Last Update: ' .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '. \\cr \n'
+			
 		elseif ResultsList[(PiecesPerResult*ResultLoop)] == 'Unchecked' then
-			info_display = info_display .. ' \\cs(50, 50, 50)' .. ResultsList[(PiecesPerResult*ResultLoop - 5)] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
-			info_display = info_display .. ": Haven't checked yet as of " .. ResultsList[(PiecesPerResult*ResultLoop) - 1] .. '.' .. '\\cr \n'
-			--gray text, for when we don't know enough to make confident statements.
-			--should read something like "Jormungand in Uleguerand Range: Haven't checked yet as of 12:34:26."
-
+			--leave it the blue from not having checked until I have
+			info_display = info_display .. ' \\cs(0, 0, 200)' .. ResultsList[(PiecesPerResult*ResultLoop) - 6] .. ': Status: Unknown. Last Update: None yet. \\cr \n'
+			
 		--if we get here, we have something in there that I didn't put in there myself by hand, so complain about it!
 		else
-			info_display = info_display .. ' \\cs(255, 255, 0)' .. ResultsList[(PiecesPerResult*ResultLoop) - 5] .. ' in ' .. ResultsList[(PiecesPerResult*ResultLoop) - 6]
-			info_display = info_display .. ": Improper mob status (" .. ResultsList[(PiecesPerResult*ResultLoop) - 1] ..") found at timestamp: " .. os.date("%X",os.time()) .. '.' .. '\\cr \n'
 			--bright yellow is ugly so let's use it for errors so that it catches my eye, I guess
+			info_display = info_display .. ' \\cs(255, 255, 0) SOMETHING WENT HORRIBLY WRONG, FIX IT: \\cr \n'
+			info_display = info_display .. ": Improper mob status (" .. ResultsList[(PiecesPerResult*ResultLoop) - 1] ..") found at timestamp: " .. os.date("%X",os.time()) .. '.' .. '\\cr \n'
 
 		end
 
@@ -740,7 +750,7 @@ function check_for_one_enemy()
 	CurrentZone = windower.ffxi.get_info().zone --global variable storing zone ID
 
 	--this is zero-indexed to prevent me from having to do hacky things with the addition in the below loop
-	--also note that this will just pick up multiple mobs in same zone, so sandworm + ixion or whatever, doing them one ater another
+	--also note that this will just pick up multiple mobs in same zone, so sandworm + ixion or whatever, doing them one after another
 	for i = 0, NumberOfTargets -1 , 1 do
 
 		--if that zone is the current zone, looky-loo
@@ -772,14 +782,13 @@ function list_all_targets()
 	notice("Here's a list of every target and how to get there. Also updating GUI...")
 
 	info_display = '\\cs(1, 1, 1)' .. ' Notorious Monster Hunter (Listing All Targets): \\cr \n'
-	
 
 	for LoopCount = 1, NumberOfTargets, 1 do
 		AlreadyCompletedElements = (LoopCount-1)*PiecesPerResult --the first X-1 mobs are done, so skip the first (X-1) * (elements per mob) elements [for the first one, this is 0, so we don't run into weird index problems]
 	
-			notice('Target number ' .. LoopCount .. ': ' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.')
+		notice('Target number ' .. LoopCount .. ': ' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.')
 
-			info_display = info_display .. ' \\cs(1, 1, 1)' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.\\cr \n'
+		info_display = info_display .. ' \\cs(1, 1, 1)' .. ResultsList[AlreadyCompletedElements+2] .. ' in ' .. ResultsList[AlreadyCompletedElements+1] .. ' via ' .. TargetsList[(LoopCount)*3] .. '.\\cr \n'
 	
 	end
 
@@ -806,12 +815,12 @@ function single_enemy_status_check(CurrentTargetName)
 	
 	--oops. second, we have to put quotes around any two-word name, otherwise King Vinegarroon finds a bunch of other stuff
 	windower.send_command('scanzone name ' .. '"' .. CurrentTargetName .. '"')
-	coroutine.sleep(4) --wait for reply packet
+	coroutine.sleep(3) --wait for reply packet
 
 	--now "targetname" is the name of the target, the actual correct one taken from scanzone
 
 	windower.send_command('scanzone scan ' .. TargetIndex)
-	coroutine.sleep(4) --wait for reply packet
+	coroutine.sleep(3) --wait for reply packet
 
 	--okay, here are the variables we can use, if we can figure out some combination of them that actually matter:
 	--notice('name is: ' .. CurrentTargetName)
@@ -840,7 +849,7 @@ function single_enemy_status_check(CurrentTargetName)
 		--this one is awkward, because I can't figure out how to differentiate sandworm gone from sandworm here
 
 		if TargetPositionString ~= '(0.00, 0.00, 0.00)' then
-			NewMobStatus = "ALIVE or maybe not"
+			NewMobStatus = "ALIVE or maybe it was missed and despawned"
 
 		else 
 			--coordinates 0 means hasn't spawned in this zone even once since maintenance
@@ -868,17 +877,13 @@ end
 
 
 
-
-
-
-
---below this point I'm confident these functions are fine and should never need to be changed (well, okay, the testing function lives down here too, you can change that)
---literally just waits for us to be in a different zone than we were before. possible that we want to bake in a second loop to wait for a SG/HP to load and have that be configurable, but meh
+--below this point I'm confident these functions are fine and should never need to be changed (well, okay, the testing function lives at the end of this also)
+--literally just waits for us to be in a different zone than we were before. possible that it might be desirable to bake in a second loop to wait for a SG/HP to load and have that be configurable, but meh
 function wait_for_zone_change()
 	ZoneThatWeAreInRightNow = windower.ffxi.get_info().zone
 	
 	while ZoneThatWeAreInRightNow == windower.ffxi.get_info().zone do
-		coroutine.sleep(1) --sleep one second. no need to be faster.
+		coroutine.sleep(1) --sleep one second. no need to be faster. this is not for optimization and speed.
 	end
 
 end
@@ -899,7 +904,7 @@ function wait_for_mob_by_prefix(prefix)
 	return mob_id
 end
 
---handles the case where there's more than one of what we're looking for. in practice, I don't think any two HPs are within load... oh, Ru'Lude Gardens has two close to each other! existence justified.
+--handles the case where there's more than one of what we're looking for. in practice, I don't think any two HPs are within load... oh, Ru'Lude Gardens has two or three close to each other! existence justified.
 function get_nearest_mob_by_prefix(prefix)
 
 	local function starts_with(str, start)
@@ -923,7 +928,7 @@ end
 function get_distance(x, y)
 	
 	--please note, due to lack of some of DT's supporting functions, if you call this any time that you don't absolutely KNOW that the zone has loaded, me can be nil, and this will fail.
-	local me = windower.ffxi.get_mob_by_id(windower.ffxi.get_player().id) --is this *really* the most efficient way to do this?! really, DT? really, windower staff? is there no better way to get your own x-position?! I blame Stan.
+	local me = windower.ffxi.get_mob_by_id(windower.ffxi.get_player().id) --is this *really* the most efficient way to do this?! really, windower staff? is there no better way to get your own x-position?! I blame Stan.
 
 	return math.sqrt(math.pow(me.x - x, 2) + math.pow(me.y - y, 2))
 end
@@ -948,9 +953,17 @@ function testing_function()
 	--this is the only part I DON'T comment out, so that I know it's working
 	notice('Debug: Testing function complete.')
 	
-	--can you believe this is vanilla windower lmao
+	--can you believe this is vanilla windower?!
 	--windower.play_sound(windower.addon_path .. 'sounds/UnknownBlueMagicUsed.wav')
-	--I don't have a suitably funny sound clip but I sure could make one
-	--or I could use CONQUERING THE WORM lmao	
+	--I don't have a suitably funny sound clip but I sure could make one out of CONQUERING THE WORM
 
 end
+
+
+--not currently used, but just as a visual example of how I did it, some joke text to show how the UI works so it can be dragged where you want it and whatever and also to show when it gets overwritten shortly afterwards
+--info_display = ' \\cs(150, 0, 200)' .. 'Notorious Monster Hunter! \\cr \n' --this is a nice purple, a little too plum I think, I went too hard on B
+--info_display = info_display .. ' \\cs(200, 00, 0)' .. 'Notorious \\cr \n'
+--info_display = info_display .. ' \\cs(0, 200, 0)' .. 'Monster \\cr \n'
+--info_display = info_display .. ' \\cs(0, 0, 200)' .. 'Hunter \\cr \n'
+--info_display = info_display .. ' \\cs(230, 230, 230)' .. '...Notorious Monster Hunter? \\cr \n'
+--info_display = info_display .. ' \\cs(1, 1, 1)' .. 'Yes, Notorious Monster Hunter. \\cr \n'
