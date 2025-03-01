@@ -1,3 +1,4 @@
+## ffxi-content/safespace
 This addon removes player sprites near NPCs you want to interact with, so that you can actually interact with them.<br/>
 Lili originally wrote this to protect pubbies from the scourge of Odoro, but now it just makes our lives all easier.<br/>
 

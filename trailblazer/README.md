@@ -1,2 +1,2 @@
-# ffxi-addons/Trailblazer
+## ffxi-content/Trailblazer
 Purchases Trailblazing Pickaxe/Hatchet/Sickle +1 from Floralie (inside the Pioneer's Coalition, Western Adoulin, E-8) in bulk quantities. Because the game won't let you do that natively.
