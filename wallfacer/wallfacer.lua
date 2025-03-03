@@ -1,14 +1,13 @@
 --secret requirement: FPS uncapped makes this explode because it currently refreshes every 15 frames. don't do that. I can fix it later.
 
 _addon.name = 'Wallfacer'; --get it? because you can see whether the mob is facing the wall. those books had good ideas but the characters were two-dimensional. heh.
-_addon.version = '0.1.0'; --20250301 made GUI exist. very large list of functionality left
+_addon.version = '0.2.0'; --20250301 realized just how impossible mob model is. there's no list. got rid of funlib and moved functions in here so it, well, functions.
 _addon.author = 'me';
 _addon.commands = {'wf'}; --there's no command other than the testing function for myself, so this shortcut is short so that I can get there faster
 
 res = require('resources') --used to get zone name
 packets = require('packets') --"nice ffxi" "thanks! it has packets." I'm not actually using this but that joke lives rent-free in my head
 texts = require('texts') --used for the gui
-funlib = require('functionlibrary') --see addons\libs\functionlibrary.lua - used to get mob information because I didn't want to reinvent the wheel every time and had the code lying around
 require('logger') --used to generate in-game chat debug text. I prefer this to just using a naked windower.add_to_chat() but you can do that instead if you want and have more options for colors and formatting.
 require('tables') --I'm gonna be honest with you: I have no idea whatsoever whether I need to include this. which of the T{} functions can you do without it?
 
@@ -22,7 +21,7 @@ count = 0 --will be used to track time for the GUI display, initializing as an i
 ZoneNameUpperCase = true
 
 --set this to "true" to get debug logging output to the in-game chat log. you definitely don't want to, but I do when I'm testing.
-DebugVariable = true
+DebugVariable = false
 
 if DebugVariable then
 	notice('Wallfacer dot lua loaded. Debugging is currently ON.')
@@ -96,10 +95,6 @@ function update_nonmob_information()
   CurrentHour = math.floor(CurrentTime / 60) --get the hour (int, 0-23)
   CurrentMinute = (CurrentTime % 60) --get the minute (int, 0-59)
 
-  if DebugVariable then
-    notice('Current zone is: ' .. CurrentZone .. '. Current time is: ' .. tostring(CurrentTime) .. '.')
-  end
-
   --convert each of hours and minutes into a guaranteed string of length 2
   if CurrentHour < 10 then
     CurrentHourString = '0' .. tostring(CurrentHour)
@@ -115,6 +110,10 @@ function update_nonmob_information()
 
   --concat the two into a string of fixed length 5
   TimeString = CurrentHourString .. ':' .. CurrentMinuteString
+
+  if DebugVariable then
+    notice('Current zone is: ' .. CurrentZone .. '. Current time is: ' .. tostring(CurrentTime) .. ', a.k.a. ' .. TimeString)
+  end
 
   --pad zone length to 30 - maximum English zone length is 28, "Silver Sea route to Al Zahbi"
   for i = 1, (30 - string.len(CurrentZone)), 1 do
@@ -138,21 +137,21 @@ function create_mob_information_table()
 
 	RawMobArray = windower.ffxi.get_mob_array()
 
-	--TODO: loop over the raw mob array, it's something about pairs I think
-	--TODO: save all this output to a table, rather than just overwriting it instantly
-	--TODO: do we want to keep things that are not attackable? is funny to have A Home Point or Some Guards In Jeuno. yeah definitely.
-	for i, j in pairs(RawMobArray) do
-		
-		MobID = i
-		MobName = windower.ffxi.get_mob_by_id(i).name
-		Distance = windower.ffxi.get_mob_by_id(i).distance
-		Heading = windower.ffxi.get_mob_by_id(i).heading
-		Facing = windower.ffxi.get_mob_by_id(i).facing
-		MobX = windower.ffxi.get_mob_by_id(i).x
-		MobY = windower.ffxi.get_mob_by_id(i).y
-		Model = windower.ffxi.get_mob_by_id(i).models.1 --is this [1]? either way I think it's the best we can do - can't really determine aggro type from that usually... without hardcoding! ha HA! god help me.
+	--TODO: save all this output to a table, rather than spitting it out to the chat log and not recording it, now that I know that at least some of it is working
+	for index, mob in pairs(RawMobArray) do
 
-		notice('TESTING: Mob ID/Name: ' .. tostring(i) .. '/' .. MobName .. ', Distance: ' .. tostring(Distance) .. ', Heading: ' .. tostring(Heading) .. ', Facing: ' .. tostring(Facing) .. '.')
+    --index is numeric, and seemingly fixed across the entire array
+    --each "mob" is the entire table of windower.ffxi.get_mob(), so we can reference, for example, mob.id
+
+    notice('test: mob.id=' .. tostring(mob.id))
+    notice('test: mobname: ' .. tostring(Mob.name))
+    notice('test: coordinates: ' .. tostring(mob.x) .. ', ' .. tostring(mob.y))
+		notice('test: actual distance: ' .. tostring(get_distance(mob.x, mob.y)))
+    notice('test: spawn type: ' .. tostring(mob.spawn_type))
+	  notice('test: heading: ' .. tostring(mob.heading))
+    notice('test: facing: ' .. tostring(mob.facing))
+ 
+    
 	end 
 
 end
@@ -160,20 +159,60 @@ end
 --takes the information table that has already been created and formats it to display in the HUD
 function read_mob_information_table()
 
-  --TODO: literally all of this.
+  --TODO: literally all of this. see all notes below.
 
+  --loop over all mobs and:
   --the mob's position relative to us tells us which cell of the GUI to put it in
 
-  --then define aggro range per mob
-  --sight aggro range is 15 yalms, 60 degree cone (ffxiclopedia says "60-75 degree", bg says 60 degree)
-  --sound aggro range is 8 yalms, circle
-  --blood aggro range is 20 yalms, circle (bg says 8/15/20 for yellow/orange/red hp?), this one we can actually hardcode by mob type without issues I think (sheol will be wrong for the others)
+  --TODO: we have name->model, use that to go model->family (and hardcode the exceptions), then family->aggro
+  --TODO: get a list of nethack monster types to populate the monster list
+  --sight aggro range is 15 yalms, 60 degree cone (ffxiclopedia says "60-75 degree"/bg says "60 degree", say a cone (1/6 of 2pi radians) out to 15 yalm distance)
+  --sound aggro range is 8 yalms, circle (circle of radius 8, which will look like an oval thanks to the 2:1 compression)
+  --blood aggro range is 20 yalms, circle (bg says 8/15/20 for yellow/orange/red hp?), this one we can actually hardcode by mob type without issues I think (sheol gonna get me... but names work?)
   --since we have 3 we can use R, G, B and every combination thereof to visually distinguish (blood is red. for sure. that means sight is... blue, not green. arbitrarily.)
-  
-  --TODO: hardcode sight/sound assumptions by mob model, vs just showing both for everything which is not really that good an idea
 
-  --TODO: handle case where multiple mobs are in the same cell 
+  --TODO: handle case where multiple entities are in the same cell 
   --priority ordering: attackable mob > non-attackable mob (ex. chigoe) > interactable NPC (ex. home point) > never-interactable NPC (ex. environmental abyssea soldiers/mobs)
+
+  --spawn_type = 16 is something. 14 is something else. oh, per windower discord:
+  --bit 1    PC
+  --bit 2    NPC
+  --bit 3    Party
+  --bit 4    Alliance
+  --bit 5    Monster [note: this is 0x0010 in hexadecimal, see https://github.com/lili-ffxi/FFXI-Addons/blob/master/tellapart/tellapart.lua line 133 where spawn_type references it]
+  --bit 6    Object -- No Nameplate (interactables like Doors, ???, etc)
+  --bit 7    Airship
+  --bit 8    LocalPlayer
+  --Trust is 14, NPC in party and alliance by definition.
+  --16 is 010000 i.e. a monster, which I believe is the canonical "is a monster" definition?
+  --another PC will be any of 1, 5, 9, 11 depending on party/alliance membership relative to self. self is always 13 because you are always in a party and in an alliance with yourself.
+
+  --entity_type and target_type also exist, the former possibly only for campaign npcs? one has NPC for trust, there's also "player", "self", "monster" that doesn't always work
+  --target_type per windower discord:
+  --{
+  --    PC = 0,
+  --    NPC = 1,
+  --    PARTY = 2,
+  --    ALLIANCE = 3,
+  --    ENEMY = 4,
+  --    OBJECT = 5,
+  --    ELEVATOR = 6,
+  --    SHIP = 7,
+  --    ALLY = 8,
+  --    PLAYER = 9,
+  --    FELLOW = 0x0B,
+  --    TRUST = 0x0C
+  --};
+
+  --TODO: "you see a X" message on an extra row under the thing for when something moves into aggro range/a user-configurable range nearby?
+  --TODO: "the X is looking at you" might be hilarious too for when something goes from not looking at you to looking at you slightly out of aggro range
+  --TODO: test annoying noise when you should be getting aggro? this might be a bridge too far but I think it's hilarious
+
+  --end loop over all mobs
+
+  --TODO: after mobs, populate NPCs
+  --special trust handling? unlikely to be necessary except avoid model 0 and go by target_type instead. is ally (target_type = 8) things like wyvern and carbuncle?
+
 
 end
 
@@ -192,6 +231,44 @@ windower.register_event('postrender', function()
 	count = count + 1
 
 end)
+
+--determine what exactly we're looking at
+function can_attack_mob(mob_id)
+	
+	--Is this object an actual enemy?
+	local mob = windower.ffxi.get_mob_by_id(mob_id)
+	if not mob or mob.id == 0 or not mob.is_npc or mob.in_party or not mob.valid_target then
+		return false
+	end
+
+	--is the target a monster? see above notes on this variable.
+	if mob.spawn_type ~= 16 then
+		return false
+	end
+
+	--Is the mob actually alive? It's still in the array even if it's got 0 HP sometimes.
+  --Valid_Target should handle that but it does not always, unsure why (per windower discord, valid_target is "can you target it and have it show up as your target in the bottom right")
+	if mob.hpp <= 0 then
+		return false
+	end
+
+	return true
+
+end
+
+--gets the distance between two points (while the z-dimension does exist, the only thing it does is a height check for "can attack" and I don't know how mob aggro works with that)
+function get_distance(x_one, y_one, x_two, y_two)
+	
+  --if a second point isn't passed in, assume that I meant "distance to the player", because I guarantee I'll slip up and do this at some point
+  if not x_two or not y_two then
+    local me = windower.ffxi.get_player().id
+    x_two = me.x
+    y_two = me.y
+  end
+	
+	return math.sqrt(math.pow(me.x - x, 2) + math.pow(me.y - y, 2))
+end
+
 
 --hiding at the bottom (ctrl-end makes this one of the most accessible locations, as I once learned from a very angry man) - access to the testing function that can be changed as needed
 windower.register_event('addon command', function (...)

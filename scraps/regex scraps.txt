@@ -17,7 +17,7 @@ the same as above, but in a "capture group" to be spat back out in a find-and-re
 
 used for bg wiki editing: "when you find the line above, replace it with the same thing, but with [[double square brackets around it]]"
 \[\[$0\]\]
-NOTE: this is specifically due to notepad++ dev choices - \1 "should" work, but the first capture group is indexed 0 now but was 1 in 2018 according to google - and the $ is used rather than \ for clarity, as both work
+NOTE: this is specifically due to notepad++ dev choices - $1 "should" work, but the first capture group is indexed 0 now but was 1 in 2018 according to google - and the $ is used rather than \ for clarity, as both work
 
 fairly complicated bg wiki replace:
 turn
@@ -94,3 +94,9 @@ this uses the regex from above to fill that capture group of an item name and th
 similar, but updating map.lua for monisette with job information in a comment:
 job="",}, --af one, ([a-z]+), all
 "grab that unknown-character-length job thing I had in that exact string and then in replace use $1 to reference it instead of $0 because ???"
+
+
+
+
+https://stackoverflow.com/questions/14636539/lines-number-using-regex-in-notepad
+"Column Editor (Alt + C) provides a way to insert numbering. Options exist to choose the starting number, interval, and how often each number should be repeated. Place the cursor on the first position of the first line and increment by one to mimic the actual line numbers."
