@@ -1,9 +1,10 @@
---secret requirement: FPS uncapped makes this explode because it currently refreshes every 15 frames. don't do that. I can fix it later.
+--TODO: FPS uncapped makes this explode because it currently refreshes every 15 frames. don't do that, may fix it later.
+--thinking to look at system time instead... vanilla lua only has os.clock which works at the second level? absolutely not keeping a loop running nonstop.
 
 _addon.name = 'Wallfacer'; --get it? because you can see whether the mob is facing the wall. those books had good ideas but the characters were two-dimensional. heh.
-_addon.version = '0.2.0'; --20250301 realized just how impossible mob model is. there's no list. got rid of funlib and moved functions in here so it, well, functions.
+_addon.version = '0.2.1'; --20250303 thought about a lot of stuff, put a lot of "todo"s in, got a list of mobs, working on it
 _addon.author = 'me';
-_addon.commands = {'wf'}; --there's no command other than the testing function for myself, so this shortcut is short so that I can get there faster
+_addon.commands = {'wf'}; --there's no commands other than the testing function for myself, so this shortcut is short so that I can get there faster
 
 res = require('resources') --used to get zone name
 packets = require('packets') --"nice ffxi" "thanks! it has packets." I'm not actually using this but that joke lives rent-free in my head
@@ -14,7 +15,6 @@ require('tables') --I'm gonna be honest with you: I have no idea whatsoever whet
 --OPTIONS SECTION
 --update the GUI only this many frames. remember that ffxi natively runs at 30 fps, windower "config" plugin can instead do 60 or uncapped.
 HowManyTicksToUpdate = 15 --currently default to 1/2 second on native fps, 1/4 seconds with 60 cap
---TODO: add uncapped fps compatibility that looks at system time instead... vanilla lua only has os.clock which works at the second level? absolutely not keeping a loop running nonstop.
 count = 0 --will be used to track time for the GUI display, initializing as an integer juuust in case
 
 --set this to "false" to see Maquette Abdhaljs-Legion (A) instead of MAQUETTE ABDHALJS-LEGION (A)... except that the zone name in res\zones.lua is actually MAQUETTE ABDHALJS-LEGIONA. eyy, da legiona, am boo skah day.
@@ -58,7 +58,7 @@ function create_HUD_box()
   --get the zone and time and convert them to the format we want
   update_nonmob_information()
 
-  --TODO: if the mob info table stores model I'm ABSOLUTELY going to nethack-style pick a letter for each base mob sprite. it's gonna be so exciiiiiiting 
+  --TODO: ABSOLUTELY going to nethack-style pick a letter for each base mob sprite. it's gonna be so exciiiiiiting 
   create_mob_information_table()
 
   --TODO: figure out how I'm going to read the info table and define which cell goes where, likely into a 24x24 table
@@ -262,13 +262,67 @@ function get_distance(x_one, y_one, x_two, y_two)
   --if a second point isn't passed in, assume that I meant "distance to the player", because I guarantee I'll slip up and do this at some point
   if not x_two or not y_two then
     local me = windower.ffxi.get_player().id
-    x_two = me.x
-    y_two = me.y
+    local x_two = me.x
+    local y_two = me.y
   end
 	
-	return math.sqrt(math.pow(me.x - x, 2) + math.pow(me.y - y, 2))
+	return math.sqrt(math.pow(x_one - x_two, 2) + math.pow(y_one - y_two, 2))
 end
 
+--calculates the angle needed to turn from the point (x_two, y_two) to be facing point (x_one, y_one), in radians
+function get_radians_between(x_one, y_one, x_two, y_two)
+
+  --if a second point isn't passed in, assume that I meant "the player", because, again, mistakes will be made
+  if not x_two or not y_two then
+    local me = windower.ffxi.get_player().id
+    local x_two = me.x
+    local y_two = me.y
+  end
+
+  local x_diff = x_two - x_one
+	local y_diff = y_two - y_one
+
+  --please note that this relies on ffxi using old lua: per https://www.lua.org/manual/5.3/manual.html#8.2 the atan2 function was deprecated. not gonna fix, since we are in fact using old lua.
+	return math.atan2(x_diff, y_diff) + math.pi / 2
+end
+
+
+--TODO, BUT A BIG SECRET: it's gonna be way more efficient to not use this and hardcode ffxi-supported aggro ranges. so I'm gonna do that eventually. but I'm keeping this just in case.
+--calculates whether the point (point x, point y) is within the bounds of an arc of the given radius centered at the center (center x, center y)
+--since a circle is just an arc of angle 2pi this handles it just as well as a cone, which is very clever and I didn't come up with it myself despite it being trivial geometry
+function within_arc_area(center_x, center_y, radius, angle, point_x, point_y)
+
+  --first, pretend the center is zero. this saves doing more arithmetic later, so it's a net time gain
+  relative_x = point_x - center_x
+  relative_y = point_y - center_y
+
+  --three things to check, which we'll do in four cases because I'm an idiot:
+  --1: is it within "radius" distance?
+  if (relative_x)^2 + (relative_y)^2 > (radius)^ 2 then
+    return false
+  end
+
+  --once we know it's within distance, if we're looking at a circle (two pi radians or greater), it's within the area
+  if radius >= 2 * math.pi then
+    return true
+  end
+
+  --2: if we have an actual arc, is the point NOT "before" the start of the arc
+  --todo: confirm this properly returns negative
+  if get_radians_between(center_x, center_y, point_x, point_y) < -(angle / 2) then
+    return false
+  end
+  
+  --3: same condition, is the point NOT "after" the end of the arc
+  --todo: confirm this also works
+  if get_radians_between(center_x, center_y, point_x, point_y) > (angle / 2) then
+    return false
+  end
+
+  --if we got here we haven't eliminated ourselves yet i.e. we're good, inside the arc
+  return true
+
+end
 
 --hiding at the bottom (ctrl-end makes this one of the most accessible locations, as I once learned from a very angry man) - access to the testing function that can be changed as needed
 windower.register_event('addon command', function (...)
