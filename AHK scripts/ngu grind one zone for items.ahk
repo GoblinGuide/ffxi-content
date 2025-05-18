@@ -1,7 +1,7 @@
 ;this, and all my other scripts, are AHK 1.0 not AHK 2.0. just be aware, because it keeps coming up for me every time I'm on a fresh computer and accidentally install only 2.0
 
 #SingleInstance force
-;just means you can't have multiple copies running, so no crabwalking
+;just means you can't have multiple copies running
 
 SetTitleMatchMode, 2
 ;can contain the phrase specified below anywhere in the window title (third parameter of ControlClick) to be a match and send input to
@@ -106,7 +106,7 @@ Waiting := 0
 ;esc quits. not ctrl-esc because I have to have ngu visible anyway for the pixel check
 Esc::ExitApp
 
-;below this line, commented out scraps I'm keeping or search purposes
+;below this line, commented out scraps I'm keeping for search purposes
 ;quick testing, ctrl-e confirms there's a window matching the hardcoded criteria
 ;^e::
 ;{
