@@ -328,15 +328,16 @@ function init_gear_sets()
 	--haven't got any racc sets, should definitely work out a toggle for that eventually
 
     --base 60% triple shot activation rate after job point bonuses, so 40 is max in gear
+    --with job points and ambu cape/empy +3 body the rate is 79% TS/39% Quad 
     --18 currently, cap of 33 with existing gear that I know of
-    --this sacrifices some DT
+    --since dt matters so much say fuck it and just use malignance basically
     sets.TripleShot = {
-        --head="Oshosi Mask +1", --buy, 5 + some damage bonus
+        head="Malignance Chapeau",
         body=gear.EmpyBody, --13, upgrade eventually to 14 (also 12 DT to make up for missing currently 14 in malignance)
         hands=gear.RelicHands, --occ. becomes Quad Shot
-        --legs="Osh. Trousers +1", --buy, 6
-        --feet="Osh. Leggings +1", --buy, 3
-        back=gear.AmbuCape.TP, --5, want the pdt and not the meva
+        legs="Malignance Tights",
+        feet="Malignance Boots",
+        back=gear.AmbuCape.TP, --5
         }
 
 	 ------------------------------------------------------------------------------------------------
