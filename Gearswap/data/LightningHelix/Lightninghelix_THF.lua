@@ -134,7 +134,7 @@ function init_gear_sets()
         --hands="Thief's Kote", --3 (tonberry NM in uggalepih, tako there)
         --legs=gear.AFLegs, --2 (reforge further will get 0 instead, be aware)
         feet=gear.AFFeet, --3 (reforge further get 10, then 15)
-        --neck="Pentalagus Charm", --2 (tails of woe II or 1m gil)
+        --neck="Pentalagus Charm", --2 (currently not in wardrobe, but have it in my mog storage somewhere)
         --waist="Key Ring Belt", --1 (some godawful bastok quest)
         --head="Rogue's Bonnet", --1 (level 54 AF, loses it on any reforge, requires redoing the quest)
     }
