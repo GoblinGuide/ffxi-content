@@ -78,8 +78,8 @@ function init_gear_sets()
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    --all WS sets have as close to 50 DT as I could get because I got sick of dying, lol, lmao
-    --relevant numbers: Nyame is 7 9 7 8 7 = 38. plus dring is 48, plus either odnowa earring +1 or a,bu cape is capped
+    --all WS sets copied from an old COR gearswap of mine, lol, lmao
+    --relevant numbers: Nyame is 7 9 7 8 7 = 38. plus dring is 48, plus alabaster earring or ambu cape is capped
 
 	--base WS set: if not defined, Nyame, etc.
     sets.precast.WS = {
@@ -94,7 +94,7 @@ function init_gear_sets()
         left_ear=gear.Moonshade,
         right_ear="Odr Earring", --default to wsd, I guess, without knowing what stat's what
         left_ring="Cornelia's Ring", --10 wsd seems fine
-        right_ring="Defending Ring", --10 dt
+        right_ring="Murky Ring", --10 dt
         --back=gear.AmbuCape.MagicWS, --we ain't got no capes on RUN
         }
 
@@ -110,7 +110,7 @@ function init_gear_sets()
 		left_ear="Ishvara Earring", --lmao storage
         right_ear=gear.Moonshade,
         left_ring="Cornelia's Ring", --10 wsd seems fine
-        right_ring="Defending Ring", --10 dt
+        right_ring="Murky Ring", --10 dt
         --back=gear.AmbuCape.PhysWS,
         }
 
@@ -155,7 +155,7 @@ function init_gear_sets()
         left_ear="Telos Earring",
         right_ear="Sherida Earring", 
         left_ring="Ilabrat Ring", --run is on the weirdest stuff, I swear
-        right_ring="Defending Ring", --"Epona's Ring", removed for DT
+        right_ring="Murky Ring", --"Epona's Ring", removed for DT
         --back=gear.AmbuCape.TP, --no capes
         }
 
@@ -171,13 +171,13 @@ function init_gear_sets()
 		hands="Nyame Gauntlets", --7 dt (26)
 		legs="Nyame Flanchard", --8 dt (34)
 		feet="Nyame Sollerets", --7 dt (41)
-		neck="Loricate Torque +1", --6 dt (47)
-		waist="Reiki Yotai", --4 stp lmao, carrier sash is an option for sure?
-        left_ear="Odnowa Earring +1", --3 dt (50)
+		neck="Null Loop", --5 dt (46)
+		waist="Carrier Sash", --elemental resist
+        left_ear="Alabaster Earring", --5 dt (51 and capped)
 		right_ear="Eabani Earring", --15 evasion, the ear slots are awful for idle sets
 		left_ring="Shneddick Ring +1", --18 movespeed
-		right_ring="Defending Ring", -- 10 DT (60)
-        --back=gear.AmbuCape.Snapshot, --meva, since we're dt capped
+		right_ring="Chirich Ring +1", -- 1 regen (lol)
+        back="Null Shawl", --50 meva
         }
 
     ------------------------------------------------------------------------------------------------

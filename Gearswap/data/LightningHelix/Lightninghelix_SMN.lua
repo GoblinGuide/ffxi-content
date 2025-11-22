@@ -44,16 +44,9 @@ function user_setup()
 	gear.JSECape = {}
 	gear.JSECape.SummoningSkill = { name="Conveyance Cape", augments={'Summoning magic skill +5','Pet: Enmity+6','Blood Pact Dmg.+3',}}
 	
+	--could have a FC augmented pair of these too, but I don't care at the moment
 	gear.MerlinicDastanas = {}
 	gear.MerlinicDastanas.BP = { name="Merlinic Dastanas", augments={'Pet: Mag. Acc.+17 Pet: "Mag.Atk.Bns."+17','Blood Pact Dmg.+10','Pet: "Mag.Atk.Bns."+9',}}
-	gear.MerlinicDastanas.FC = { name="Merlinic Dastanas", augments={'Attack+9','"Fast Cast"+7','"Mag.Atk.Bns."+4',}}
-	
-	--futureproofing even though I have only one of each of these merlinics
-	gear.MerlinicCrackows = {}
-	gear.MerlinicCrackows.FC = { name="Merlinic Crackows", augments={'Mag. Acc.+12','"Fast Cast"+7','INT+8',}}
-	
-	gear.MerlinicShalwar = {}
-	gear.MerlinicShalwar.FC = { name="Merlinic Shalwar", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+7','DEX+6','Mag. Acc.+6','"Mag.Atk.Bns."+2',}}
 	
 	gear.Espiritus = {}
 	gear.Espiritus.PathA = { name="Espiritus", augments={'Enmity-6','Pet: "Mag.Atk.Bns."+30','Pet: Damage taken -4%',}}
@@ -64,21 +57,21 @@ function user_setup()
 	gear.ApogeePumps.PathB = { name="Apogee Pumps +1", augments={'MP+80','Pet: Attack+35','Blood Pact Dmg.+8',}}
 	
     --trying something new
-    gear.AFHead = {name="Convoker's Horn +2"} --17 smn skill up to 19
+    gear.AFHead = {name="Convoker's Horn +2"} --unused, +4 makes it best pet macc for debuffs
     gear.AFBody = {name="Convoker's Doublet +3"} --45 macc/acc, 16 bp damage
-    gear.AFHands = {name="Convoker's Bracers +2"} --unused lol (at +3 it's 43 acc/macc, 10 da, still unused)
-    gear.AFLegs = {name="Convoker's Spats +2"} --50 macc + set bonus
-    gear.AFFeet = {name="Convoker's Pigaches"} --nope
+    gear.AFHands = {name="Convoker's Bracers +2"} --unused, +4 makes it 58 acc/macc, 10 da, but I think I don't care?
+    gear.AFLegs = {name="Convoker's Spats +2"} --+3 is 50 macc + 15 more from set bonus (beats empy +3), +4 gives another 10, more importantly empy pants are otherwise useless
+    gear.AFFeet = {name="Convoker's Pigaches"} --unused
 	gear.RelicHead = {name="Glyphic Horn +1"} --30 seconds astral flow duration
-    gear.RelicBody = {name="Glyphic Doublet"} --nope
-    gear.RelicHands = {name="Glyphic Bracers"} --nope
-    gear.RelicLegs = {name="Glyphic Spats"} --nope
-    gear.RelicFeet = {name="Glyphic Pigaches"} --nope
+    gear.RelicBody = {name="Glyphic Doublet"} --unused
+    gear.RelicHands = {name="Glyphic Bracers"} --unused
+    gear.RelicLegs = {name="Glyphic Spats"} --unused
+    gear.RelicFeet = {name="Glyphic Pigaches"} --unused
 	gear.EmpyHead = {name="Beckoner's Horn +2"} --avatar's favor +4 up to +5, 3 refresh, 9 dt
     gear.EmpyBody = {name="Beckoner's Doublet +2"} --7 perp cost, 12 dt
-    gear.EmpyHands = {name="Beckoner's Bracers +2"} --mana cede +130%
-    gear.EmpyLegs = {name="Beckoner's Spats +2"} --650 tp bonus up to 700
-    gear.EmpyFeet = {name="Beckoner's Pigaches"} --nope (technically not useless, elemental siphon +70)
+    gear.EmpyHands = {name="Beckoner's Bracers +2"} --unused, mana cede +130% tp granted
+    gear.EmpyLegs = {name="Beckoner's Spats +2"} --unused, arciela sinister reign pants have same tp bonus and +bp damage
+    gear.EmpyFeet = {name="Beckoner's Pigaches"} --unused (technically not useless, elemental siphon +70, but I don't care)
 
 end
 
@@ -98,13 +91,13 @@ function init_gear_sets()
 	--elemental siphon returns 1.05 * summoning magic skill, caps at 700, with some other irrelevant factors
     sets.precast.JA['Elemental Siphon'] = {
 		--ammo="Esper Stone +1", --20 mp, eighth walk surged, inventory
-		head=gear.AFHead, --17 skill
+		head=gear.EmpyHead, --18 skill
 		body="Baayami Robe +1",
 		hands="Baayami Cuffs +1",
 		legs="Baayami Slops +1",
 		feet="Baaya. Sabots +1", --empy feet superior if I find myself with many many free inventory slots and spare time
 		left_ring="Evoker's Ring",
-		right_ring="Stikini Ring +1",
+		right_ring={name="Stikini Ring +1", bag="wardrobe2"},
 		left_ear="C. Palug Earring",
 		right_ear="Lodurr Earring",
 		--waist="Kobo Obi", --if inventory space is unlimited there's "Ligeia Sash" from siren fight
@@ -112,8 +105,9 @@ function init_gear_sets()
 		back=gear.JSECape.SummoningSkill, --the base effect on this cape is +30 mp returned
 		}
 
+	--lol no, inventory slot
     sets.precast.JA['Mana Cede'] = {
-		hands=gear.EmpyHands, --+130% TP granted
+		--hands=gear.EmpyHands, --+130% TP granted
 		}
 
 	--for all pact precasts, want Beckoner's Horn on, Avatar's Favor tiers give distinct recast reduction that you can't get anywhere else
@@ -129,7 +123,7 @@ function init_gear_sets()
 		legs="Baayami Slops +1",
 		feet="Baaya. Sabots +1",
 		left_ring="Evoker's Ring",
-		right_ring="Stikini Ring +1",
+		right_ring={name="Stikini Ring +1", bag="wardrobe2"},
 		left_ear="C. Palug Earring",
 		right_ear="Lodurr Earring",
 		--waist="Kobo Obi", --seiryu in escha-ruaun
@@ -142,21 +136,19 @@ function init_gear_sets()
 		main="Nirvana"
 		})
 
-	--cap is 80 FC + 10 occ, this is 37 + 0
+	--cap is 80 FC, this is 58
+	--merlinic augments exist if I really, truly care, which I don't
     sets.precast.FC = {
-		--ammo="Impatiens", --2 occ (0 + 2) --note: removes avatar ilevel? or is it locked in on summon? let's not risk it
-		head="Amalric Coif +1", --11 (11 + 2) --keeping this, albeit in wardrobe 3, because it's rdm refresh potency, so might as well use it here
-		body="Baayami Robe +1", --12 (23 + 2) --it's not summoning magic fc it's just fc!
-		--hands=gear.MerlinicDastanas.FC, --7 aug --inventory
-		--legs=gear.MerlinicShalwar.FC, --7 aug --inventory
-		--feet=gear.MerlinicCrackows.FC, --5 + 7 aug --inventory
-		left_ring="Kishar Ring", --4 (15)
-		right_ring="Prolix Ring", --2 (17)
-		left_ear="Etiolation Earring", --1 (18)
-		right_ear="Malignance Earring", --4 (22)
+		head="Amalric Coif +1", --11 (11) --keeping this, albeit in wardrobe 3, because it's rdm refresh potency, so might as well use it here
+		body="Baayami Robe +1", --12 (23) --it's not summoning magic fc, weirdly, it's just normal fc!
+		legs="Volte Brais", --8 (31)
 		waist={name="Plat. Mog. Belt", priority=100}, --HP swap for safety
-		neck="Orunmila's Torque", --5 (27)
-		back=gear.AmbuCape.MagicBP, --10, lol (37)
+		neck="Orunmila's Torque", --5 (36)
+		right_ear="Malignance Earring", --4 (42)
+		--left_ear="Etiolation Earring", --1, inventory
+		left_ring="Kishar Ring", --4 (46)
+		right_ring="Prolix Ring", --2 (48)
+		back=gear.AmbuCape.MagicBP, --10, lol (58)
 		}
 
     --------------------------------------
@@ -222,17 +214,17 @@ function init_gear_sets()
     sets.midcast.Pet.DebuffBloodPactWard = {
 		sub="Elan Strap +1", --this is actually only mab and BP damage, but that's fine
 		ammo="Sancus Sachet +1",
-        head=gear.AFHead, --set bonus
+        head=gear.EmpyHead, --AF Head beats this at +4 (57+15 set vs 61 on +3 empy)
         body=gear.AFBody, --set bonus
 		hands="Lamassu Mitts +1",
 		legs=gear.AFLegs, --set bonus
 		feet="Bunzi's Sabots", --this is 50 macc, BUT ALSO +1 pet level so losing convoker's set bonus like 10 macc is ok because you get raw stats from the level
+		neck="Smn. Collar +2",
+        waist="Regal Belt",
 		left_ring="Evoker's Ring",
 		right_ring="C. Palug Ring",
 		left_ear="Lugalbanda Earring",
 		right_ear="Enmerkar Earring",
-		neck="Smn. Collar +2",
-        waist="Regal Belt",
 		back=gear.JSECape.MagicBP,
 		}
     
@@ -246,12 +238,12 @@ function init_gear_sets()
 		hands=gear.MerlinicDastanas.BP,
 		legs="Apogee Slacks +1",
 		feet=gear.ApogeePumps.PathB, --per frod, the +1 level from bunzi's raw stats is not nearly as good as this
-		left_ring="Varar Ring +1",
-		right_ring="Varar Ring +1",
-		left_ear="Lugalbanda Earring",
-		right_ear="Gelos Earring", --until smn sortie earring, even NQ
 		neck="Smn. Collar +2",
 		waist="Incarnation Sash", --the DA makes this better than Regal, allegedly
+		left_ring={name="Varar Ring +1", bag="wardrobe1"},
+		right_ring={name="Varar Ring +1", bag="wardrobe2"},
+		left_ear="Lugalbanda Earring",
+		right_ear="Gelos Earring", --until smn sortie earring, even NQ
 		back=gear.AmbuCape.PhysicalBP,
 		}
 
@@ -265,12 +257,12 @@ function init_gear_sets()
 		hands=gear.MerlinicDastanas.BP,
 		legs="Enticer's Pants", --haha yesss thanks deeds
 		feet=gear.ApogeePumps.PathA,
-		left_ring="Varar Ring +1",
-		right_ring="Varar Ring +1",
-		left_ear="Lugalbanda Earring",
-		right_ear="Gelos Earring", --until sortie earring, even NQ
 		neck="Smn. Collar +2",
 		waist="Regal Belt",
+		left_ring={name="Varar Ring +1", bag="wardrobe1"},
+		right_ring={name="Varar Ring +1", bag="wardrobe2"},
+		left_ear="Lugalbanda Earring",
+		right_ear="Gelos Earring", --until sortie earring, even NQ
 		back=gear.AmbuCape.MagicBP,
 		}
 
@@ -283,7 +275,7 @@ function init_gear_sets()
     --------------------------------------
     
 	--15 perp + 4 refresh + 2 refresh from smn traits = 21 total = 21 max perp cost with avatar's favor (because it's 14 * 1.5)
-	--dt is capped, could needl cape to meva but then I have to find a few more dt (empy +3 head and body do it I think? not sure)
+	--dt is capped, could needle cape to meva
 	sets.idle = {
 		main="Nirvana", --8 perp cost (8 perp)
 		sub="Khonsu", --6 dt (6 dt, 8 perp)
@@ -293,13 +285,13 @@ function init_gear_sets()
 		hands="Nyame Gauntlets", --7 dt (34 dt, 15 perp) (-5 perp option here with lamassu mitts +1 if I need it)
 		legs="Nyame Flanchard", --8 dt (42 dt, 15 perp) (over "Assiduity Pants +1" which give refresh/perp)
 		feet="Bunzi's Sabots", --6 dt, avatar level +1 (48 dt, 15 perp, 1 refresh)
-		neck="Sibyl Scarf", --1 refresh WHEN WINDURST CITIZEN [always] (48 dt, 15 perp, 2 refresh)
+		neck="Sibyl Scarf", --1 refresh WHEN WINDURST CITIZEN [always] (48 dt, 15 perp, 2 refresh) (yes I genuinely need this 1 refresh here)
 		waist="Carrier's Sash", --elemental resistance (48 dt, 15 perp, 2 refresh)
-		left_ring="Stikini Ring +1", --1 refresh (48 dt, 15 perp, 3 refresh)
+		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --1 refresh (48 dt, 15 perp, 3 refresh)
 		right_ring="Shneddick Ring +1", --movespeed (48 dt, 15 perp, 3 refresh)
-        left_ear="Eabani Earring", --8 meva/15 eva
-		right_ear="C. Palug Earring", --1 refresh (48 dt, 15 perp, 4 refresh)
-        back=gear.AmbuCape.MagicBP --5 DT (53 dt, 18 perp, 4 refresh)
+        left_ear="Alabaster Earring", --5 dt (53 dt, 15 perp, 3 refresh)
+		right_ear="C. Palug Earring", --1 refresh (53 dt, 15 perp, 4 refresh)
+        back=gear.AmbuCape.MagicBP --5 DT (58 dt, 18 perp, 4 refresh)
 		}
 
     --------------------------------------
@@ -320,7 +312,7 @@ function init_gear_sets()
 		neck="Combatant's Torque", --thank god for job-agnostic store TP
 		waist="Plat. Mog. Belt", --literally have no relevant melee belt, so keep the meva/dt
 		left_ring="Chirich Ring +1", --stp
-		right_ring="Chirich Ring +1", --stp
+		right_ring="Murky Ring", --dt
         left_ear="Telos Earring", --da
 		right_ear="Dedition Earring", --minus 10 acc but I'm assuming that if I'm meleeing I can hit stuff, because otherwise I'd be using wings/corsair regain roll
 		back=gear.AmbuCape.PhysicalBP, --for the DT

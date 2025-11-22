@@ -1,5 +1,4 @@
 -- Original: Motenten / Modified: Arislan / gutted: me :)
---here's sets for future reference https://www.ffxiah.com/forum/topic/52018/luck-of-the-draw-a-corsairs-guide-new#_user-5
 
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
@@ -11,6 +10,7 @@ function get_sets()
 
     -- Load and initialize the include file.
     include('Mote-Include.lua')
+
 end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
@@ -27,6 +27,9 @@ function job_setup()
     info.default_ja_ids = S{35, 204}
     -- Unblinkable JA IDs for actions that always have TH: Quick/Box/Stutter Step, Desperate/Violent Flourish
     info.default_u_ja_ids = S{201, 202, 203, 205, 207}
+
+    --20251110 adding "default to party chat mode" so that I don't say "r legion" in norg, instead putting it in empty party chat
+    windower.send_command('input /cm p')
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -35,22 +38,23 @@ end
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
-    state.OffenseMode:options('Normal')
-    --state.HybridMode:options('Normal', 'DT') --I do not actually use this toggle
-    state.RangedMode:options('STP', 'Normal') --by default, aim for ranged tp rather than damage per shot
-    state.WeaponskillMode:options('Normal')
-    state.IdleMode:options('Normal')
+    --20251118 if I don't run into trouble from removing these in a week, delete them
+    --state.OffenseMode:options('Normal')
+    --state.HybridMode:options('Normal', 'DT') --all my sets are
+    --state.RangedMode:options('STP', 'Normal') --
+    --state.WeaponskillMode:options('Normal')
+    --state.IdleMode:options('Normal')
 
-    state.WeaponSet = M{['description']='Weapon Set', 'Ataktos', 'DeathPenalty_Melee', 'Fomalhaut_Melee', 'Evisceration', 'AeolianSet'} --by default, the blade is savage --'DeathPenalty_Ranged', 'Fomalhaut_Ranged'
-	--state.QuickDraw = M{['description']='Quick Draw Mode', 'QDDebuff', 'QDSTP'} --by default, QD for the debuff, but a toggle for maximum store tp
+    state.WeaponSet = M{['description']='Weapon Set', 'Ataktos', 'DeathPenalty_Melee', 'Fomalhaut_Melee', 'Evisceration', 'AeolianSet'} --default to SB on job change
+    --unused: 'DeathPenalty_Ranged', 'Fomalhaut_Ranged' (for ra only situations)
 	send_command('bind F10 gs c cycle WeaponSet')
-	--send_command('bind F11 gs c cycle QuickDraw')
 
-    gear.RAbullet = "Chrono Bullet" --correct
-    gear.RAccbullet = "Chrono Bullet" --correct
-    gear.PhysWSbullet = "Chrono Bullet" --this does nothing for savage, but it helps with Fomalhaut!
-    gear.MagicWSbullet = "Living Bullet" --correct
-    gear.QDbullet = "Living Bullet" --macc on this bullet too so it's fine
+
+    gear.RAbullet = "Chrono Bullet" --optimal
+    gear.RAccbullet = "Chrono Bullet" --optimal
+    gear.PhysWSbullet = "Chrono Bullet" --doesn't do anything for Savage Blade, good with Last Stand?
+    gear.MagicWSbullet = "Living Bullet" --optimal
+    gear.QDbullet = "Living Bullet" --macc, so optimal I think
 
 	--define ambu capes
 	gear.AmbuCape = {}
@@ -60,104 +64,99 @@ function user_setup()
 	gear.AmbuCape.Snapshot = { name="Camulus's Mantle", augments={'INT+20','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','"Snapshot"+10','Mag. Evasion+15',}} --snapshot, meva, good for phantom roll
 	
 	--define other stuff
-	gear.HercBoots = {}
-	gear.HercBoots.TH = { name="Herculean Boots", augments={'Pet: VIT+13','AGI+12','"Treasure Hunter"+2',}}
-	gear.HercBoots.FC = { name="Herculean Boots", augments={'"Mag.Atk.Bns."+21','"Fast Cast"+6','CHR+8',}}
-	
-	gear.HercVest = {}
-	gear.HercVest.TH = { name="Herculean Vest", augments={'INT+2','Pet: Haste+1','"Treasure Hunter"+2','Accuracy+5 Attack+5',}}
+    gear.HercHelm = {} --technically not needed if I just rename the item below, but a legacy of when I had TH herc helms (never gonna have a wsd one ever, but 13 FC seems worth 1 inv slot)
+    gear.HercHelm.FC = { name="Herculean Helm", augments={'"Mag.Atk.Bns."+8','"Fast Cast"+6','MND+8',}}
 
-	--only one of each of these
-	gear.TaeonTabard = { name="Taeon Tabard", augments={'Accuracy+20 Attack+20','"Fast Cast"+5',}} --fast cast
-	gear.Moonshade = { name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +250',}} --obviously
-	gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}} --fast cast
+	gear.Moonshade = { name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +250',}}
+	gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
 	
     --trying something new
-    gear.AFHead = {name="Laksamana's Tricorne +3"} --20 quick draw damage
-    gear.AFBody = {name="Laksamana's Frac +3"} --20 rapid shot, 10 wsd
-    gear.AFHands = {name="Laksamana's Gants +1"} --nope
-    gear.AFLegs = {name="Laksamana's Trews +1"} --nope
-    gear.AFFeet = {name="Laksamana's Bottes +2"} --10 quick draw damage
+    gear.AFHead = {name="Laksamana's Tricorne +3"} --unused forever (quick draw damage)
+    gear.AFBody = {name="Laksamana's Frac +3"} --unused, 20 rapid shot, 10 wsd, reforges to 12 wsd (nyame goes to 13) no dt
+    gear.AFHands = {name="Laksamana's Gants +1"} --unused forever
+    gear.AFLegs = {name="Laksamana's Trews +1"} --unused forever
+    gear.AFFeet = {name="Laksamana's Bottes +2"} --unused forever (quick draw damage, yes there are really two such pieces)
     gear.RelicHead = {name="Lanun Tricorne +1"} --30 sec duration, 50% to give roll job bonus when job not in party
     gear.RelicBody = {name="Lanun Frac +3"} --50% random deal work on two things
-    gear.RelicHands = {name="Lanun Gants +3"} --20% (per merit) to fold two busts... but also 13 snapshot and triple shot occasionally becomes quad shot
+    gear.RelicHands = {name="Lanun Gants +3"} --13 snapshot and triple shot occasionally becomes quad shot (also fold two busts chance)
     gear.RelicLegs = {name="Lanun Trews +1"} --12% (4 per merit) to make Snake Eye 0 recast
-    gear.RelicFeet = {name="Lanun Bottes +3"} --changes wild card odds in your favor, 10 wsd
-    gear.EmpyHead = {name="Chasseur's Tricorne +2"} --16 rapid shot, 9 dt
-    gear.EmpyBody = {name="Chasseur's Frac +2"} --10 tp regain on tactician's roll, +13% triple shot procs if equipped, 12 dt
-    gear.EmpyHands = {name="Chasseur's Gants +2"} --roll duration +55 up to +60, 7 crit rate up to 8, 8 wsd up to 12
-    gear.EmpyLegs = {name="Chasseur's Culottes +1"} --nope (12 dt but inventory)
-    gear.EmpyFeet = {name="Chasseur's Bottes +1"} --this is the garbage quick draw piece, currently unused within this gearswap, but if I need it I'd better make sure to change that, lots of notes here so I see this
+    gear.RelicFeet = {name="Lanun Bottes +3"} --changes wild card odds in your favor, 10 wsd -> 12 on reforge but only 6 pdt (no thanks)
+    gear.EmpyHead = {name="Chasseur's Tricorne +2"} --16 rapid shot, 9 dt (up to 18/10)
+    gear.EmpyBody = {name="Chasseur's Frac +2"} --10 tp regain on tactician's roll, +13% triple shot procs if equipped, 12 dt (up to 13 dt, 14 triple shot)
+    gear.EmpyHands = {name="Chasseur's Gants +2"} --roll duration +55 up to +60, 7 crit rate 7 up to 8, 8 wsd up to 12 (also no dt, very rude)
+    gear.EmpyLegs = {name="Chasseur's Culottes +1"} --currently unused until +3 reforge (12 dt once I get there)
+    gear.EmpyFeet = {name="Chasseur's Bottes +2"} --quick draw same-element subsequent-damage buff
 
 end
 
 -- Define sets and vars used by this job file.
 function init_gear_sets()
 
-    --TH 2+2 = 4
-    --until I get one more Volte TH1 piece, at which point I'll move these Herc Boots because I can use those on every job and get +1 inventory slot total from -3 +4
+    --may be optimal to change Volte pieces at some point, or use Hoxne Ring with HP swaps, or whatever. this is fine for now.
+    --TH 2+1+1, all items work on all jobs and are i119
 	sets.TreasureHunter = {
 		body="Volte Jupon", --2
-		feet=gear.HercBoots.TH, --2
+		hands="Volte Bracers", --1
+        waist="Chaac Belt", --1
 		}
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    sets.precast.JA['Snake Eye'] = {legs=gear.RelicLegs,} --12% chance or 0 recast
-    sets.precast.JA['Wild Card'] = {feet=gear.RelicFeet,} --goes from 1/6 all around to 2/16 2/16 3/16 3/16 3/16 3/16
+    sets.precast.JA['Snake Eye'] = {legs=gear.RelicLegs,} --12% chance of 0 recast
+    sets.precast.JA['Wild Card'] = {feet=gear.RelicFeet,} --changes odds from 1/6 uniform to 2/16 2/16 3/16 3/16 3/16 3/16
     sets.precast.JA['Random Deal'] = {body=gear.RelicBody,} --50% to reset two abilities instead of one
 
     --roll +8, duration +100, aoe up, recast -5
-	--DT in nonbuff relevant slots (total is currently 42 pdt 32 mdt - snapshot cape is meva instead if I end up wanting that)
+	--41 pdt 31 mdt - could use nyame legs over desultor tassets, or plat mog belt, or something?
     sets.precast.CorsairRoll = {
-		main="Rostam", --path C, pr + 8
+		main="Rostam", --roll +8
 		ranged="Compensator", --roll duration +20
-        head="Lanun Tricorne +1", --duration +30 and roll effect up (50% to give job bonus if job not in party, DRK and SAM and RNG are the best rolls, this works out)
-        body="Nyame Mail", --9 dt, HP
+        head="Lanun Tricorne +1", --duration +30 and roll effect up (50% to give job bonus if job not in party)
+        body="Nyame Mail", --9 dt (9 dt)
         hands=gear.EmpyHands, --55 duration
-        legs="Desultor Tassets", --roll recast -5 (can be 8 dt on nyame legs here if I want to cap)
-        feet="Nyame Sollerets", --7 dt, HP
+        legs="Desultor Tassets", --roll recast -5 (vs 8 dt on nyame legs here if I want to cap)
+        feet="Nyame Sollerets", --7 dt (16 dt)
         neck="Regal Necklace", --20 duration
-		--waist="Plat. Mog. Belt", --3 DT, HP, sick of blood aggro
-        left_ear="Odnowa Earring +1", --3 dt, hp
-        right_ear="Eabani Earring", --15 eva/hp (could be etiolation for 1 mdt)
-        left_ring="Luzaf's Ring", --roll aoe up
-        right_ring="Defending Ring", --10 dt
-        back=gear.AmbuCape.TP, --10 pdt
+		--waist="Plat. Mog. Belt", --3 DT, HP, sick of blood aggro so nothing here for now (maybe flume belt +1, 4 pdt?)
+        left_ear="Alabaster Earring", --5 dt (21 dt)
+        --right_ear="Etiolation Earring", --3 mdt, inventory, but if needed
+        left_ring="Luzaf's Ring", --roll aoe up because I love it (could put dring here lol?)
+        right_ring="Murky Ring", --10 dt (31 dt)
+        back=gear.AmbuCape.TP, --10 pdt (41 pdt, 31 mdt)
         }
 
-    sets.precast.CorsairRoll.Duration = sets.precast.CorsairRoll
-    sets.precast.CorsairRoll["Tactician's Roll"] = set_combine(sets.precast.CorsairRoll, {body=gear.EmpyBody,}) --tp regain, useful if not nearly as good as chaos/samurai
-    sets.precast.CorsairRoll["Allies' Roll"] = set_combine(sets.precast.CorsairRoll, {hands=gear.EmpyHands,}) --skillchain damage, but I have these for the duration bonus so might as well define
+    sets.precast.CorsairRoll.Duration = sets.precast.CorsairRoll --no thank you, just gonna figure out one set
+    sets.precast.CorsairRoll["Tactician's Roll"] = set_combine(sets.precast.CorsairRoll, {body=gear.EmpyBody,}) --tp regain, actually useful
+    sets.precast.CorsairRoll["Allies' Roll"] = set_combine(sets.precast.CorsairRoll, {hands=gear.EmpyHands,}) --skillchain damage, but I have these for the duration bonus in this slot anyway so I might as well explicitly define
     sets.precast.FoldDoubleBust = {hands=gear.RelicHands,} --lets me fold two busts at once, which hopefully will never happen. but I use this for other stuff anyway
 
-	--43 FC + 0 occ quicken
+	--FC is 44, cap is 80. I don't really care. anything BLU can use we can use here.
     sets.precast.FC = {
-		head="Haruspex Hat", --8 (8)
-        body=gear.TaeonTabard, --9 (17)
-        hands=gear.LeylineGloves, --6 (23)
-        --legs="Rawhide Trousers", --5 if I care to get these
-        feet=gear.HercBoots.FC, --6 (29)
-        neck="Orunmila's Torque", --5 (34)
-        left_ear="Loquacious Earring", --2 (36)
-        right_ear="Etiolation Earring", --1 (37)
-        left_ring="Prolix Ring", --2 (39)
-        right_ring="Kishar Ring", --4 (43)
+		head=gear.HercHelm.FC, --7+6 (13) --keeping this single item 
+        body="Adhemar Jacket +1", --10 (23) (lol)
+        hands=gear.LeylineGloves, --8 (31)
+        --legs="Gyve Trousers", --4, gear.Herclegs.FC is 6, inventory
+        --feet=gear.HercBoots.FC, --6 aug, inventory
+        neck="Orunmila's Torque", --5 (36)
+        left_ear="Loquacious Earring", --2 (38)
+        --right_ear="Etiolation Earring", --1, inventory
+        left_ring="Prolix Ring", --2 (42)
+        right_ring="Kishar Ring", --4 (44)
         }
 		
-    --snapshot cap is 60 (+10 from gifts, 70 is the real cap), rapid shot cap does not seem to exist (it's like quick cast)
-    --have an extra 3 from crep ring if I need it for some reason, can't free up an inventory slot YET but we'll see...prog
-	--this set takes me to 61 + 27
+    --snapshot cap is 60 (+10 from gifts, 70 is the real cap), rapid shot cap does not seem to exist (it's like quick cast, but good instead of bad)
+	--this is currently 64 + 27 (ikenga's boots is 5 so it leaves me literally one short, taeon can go to 10 per slot in the big five but those are already as good as they get)
     sets.precast.RA = {
-        head=gear.EmpyHead, --0+14 --upgrade this someday, but not really worth it
+        head=gear.EmpyHead, --0+16 --upgrade this someday, eventually
         body="Oshosi Vest +1", --14+0
         hands=gear.RelicHands, --11+0
         legs="Adhemar Kecks +1", --10+13
-        feet="Meg. Jam. +2", --10+0
+        feet="Meg. Jam. +2", --10+0 --if I can replace this it's +1 inv slot, but I do not think there's a way to do this even with ikenga's boots
         neck="Comm. Charm +2", --4+0
 		waist="Yemaya Belt", --0+5
+        left_ring="Crepuscular Ring", --3+0
         back=gear.AmbuCape.Snapshot, --10+0
         }
 
@@ -166,7 +165,7 @@ function init_gear_sets()
     ------------------------------------------------------------------------------------------------
 
     --all WS sets have as close to 50 DT as I could get because I got sick of dying
-    --relevant numbers: Nyame is 7 9 7 8 7 = 38. plus dring is 48, plus either odnowa earring +1 or a,bu cape is capped
+    --relevant numbers: Nyame is 7 9 7 8 7 = 38, murky ring plus either alabaster earring or dt ambu cape is capped
 
 	--base WS set: if not defined, Nyame, etc.
     sets.precast.WS = {
@@ -178,10 +177,10 @@ function init_gear_sets()
         feet="Nyame Sollerets",
         neck="Fotia Gorget", --default to fotia is likely wrong but I'm very, very lazy
 		waist="Fotia Belt",
-        left_ear=gear.Moonshade,
-        right_ear="Odr Earring", --default to wsd, I guess, without knowing what stat's what
+        left_ear="Alabaster Earring", --default to dt cap
+        right_ear=gear.Moonshade,
         left_ring="Cornelia's Ring", --10 wsd seems fine
-        right_ring="Defending Ring", --10 dt
+        right_ring="Murky Ring", --10 dt
         back=gear.AmbuCape.MagicWS, --default to magic because it has -PDT (may want to needle one of the two to regular DT?)
         }
 
@@ -192,13 +191,13 @@ function init_gear_sets()
 		body="Nyame Mail",
         hands="Nyame Gauntlets",
         legs="Nyame Flanchard",
-        feet="Nyame Sollerets", --over "Lanun Bottes +3", --10 wsd
+        feet="Nyame Sollerets",
         neck="Comm. Charm +2",
 		waist="Skrymir Cord +1", --autoequip sash logic below
-        left_ear="Odnowa Earring +1", --dt
+        left_ear="Alabaster Earring", --5 dt
         right_ear="Friomisi Earring",
         left_ring="Cornelia's Ring",
-        right_ring="Defending Ring", --10 dt
+        right_ring="Murky Ring", --10 dt
         back=gear.AmbuCape.MagicWS,
         }
 
@@ -211,36 +210,40 @@ function init_gear_sets()
     sets.precast.WS['Hot Shot'] = sets.precast.WS['Aeolian Edge'] --not really sure why I had this with not moonshade befofre, the ftp scaling seems real?
 
 	--really though we're here for these two
+    --DT in the Leaden set is 9+7+8+7 from 4/5 Nyame (31), 10 from Murky Ring (41), 10 PDT from ambu cape (51+41 Shell V handles)
+    --could use Alabaster over Friomisi and needle Cape to regular DT for double cap at the cost of 10 MAB which honestly... doesn't really bother me at all, but I'll wait on more Nyame aug for WSD to compensate
     sets.precast.WS['Leaden Salute'] = {
         ammo=gear.MagicWSbullet,
-        head="Pixie Hairpin +1", --minus 7 dt from nyame head
-		body="Nyame Mail", --DT
-        hands="Nyame Gauntlets",
-        legs="Nyame Flanchard",
-        feet="Nyame Sollerets", --DT, "Lanun Bottes +3", --10 wsd
+        head="Pixie Hairpin +1", --minus 7 dt from nyame head, plus 28 dark affinity (that's twice as much as orpheus sash!)
+		body="Nyame Mail", --DT, allegedly "Lanun Frac +4" having 64 MAB > 30 MAB is actually superior
+        hands="Nyame Gauntlets", --DT
+        legs="Nyame Flanchard", --DT
+        feet="Nyame Sollerets", --DT
         neck="Comm. Charm +2",
 		waist="Skrymir Cord +1", --there is autoequip orph sash logic below
         left_ear="Friomisi Earring", --MAB
         right_ear=gear.Moonshade,
         left_ring="Archon Ring", --I have no idea why they say regal might be even with this. cornelia will be better until my nyame's auged but not so much that I'd notice
-        right_ring="Defending Ring", --10 dt
-        back=gear.AmbuCape.MagicWS, --and here's the rest of that dt back, truth be told I actually... hmm. yes I think I can actually get away with just this and not odnowa, it's 10 pdt, mdt is covered by Shell
+        right_ring="Murky Ring", --10 dt (Dingir Ring is better if I don't care about dt cap))
+        back=gear.AmbuCape.MagicWS, --10 pdt
         }
 
+    --want to dt cap, this cape has magic evade...
+    --38 dt from 5/5 nyame, so need 12. alabaster+murky, or cape+murky, so flex is either an earring (bleh) or a cape augment (okay, meva it is)
     sets.precast.WS['Savage Blade'] = {
 		ammo=gear.PhysWSbullet,
         head="Nyame Helm",
-		body="Nyame Mail", --DT
+		body="Nyame Mail",
         hands="Nyame Gauntlets",
         legs="Nyame Flanchard",
-        feet="Nyame Sollerets", --DT, "Lanun Bottes +3", --10 wsd
+        feet="Nyame Sollerets", --DT, "Lanun Bottes +3", --10 wsd, full nyame is 38 dt
         neck="Comm. Charm +2", --15 str aug
 		waist="Sailfi Belt +1",
-		left_ear="Odr Earring", --sucks, but better than wasting an inv slot on 2 wsd
+		left_ear="Alabaster Earring", --whatever, good enough, 5 dt to go 48 with ring -> 53 and capped
         right_ear=gear.Moonshade,
         left_ring="Cornelia's Ring",
-        right_ring="Defending Ring", --10 dt
-        back=gear.AmbuCape.PhysWS,
+        right_ring="Murky Ring", --10 dt
+        back=gear.AmbuCape.PhysWS, --this cape has magic evade
         }
 
     --yeah ok I did make a fomalhaut so this matters too, 85% agi modifier, physical, ftp good
@@ -253,17 +256,17 @@ function init_gear_sets()
         feet="Nyame Sollerets", --DT, "Lanun Bottes +3", --10 wsd
         neck="Fotia Gorget", --default to fotia is likely wrong but I'm very, very lazy
 		waist="Fotia Belt",
-        left_ear="Odnowa Earring +1", --this gives me 3 dt and I have no actual relevant earring here
+        left_ear="Alabaster Earring", --cap DT
         right_ear=gear.Moonshade,
         left_ring="Dingir Ring", --wow that's a lot of stats
-        right_ring="Defending Ring", --10 dt
+        right_ring="Murky Ring", --10 dt
         back=gear.AmbuCape.PhysWS,
         }
 
 	--really, who cares? mnd modifier that I will never use
 	sets.precast.WS['Requiescat'] = set_combine(sets.precast.WS, {
-        left_ear=gear.Moonshade,
-        right_ear="Telos Earring",
+        left_ear="Telos Earring",
+        right_ear=gear.Moonshade,
         })
 
 	--for sheol 
@@ -276,11 +279,11 @@ function init_gear_sets()
         feet="Nyame Sollerets",
 		neck="Fotia Gorget",
 		waist="Fotia Belt",
-        left_ear="Sherida Earring", --allegedly second best earring for evisc, period, which blows my mind
-        right_ear="Odr Earring", --Moonshade is only 2.5% crit rate at 1k tp
+        left_ear="Alabaster Earring", --cap dt (allegedly Sherida if I can do this a different way/care)
+        right_ear="Odr Earring", --crit
         left_ring="Ilabrat Ring", --stats for days
-        right_ring="Defending Ring", --10 dt
-        back=gear.AmbuCape.PhysWS, --not optimal, double not making crit cape
+        right_ring="Murky Ring", --10 dt
+        back=gear.AmbuCape.PhysWS, --not optimal, but double not making crit cape
 		}
 
     ------------------------------------------------------------------------------------------------
@@ -289,13 +292,11 @@ function init_gear_sets()
 
     sets.midcast.FastRecast = sets.precast.FC
 
-    --todo: find actual sird gear?
+    --todo: find actual sird gear? I have half this crap but none of it's in my wardrobe for space reasons
     sets.midcast.SpellInterrupt = {
-        --body="" --0, taeon tabard does NOT have ten natively so I removed the errant reference here
         --hands="Rawhide Gloves", --15
-        legs="Carmine Cuisses +1", --20
-        --feet=gear.Taeon_Phalanx_feet, --10
-        neck="Loricate Torque +1", --5
+        --legs="Carmine Cuisses +1", --20
+        --neck="Loricate Torque +1", --5
         --waist="Rumination Sash", --10
         --left_ear="Halasz Earring", --5
         --right_ear="Magnetic Earring", --8
@@ -306,38 +307,40 @@ function init_gear_sets()
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 
     -- Ranged gear, store tp mostly
-    --full malignance set is 6 9 5 7 4 = 15 + 12 + 4 = 31 DT so with dring and cape and shell V this is also capped
-    --todo: figure out ranged set, make ranged cape?
+    --full malignance set is 6 9 5 7 4 = 15 + 12 + 4 = 31 DT so with ring and cape and shell V this is also capped
+    --todo: figure out ranged set, make ranged cape? do I care about... well, anything?
     sets.midcast.RA = {
 		--sub="Nusku Shield", --this eats tp if I'm dual wielding
         ammo=gear.PhysWSbullet, --ranged attack is physical attack, too lazy to rename bullet
-        head="Malignance Chapeau", --"Ikenga's Hat", --needs augs to beat the macc
+        head="Malignance Chapeau", --"Ikenga's Hat", --needs augs to beat the racc
         body="Malignance Tabard",
         hands="Malignance Gloves",
         legs="Malignance Tights", --"Ikenga's Trousers", --same
         feet="Malignance Boots",
         neck="Iskur Gorget",
         left_ear="Crepuscular Earring", --lose 7 ratk from enervating, gain 3 racc+1 stp
-        right_ear="Telos Earring",
+        right_ear="Telos Earring", --these are both 10 racc 5 stp so it doesn't matter which I put here for triple shot to overwrite with dt
         left_ring="Crepuscular Ring", --racc and stp
-        right_ring="Defending Ring", --10 dt
+        right_ring="Murky Ring", --10 dt
         waist="Yemaya Belt",
 		back=gear.AmbuCape.TP, --I don't have an actual ranged attack/ranged accuracy cape apparently
         }
 
 	--haven't got any racc sets, should definitely work out a toggle for that eventually
 
+    
     --base 60% triple shot activation rate after job point bonuses, so 40 is max in gear
-    --with job points and ambu cape/empy +3 body the rate is 79% TS/39% Quad 
-    --18 currently, cap of 33 with existing gear that I know of
-    --since dt matters so much say fuck it and just use malignance basically
+    --this set is 13+5+5 = 23 to take to 83% activation total
+    --DT is 12 (empy body) + 7 + 4 (malignance boots and tights) + 10 (murky) + 5 (alabaster) = 12 + 7 + 4 + 10 + 5 = 13 + 11 + 15 = 38 + 10 PDT from Ambu cape = 48 PDT, 38 MDT
+    --there's a reasonable argument for not using the oshosi pieces, but I think it's correct to use them? not sure. let's give it a shot for a while.
     sets.TripleShot = {
-        head="Malignance Chapeau",
-        body=gear.EmpyBody, --13, upgrade eventually to 14 (also 12 DT to make up for missing currently 14 in malignance)
-        hands=gear.RelicHands, --occ. becomes Quad Shot
+        head="Oshosi Mask +1", --5%, Triple Shot damage +13 (this is a percentage)
+        body=gear.EmpyBody, --13% (becomes 14% at +3)
+        hands=gear.RelicHands, --occ. becomes Quad Shot (good)
         legs="Malignance Tights",
         feet="Malignance Boots",
-        back=gear.AmbuCape.TP, --5
+        left_ear="Alabaster Earring", --5 dt
+        back=gear.AmbuCape.TP, --5%
         }
 
 	 ------------------------------------------------------------------------------------------------
@@ -348,7 +351,7 @@ function init_gear_sets()
 	--/nin is 25 DW so 11 in gear needed, currently at 7+4 is perfect
 	--full malig is 26 gear haste = capped, barely
 	--current engaged DT is 31 from malignance + 10 DT from dring (41/41) (need 9 more)
-    --with empy +3 legs: empy legs + null loop + offhand gleti's knife + figure out ear situation (cessance that I don't have > telos that I do > idk because cor is its own source of store tp? + malig has some obv)
+    --EVENTUAL swaps: alabaster earring over telos, empy +3 legs over malignance, end up +2 haste, 7 dt -> 12+5 = 17 and capped DT (once I have gallimaufry)
     sets.engaged = {
         ammo=gear.RAbullet, --no coiste bodhar because weapon swap
         head="Malignance Chapeau",
@@ -358,31 +361,31 @@ function init_gear_sets()
         feet="Malignance Boots",
         neck="Iskur Gorget",
 		waist="Reiki Yotai", --7 dw
-        left_ear="Telos Earring",
-        right_ear="Eabani Earring", --suppanomimi is +1 dw
-        left_ring="Epona's Ring", --is this optimal?
-        right_ring="Defending Ring",
-        back="Null Shawl", --7 da 7 stp > 10 da from ambucape tp that I no longer use
+        left_ear="Telos Earring", --this will become alabaster earring when I have empy +3 legs
+        right_ear="Eabani Earring", --4 dw
+        left_ring="Epona's Ring", --assume this beats petrov
+        right_ring="Murky Ring",
+        back="Null Shawl", --7 da 7 stp > 10 da from ambucape tp that I no longer use, though if there's the inventory slot this is another way to solve the DT issue to free up earring slot (meh, lazy)
         }
 
     ------------------------------------------------------------------------------------------------
-    ------------------------------------------ DT Sets ---------------------------------------------
+    ---------------------- DT Sets Except Actually Just Idle In 50/50 ------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--dt capped, ring slot is '1 regen' and could be better. could get null masuqe eventually. heh.
+	--4 over dt cap, no idea what to do about it. can get higher with empy +3 but what does that even do for me, free up an ear?
     sets.idle = {
-		ammo="Chrono Bullet", --always have "a bullet" equipped to avoid weird RA situations
-		head="Nyame Helm", --7 dt (7)
-		body="Nyame Mail", --12 dt (19)
-		hands="Nyame Gauntlets", --7 dt (26)
-		legs="Nyame Flanchard", --8 dt (34)
-		feet="Nyame Sollerets", --7 dt (41)
-		neck="Loricate Torque +1", --6 dt (47)
+		ammo="Living Bullet", --always have "a bullet" equipped to avoid weird RA situations, and I always have Living Bullets in inventory because they're Leaden Salute bullets
+		head="Null Masque", --10 dt + 2 regain + 3 regen lol (10) (-23 meva relative to nyame, but regain/regen and the dt lets me use null shawl over ambu cape for 20 meva back, this is fine)
+		body="Nyame Mail", --12 dt (22)
+		hands="Nyame Gauntlets", --7 dt (29)
+		legs="Nyame Flanchard", --8 dt (37)
+		feet="Nyame Sollerets", --7 dt (44)
+		neck="Null Loop", --5 dt (49) (regrettable +50 HP and less defense than Loricate, but +1 inventory slot)
 		waist="Carrier's Sash", --elemental resistance
-        left_ear="Odnowa Earring +1", --3 dt (52)
+        left_ear="Alabaster Earring", --5 dt (54)
 		right_ear="Eabani Earring", --15 evasion, the ear slots are awful for idle sets
 		left_ring="Shneddick Ring +1", --18 movespeed
-		right_ring="Chirich Ring +1", --1 regen, because I'm dt capped elsewhere
+		right_ring="Chirich Ring +1", --1 regen
         back="Null Shawl", -- 50 meva, since dt is overcap
         }
 
@@ -398,7 +401,7 @@ function init_gear_sets()
     --    }
 
     --define weapon modes
-	sets.Ataktos = {main="Naegling", sub="Crepuscular Knife", ranged="Ataktos"} --the only Naegling set because why bother with Coiste Bodhar (swap to gleti's when I get emp+3 legs)
+	sets.Ataktos = {main="Naegling", sub="Crepuscular Knife", ranged="Ataktos"} --the only Naegling set because why bother with Coiste Bodhar (swap to gleti's when I get emp+3 legs, unless haste meta has changed)
     sets.DeathPenalty_Melee = {main="Rostam", sub="Tauret", ranged="Death Penalty"} --tauret and naegling have +magic damage and MAB, rostam only has +magic damage
 	sets.Fomalhaut_Melee = {main="Rostam", sub="Crepuscular Knife", ranged="Fomalhaut"} --(swap to gleti's when I get emp+3 legs? offhand is only contributing chr mod here, rostam has 50 racc)
     sets.AeolianSet = {main="Tauret", sub="Naegling", ranged="Death Penalty"} --tauret and naegling have +magic damage and MAB, rostam only has +magic damage
@@ -406,34 +409,27 @@ function init_gear_sets()
     sets.DeathPenalty_Ranged = {main="Rostam", sub="Crepuscular Knife", ranged="Death Penalty"} --Rostam has 50 racc on it so it's best for ranged uses (offhand is doing 0 but chr mod here)
     sets.Fomalhaut_Ranged = {main="Rostam", sub="Crepuscular Knife", ranged="Fomalhaut"} --see above set note
     
-    --curently just one set, for stp return
+    --curently just one set, with the element-buffing Bottes and almost-capped MDT
     --quick draw takes MAGIC accuracy. not ranged. don't forget that.
 	--recast hardcap is 35 seconds: 60 base, -10 from category 1 merits, -10 from JP gift, -5 from Mirke Wardecors, no need to do Blood Mask tatter+scrap synergy for another 5s
-    --without loricate + dedition this set is 42 pdt 32 mdt which felt too low so I capped it
+    --48 PDT, 38 MDT (caps with shell), so not quite perfect, but nowhere to get more without sacrifices
     sets.QuickDraw ={
         ammo=gear.QDbullet,
-        head="Malignance Chapeau", --stp and dt
-        body="Mirke Wardecors", --5s cooldown
-        hands="Malignance Gloves", --stp and dt
-        legs="Malignance Tights", --stp and dt
-        feet="Malignance Boots",
-        neck="Loricate Torque +1", --"Iskur Gorget", --8 stp
+        head="Malignance Chapeau", --6 dt
+        body="Mirke Wardecors", --minus 5 seconds cooldown
+        hands="Malignance Gloves", --5 dt (11)
+        legs="Malignance Tights", --7 dt (18)
+        feet=gear.EmpyFeet, --25% more damage on next hit of this element within 10 seconds (no laksa bottes, this is the important thing to make Leaden Salute even better)
+        neck="Null Loop", --5 dt (23) but also 50 macc over 6 dt torque / 8 stp neck
         waist="Skrymir Cord +1", --7 macc, eschan stone is same
-	    left_ear="Odnowa Earring +1", --"Dedition Earring", --8 stp
+	    left_ear="Alabaster Earring", --5 dt (28) "Dedition Earring", --8 stp
         right_ear="Telos Earring", --macc
         left_ring="Chirich Ring +1", --stp
-        right_ring="Defending Ring", --dt
-        back=gear.AmbuCape.MagicWS, --macc and pdt
+        right_ring="Murky Ring", --10 dt (38)
+        back=gear.AmbuCape.MagicWS, --macc and pdt (48 pdt, 38 mdt)
         }
 
-    --TODO: someday implement bottes debuff, but for now I get +1 inventory slot by just always going stp
-    --quick draw set 1, with bottes for debuff
-    --sets.QDDebuff = {
-    --	ranged="Death Penalty", --60% damage, 60 macc
-	--	feet="Chass. Bottes +1", --25% more damage on next hit of this element within 10 seconds (no laksa bottes, this is the important thing to make Leaden Salute even better, honestly I don't care)
-    --}
-	
-	--automatically equipped when not capable of dual wielding, see logic in function below
+        --automatically equipped when not capable of dual wielding, see logic in function below
     sets.DefaultShield = {sub="Nusku Shield"}
 
 end

@@ -80,7 +80,7 @@ function init_gear_sets()
 	legs="Nyame Flanchard",
 	feet="Nyame Sollerets",
 	left_ring="Cornelia's Ring",
-	right_ring="Defending Ring",
+	right_ring="Murky Ring",
     neck="Fotia Gorget",
     waist="Fotia Belt",
     left_ear="Moonshade Earring", --whatever
@@ -124,9 +124,9 @@ function init_gear_sets()
     hands="Nyame Gauntlets", --dt
     legs="Nyame Flanchard", --dt
     feet="Nyame Sollerets", --dt
-	neck="Loricate Torque +1", --dt
+	neck="Null Loop", --dt
 	waist="Plat. Mog. Belt", --dt
-	left_ear="Odnowa Earring +1", --dt
+	left_ear="Alabaster Earring", --dt
 	right_ear="Etiolation Earring", --dt
 	left_ring="Shneddick Ring +1", --movespeed
 	right_ring="Stikini Ring +1", --1 refresh
@@ -148,7 +148,7 @@ function init_gear_sets()
 	left_ear="Odnowa Earring +1", --dt, apparently
     right_ear="Telos Earring", --tp
 	left_ring="Chirich Ring +1", --1 refresh
-	right_ring="Defending Ring", --dt cap
+	right_ring="Murky Ring", --dt cap
 	back="Aurist's Cape +1", --meh
 	}
 	

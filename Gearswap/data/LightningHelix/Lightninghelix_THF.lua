@@ -44,6 +44,10 @@ function job_setup()
     info.default_ja_ids = S{35, 204}
     -- Unblinkable JA IDs for actions that always have TH: Quick/Box/Stutter Step, Desperate/Violent Flourish
     info.default_u_ja_ids = S{201, 202, 203, 205, 207}
+
+    --20251110 adding "default to party chat mode" so that I don't say "r legion" in norg, instead putting it in empty party chat
+    windower.send_command('input /cm p')
+
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -52,7 +56,7 @@ end
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
-    state.CombatForm = M{['description']='Engaged Gear Set', 'Legion', 'Sheol',} --this takes precedence over weaponset, which I use on corsair. trying to do what you're "supposed" to here
+    state.CombatForm = M{['description']='Engaged Gear Set', 'Legion', 'Real',} --this takes precedence over weaponset, which I use on corsair. trying to do what you're "supposed" to here
     send_command('bind F10 gs c cycle CombatForm')
 
     --define ambu capes
@@ -60,13 +64,11 @@ function user_setup()
     gear.AmbuCape.Evisc = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','Crit.hit rate+10','Phys. dmg. taken-10%',}}
     gear.AmbuCape.TP = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Damage taken-5%',}}
     
-    --define herculean boots
-    gear.HercBoots = {}
-    gear.HercBoots.TH = { name="Herculean Boots", augments={'Pet: VIT+13','AGI+12','"Treasure Hunter"+2',}}
-    gear.HercBoots.FC = { name="Herculean Boots", augments={'"Mag.Atk.Bns."+21','"Fast Cast"+6','CHR+8',}}
-    
+    --define herculean pieces, in case I ever care about more than one (I don't anymore, but I used to for TH)
+    gear.HercHelm = {}
+    gear.HercHelm.FC = { name="Herculean Helm", augments={'"Mag.Atk.Bns."+8','"Fast Cast"+6','MND+8',}}
+
     --only one of each of these
-    gear.TaeonTabard = { name="Taeon Tabard", augments={'Accuracy+20 Attack+20','"Fast Cast"+5',}}
     gear.Moonshade = { name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +250',}}
     gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
 
@@ -75,7 +77,7 @@ function user_setup()
     gear.AFBody = {name="Pillager's Vest +3"} --hide duration, 6 crit damage, 7 ta
     gear.AFHands = {name="Pillager's Armlets"} --nope
     gear.AFLegs = {name="Pillager's Culottes +1"} --at +3, this is 5 ta, 5 crit damage (and right now it's +steal instead lmao, so I'm not actually using it)
-    gear.AFFeet = {name="Pill. Poulaines +1"} --flee duration, 18 move speed
+    gear.AFFeet = {name="Pill. Poulaines +1"} --flee duration (also move speed but I have the ring)
     gear.RelicHead = {name="Plunderer's Bonnet"} --nope
     gear.RelicBody = {name="Plunderer's Vest +3"} --crit hit rate/damage
     gear.RelicHands = {name="Plunderer's Armlets +1"} --nope (TH+3 and also a Perfect Dodge boost I don't care about vs one inventory slot)
@@ -85,7 +87,7 @@ function user_setup()
     gear.EmpyBody = {name="Skulker's Vest"} --nope
     gear.EmpyHands = {name="Skulker's Armlets"} --nope
     gear.EmpyLegs = {name="Skulker's Culottes"} --nope
-    gear.EmpyFeet = {name="Skulker's Poulaines +1"} --TH+3, don't need higher because I have Volte Jupon for other jobs anyway, it's just a DT and Despoil piece beyond that
+    gear.EmpyFeet = {name="Skulker's Poulaines +1"} --TH+3, don't need higher with Volte Jupon, it's just a DT and Despoil piece beyond that
 
 end
 
@@ -96,9 +98,8 @@ function init_gear_sets()
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--thief natively has 3, need +5 for 8, this is 3+2
+	--thief natively has 3, need +5 for 8, this is 3+2 and will never need to be changed
     sets.TreasureHunter = {
-        --hands=gear.RelicHands, --3
         body="Volte Jupon", --2
         feet=gear.EmpyFeet --3 (can reforge further but will never save an inventory slot cause I use Jupon for other jobs)
     }
@@ -128,44 +129,43 @@ function init_gear_sets()
     sets.precast.JA['Hide'] = {body=gear.AFBody,}
 	--sets.precast.JA['Perfect Dodge'] = {hands=gear.RelicHands,} --I don't actually care, +1 inventory
     
-    --steal sets are actually relevant in 2024 to steal the box from apex imps for the pudding fight to get Adamantite Armor (well, "relevant", I don't care about it now but it may be a sign of things to come...)
+    --steal set's theoretically relevant for Impish Box?
     sets.precast.JA['Steal'] = {
         --ammo="Barathrum", --3 (warder of faith off euvhi in ru'aun island 2)
         --hands="Thief's Kote", --3 (tonberry NM in uggalepih, tako there)
         --legs=gear.AFLegs, --2 (reforge further will get 0 instead, be aware)
         feet=gear.AFFeet, --3 (reforge further get 10, then 15)
-        --neck="Pentalagus Charm", --2 (currently not in wardrobe, but have it in my mog storage somewhere)
+        --neck="Pentalagus Charm", --2 (ah ~2m)
         --waist="Key Ring Belt", --1 (some godawful bastok quest)
         --head="Rogue's Bonnet", --1 (level 54 AF, loses it on any reforge, requires redoing the quest)
     }
 
-	--FC is currently 51 + 2 occ quicken out of cap 80 + 10.
+	--FC is 44, cap is 80
     sets.precast.FC = {
-	ammo="Impatiens", --occ quicken 2 (0 + 2)
-	head="Haruspex Hat", --8 (8 + 2)
-	body=gear.TaeonTabard, --4+5 augment (17 + 2) adhemar +1 path D has 10 but inv
-	hands=gear.LeylineGloves, --8 (5+3) (23 + 2)
-	neck="Orunmila's Torque", --5 (28 + 2)
-	legs="Enif Cosciales", --8 (36 + 2) --level 99 lol, lmao, this theoretically affects my trusts but I do not actually care cause legion is for haste not damage
-	feet=gear.HercBoots.FC, --6 (42 + 2) --maxed aug
-	left_ring="Prolix Ring", --2 (44 + 2)
-	right_ring="Kishar Ring", --4 (48 + 2)
-	left_ear="Loquac. Earring", --2 (50 + 2)
-	right_ear="Etiolation Earring", --1 (51 + 2)
-	--back could be a distinct ambu cape for 10 FC but that's currently DT on everything I use
+	head=gear.HercHelm.FC, --7+6 (13) --bothering with this for now, I think
+	body="Adhemar Jacket", --10 (23) --this is usable on blu too, so it has an excuse to exist
+	hands=gear.LeylineGloves, --5+3 (31)
+	neck="Orunmila's Torque", --5 (36)
+	--legs="Enif Cosciales", --8 --not ilevel so get out because I might be /blm doing stupid proc stuff midcombat
+	--feet=gear.HercBoots.FC, --6 --maxed aug, inventory
+	left_ear="Loquac. Earring", --2 (38)
+	--right_ear="Etiolation Earring", --1, inventory
+	left_ring="Prolix Ring", --2 (40)
+	right_ring="Kishar Ring", --4 (44)
+    --back could be a distinct ambu cape for 10 FC but that's currently DT on all my ambu capes, weird slot to share
 	}
 
     --moving this here because I have zero other midcast sets
 	sets.midcast.FastRecast = sets.precast.FC
 
-    --in the SPECIFIC case I'm nuking for damage, use this
+    --in the SPECIFIC case I'm nuking for damage in abyssea or voidwatch or some shit, uncomment this I guess
     --sets.midcast = {
     --head="Nyame Helm", --every piece of this has 30 mab for no reason, how lucky
     --body="Nyame Mail",
     --hands="Nyame Gauntlets",
     --legs="Nyame Flanchard",
     --feet="Nyame Sollerets",
-    --neck="Sibyl Scarf", --+10 int -3 mab vs "Baetyl Pendant",
+    --neck="Sibyl Scarf",
 	--waist="Orpheus's Sash", --lol
     --left_ear="Novio Earring",
     --right_ear="Friomisi Earring",
@@ -193,17 +193,18 @@ function init_gear_sets()
     --Despoil drains TP but the items only buff the item-theft success rate. however, item theft also gives a -10% enfeeble (can be slow, def down, and uh, garbage?), so if I have the gear anyway this is free
     sets.precast.JA['Despoil'] = {
     --ammo="Barathrum", --3 (warder of faith off euvhi in ru'aun island 2)
-    --feet="Skulker's Poulaines +3", --8 enfeeble potency (theoretically I ever make this as a TH+5 piece when I can spare 80k galli)
+    --feet="Skulker's Poulaines +3", --8 enfeeble potency (theoretically I ever make this, in practice, galli)
     }
 
     ------------------------------------------------------------------------------------------------
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--have to define this to evisceration
+	--this is blank, but then we'll define a fallback below
     sets.precast.WS = {}
 
 	--this is not optimal but I'm *very* unconvinced by ffxiah's arguments, so I'm gonna fly by the seat of my pants
+    --suffice it to say that triple attack is really good on evisc because it has 5 chances to proc and produce up to 8 hits, but 8's the cap, so... uh... idk.
 	sets.precast.WS['Evisceration'] = {
 	ammo="Yetshila +1", --2 crit, 6 crit damage
     head="Adhemar Bonnet +1", --5 crit damage, until empy +3 head "skulker's bonnet +3" (6 ta, 10 pdl, this actually doesn't seem better, apparently multihit procs are actually good?)
@@ -220,11 +221,6 @@ function init_gear_sets()
     back=gear.AmbuCape.Evisc,
 	}
 
-    --suffice it to say that triple attack is really good on evisc because it has 5 chances to proc and produce up to 8 hits, but 8's the cap, so... uh... idk.
-
-    --okay so here's the deal. if I don't have anything defined, it falls back to this. so if I'm using garbage like Gust Slash in Omen, let's make sure there's a set defined.
-    sets.precast.WS = set_combine(sets.precast.WS['Evisceration'], {})
-
     --rudra's is 80 dex, physical, single hit, ftp doubles from 1k to 2k but then only 30% more at 3k
 	--also I'm never going to use it because I don't have a real weapon
 	--but if I one day do have a real weapon I'll want this set so let's not remove it
@@ -240,7 +236,7 @@ function init_gear_sets()
     --left_ear="Odr Earring",
     --right_ear=gear.Moonshade,
     --left_ring="Regal Ring",
-    --right_ring="Epamonidas's Ring",
+    --right_ring="Cornelia's Ring",
     --back=gear.AmbuCape.Evisc,
 	})
 
@@ -254,8 +250,8 @@ function init_gear_sets()
     feet="Nyame Sollerets",
     neck="Sibyl Scarf", --+10 int -3 mab vs "Baetyl Pendant",
 	waist="Orpheus's Sash", --lol
-    left_ear=gear.Moonshade,
-    right_ear="Friomisi Earring",
+    left_ear="Friomisi Earring",
+    right_ear=gear.Moonshade,
     left_ring="Cornelia's Ring", --is regal better than this? pretty sure not?
     right_ring="Dingir Ring", --lmao
     back=gear.AmbuCape.Evisc, --it's got dex, shrug
@@ -270,13 +266,16 @@ function init_gear_sets()
     legs="Nyame Flanchard",
     feet="Nyame Sollerets",
     neck="Rep. Plat. Medal", 
-	waist="Sailfi Belt +1", --huh, thief's on this
-	left_ear=gear.Moonshade, --tp bonus good
-	right_ear="Odr Earring", --whatever, this is wrong, who cares
-    left_ring="Defending Ring", --10 dt
+	waist="Sailfi Belt +1", --huh, thief's on this?
+	left_ear="Alabaster Earring", --5 dt
+    right_ear=gear.Moonshade, --tp bonus good
+    left_ring="Murky Ring", --10 dt
     right_ring="Cornelia's Ring", --10 wsd
-	back=gear.AmbuCape.Savage,back=gear.AmbuCape.Evisc, --this completely sucks but I am too lazy to change it
+	back=gear.AmbuCape.Evisc, --this completely sucks but I am too lazy to change it
     })
+
+    --fallback for ws without defined set, just use Savage Blade, it's "fine"
+    sets.precast.WS = set_combine(sets.precast.WS['Savage Blade'], {})
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Engaged Sets ------------------------------------------
@@ -286,7 +285,6 @@ function init_gear_sets()
 	--cap is 36 total with capped magical haste
     --currently 37 because reiki yotai > shetal stone
 
-	--20230701 overnight test: while the bot has served me well, I want to see if it's time for triple attack swapsies, it appears that it is and it's not close
 	--currently 32% TA, +41 TA damage (+6% from traits, +5% from merits, +8% from jp gifts, +20 atk from jp bonus, final total 51% / +41 + 20 are these the same term they don't read like it)
     sets.engaged = {
 	main="Tauret",
@@ -294,60 +292,31 @@ function init_gear_sets()
 	ammo="Coiste Bodhar", --3 stp, 3 da cause it's free
     head=gear.EmpyHead, --5 TA
     body=gear.AFBody, --7 TA
-    hands="Adhemar Wrist. +1", --4 ta, eventually gleti's with augments (70 atk, 20 str, 1 stp improvement once gleti's gets to 4 ta)
+    hands="Adhemar Wrist. +1", --4 ta, eventually gleti's with augments (70 atk, 20 str, 1 stp improvement but you lose TA)
     legs="Malignance Tights", --10 stp, eventually gleti's with augments (has to get TA, it's a lot of rp)
     feet=gear.RelicFeet, --5 TA, 11 TA dmg
     neck="Asn. Gorget +2", --4 TA, 5 TA dmg (bot thinks perhaps iskur gorget)
     waist="Reiki Yotai", --7 dw
 	right_ear="Skulker's Earring", --3 TA
-	left_ear="Dedition Earring", --swapping out Sherida
+	left_ear="Dedition Earring", --over Sherida
     right_ring="Gere Ring", --5 TA
     left_ring="Hetairoi Ring", --2 TA, 5 TA dmg (bot thinks perhaps chirich ring, ffxiah pure tp set recommends Epona's of all things to maximize TA)
-    back=gear.AmbuCape.TP, --10 stp
+    back=gear.AmbuCape.TP, --10 stp and some dt (so I think this is better than null shawl?)
 	}
 
     --per ffxiah, changes to this for the the "optimal" glass cannon don't-care-about-dt set is
     --gil: aurgelmir +1, gerdr belt +1
-    --actual work: empy +3 head, maxed samnuha tights (lol, but I'm actually pretty close, but no cigar yet sigh)
-    --gleti's: hands and legs but they need triple attack so it'll be a while
-    --have: iskur gorget, af +3 body, dedition earring, epona's ring over gere
+    --actual work: empy +3 head, gleti's hands, gleti's legs
+    --have: iskur gorget, epona's ring over hetairoi
     --suspect I'd want to change most of these at once because it messes with my DW numbers and so on
 	
-    ------------------------------------------------------------------------------------------------
-    ----------------------------------------- Idle Sets --------------------------------------------
-    ------------------------------------------------------------------------------------------------
-
-	--capped DT, loricate has def that null doesn't while null has hp which sucks for blood aggro
-    sets.idle = { 
-	main="Tauret",
-    sub="Crepuscular Knife",
-	ammo="Coiste Bodhar", --could be staunch tathlum if I buy it for a "real" job
-	head="Nyame Helm", --7 dt (7)
-    body="Malignance Tabard", --9 dt (16) (same dt/meva as nyame, more store tp for tp gain when getting hit, what an optimization)
-    hands="Nyame Gauntlets", --7 dt (23) vs "Gleti's Gauntlets", --7 pdt, also +2 regain (inventory space)
-    legs="Gleti's Breeches", --8 pdt (31+23) vs 8 dt on Nyame, but also 3 regain (3)
-	feet="Nyame Sollerets", --7 dt (38+30)
-	neck="Loricate Torque +1", --6 dt (44+36)
-	left_ring="Shneddick Ring +1", --18 movespeed, this is the slot Warp Ring goes in when myhome uses it so DRing moved to other slot to keep dt while warping
-	right_ring="Defending Ring", --10 dt (54+46)
-	waist="Carrier's Sash", --elemental resistance
-	right_ear="Odnowa Earring +1", --3 pdt, 5 mdt, def, 110 mp -> hp (51 mdt)
-	left_ear="Eabani Earring", --evasion lmao
-	back="Null Shawl", --meva and all that
-	}
-
-
-    ------------------------------------------------------------------------------------------------
-    ---------------------------------------- More Granular Melee Sets-------------------------------
-    ------------------------------------------------------------------------------------------------
-
     --https://github.com/Kinematics/GearSwap-Jobs/wiki/Sets has all the notes on how this works
 
     --to be backwards compatible with my current stuff. working on it.
     sets.engaged.Legion = set_combine(sets.engaged, {})
 
-    --for segment farming. 1 pdt short of capped but honestly I'm not going to waste even a second worrying about that. could figure out evasion somewhere or something?
-    sets.engaged.Sheol = {
+    --for anything from segment farming and omen to gaol mercing and possibly someday beyond. dt capped.
+    sets.engaged.Real = {
         main="Tauret", --no clue if I actually want to define weapons here, as above
         sub="Crepuscular Knife",
         ammo="Coiste Bodhar",
@@ -358,24 +327,50 @@ function init_gear_sets()
         feet="Malignance Boots", --4 dt (31)
         neck="Asn. Gorget +2",
         waist="Reiki Yotai",
-        left_ear="Odnowa Earring +1", --3/5 dt (34/36)
+        left_ear="Alabaster Earring", --5 dt (36)
         right_ear="Skulker's Earring",
         left_ring="Gere Ring",
-        right_ring="Defending Ring", --10 dt (44/46)
-        back=gear.AmbuCape.TP, --5 dt (49/51)
+        right_ring="Murky Ring", --10 dt (46)
+        back=gear.AmbuCape.TP, --5 dt (51)
     }
 
-    --for future V25 mercing, or anywhere else I'm expected to drop savage blades and not die
-    sets.engaged.Naegling = set_combine(sets.engaged.Sheol, {
+    --for any stuation where I have to drop savage blades and not die
+    sets.engaged.Naegling = set_combine(sets.engaged.Real, {
         main="Naegling",
         sub="Crepuscular Knife",
     })
 
-    --for future abyssea farming, or Omen, or anywhere else I'm expected to drop aeolian edges and not die
-    sets.engaged.Aeolian = set_combine(sets.engaged.Sheol, {
+    --for abyssea farming, or Omen, or anywhere else I'm expected to drop aeolian edges and not die
+    sets.engaged.Aeolian = set_combine(sets.engaged.Real, {
         main="Tauret",
         sub="Naegling", --someday we get another magic damage dagger that can compare, give it ten years
     })
+
+    ------------------------------------------------------------------------------------------------
+    ----------------------------------------- Idle Sets --------------------------------------------
+    ------------------------------------------------------------------------------------------------
+
+	--capped DT, with some hp that sucks for blood aggro, but we'll deal because lol thief
+    --once gleti hands are auged, put those in over nyame, then find 2 more dt somewhere (ear 2 odnowa is the best I can come up with, so -1 inv slot but that's ok)
+    sets.idle = { 
+	main="Tauret",
+    sub="Crepuscular Knife",
+	ammo="Coiste Bodhar", --could be staunch tathlum if I buy it for a "real" job
+	head="Null Masque", --10 dt (10) and 2 regain (2)
+    body="Malignance Tabard", --9 dt (19) (same dt/meva as nyame but more store tp for tp gain when getting hit, what an optimization) (also doesn't make me look as stupid)
+    hands="Nyame Gauntlets", --7 dt (26) vs "Gleti's Gauntlets", --7 pdt, also +2 regain (inventory space, but when I aug the gleti's they're bis for evisc/tping so then it's not inventory space anymore)
+    legs="Gleti's Breeches", --8 pdt (34+26) vs 8 dt on Nyame, but also 3 regain (5)
+	feet="Nyame Sollerets", --7 dt (41+33)
+	neck="Null Loop", --5 dt (46+38)
+	waist="Carrier's Sash", --elemental resistance
+    left_ear="Alabaster Earring", --5 dt (51+43 pdt capped)
+    right_ear="Eabani Earring", --evasion lmao (odnowa once I aug gleti)
+    left_ring="Shneddick Ring +1", --18 movespeed, this is the slot Warp Ring goes in when myhome uses it to keep dt while warping
+	right_ring="Murky Ring", --10 dt (61+53 mdt capped)
+	back="Null Shawl", --meva
+	}
+
+
 
 end
 
@@ -448,3 +443,37 @@ function job_update(cmdParams, eventArgs)
     th_update(cmdParams, eventArgs)
 end
 
+-- Called by the 'update' self-command, for common needs.
+-- Set eventArgs.handled to true if we don't want automatic equipping of gear.
+function job_handle_equipping_gear(playerStatus, eventArgs)
+    check_gear()
+end
+
+
+--11112025 let's try to have legion no warp ring swap etc
+function check_gear()
+    if no_swap_gear:contains(player.equipment.left_ring) then
+        disable("ring1")
+    else
+        enable("ring1")
+    end
+    if no_swap_gear:contains(player.equipment.right_ring) then
+        disable("ring2")
+    else
+        enable("ring2")
+    end
+end
+
+
+windower.register_event('zone change',
+    function()
+        if no_swap_gear:contains(player.equipment.left_ring) then
+            enable("ring1")
+            equip(sets.idle)
+        end
+        if no_swap_gear:contains(player.equipment.right_ring) then
+            enable("ring2")
+            equip(sets.idle)
+        end
+    end
+)

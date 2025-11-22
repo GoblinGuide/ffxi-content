@@ -131,16 +131,16 @@ function init_gear_sets()
         offhand="Agwu's Axe", --couuld be Izizoeksi (plasm) for pet dt
         ammo="Hesperiidae",
         head="Twilight Helm", --auto-reraise set bonus (1/2) [could be crep lol]
-        body="Twilight Mail", --auto-reraise set bonus (2/2)
-        hands="Nyame Gauntlets",
-        legs="Nyame Flanchard",
-        feet="Gleti's Boots", --again, do I need this lol
+        body="Twilight Mail", --auto-reraise set bonus (2/2) [but I need both halves lol]
+        hands="Nyame Gauntlets", --dt
+        legs="Nyame Flanchard", --dt
+        feet="Gleti's Boots", --pet level +1 is probably better, idk, don't make the stats go boom
         neck="Loricate Torque +1", --don't need pet dt here, do I? (Shepherd's Chain)
-        left_ring="Chirich Ring +1", --no DT option for self OR pet here
-        right_ring="Defending Ring",
-        left_ear="Etiolation Earring", --or in ears, sigh
+        left_ring="Chirich Ring +1", --no DT option for pet here that I know of
+        right_ring="Murky Ring Ring",
+        left_ear="Alabaster Earring", --or here that I know of
         right_ear="Eabani Earring", --will be sortie BST ear eventually
-        waist="Plat. Mog. Belt", --or here (Isa Belt)
+        waist="Plat. Mog. Belt", --or here (Isa belt?)
         back=gear.AmbuCape.PetMacc, --sure whatever
         }
 

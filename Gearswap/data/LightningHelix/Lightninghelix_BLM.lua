@@ -117,8 +117,8 @@ function init_gear_sets()
     feet="Nyame Sollerets", --dt
 	neck="Loricate Torque +1", --dt
 	waist="Plat. Mog. Belt", --dt
-	left_ear="Odnowa Earring +1", --dt
-	right_ear="Etiolation Earring", --dt
+	left_ear="Alabaster Earring", --dt
+	right_ear="Etiolation Earring", --mdt I guess
 	left_ring="Stikini Ring +1", --1 refresh
 	right_ring="Stikini Ring +1", --1 refresh
 	back="Perimede Cape" --meh

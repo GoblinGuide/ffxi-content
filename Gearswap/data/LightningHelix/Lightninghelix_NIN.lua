@@ -81,7 +81,7 @@ function init_gear_sets()
         neck="Rep. Plat. Medal",
 		waist="Sailfi Belt +1",
 		left_ear="Moonshade Earring",
-		right_ear="Odnowa Earring +1",
+		right_ear="Alabaster Earring", --but also dt?
         left_ring="Cornelia's Ring",
         right_ring="Regal Ring",
         --back=gear.AmbuCape.PhysWS,
@@ -140,12 +140,12 @@ function init_gear_sets()
         hands="Malignance Gloves",
         legs="Malignance Tights",
         feet="Malignance Boots",
-        neck="Loricate Torque +1", --to cap
+        neck="Null Loop", --I think this dt caps, or at least comes close, who cares
 		waist="Reiki Yotai", --this shouldn't be this but also I do not care. at all.
         left_ear="Telos Earring",
-        right_ear="Dedition Earring",
+        right_ear="Alabaster Earring", --probably dt capped now, that's for sure
         left_ring="Chirich Ring +1",
-        right_ring="Defending Ring", --dt
+        right_ring="Murky Ring", --dt
         --back=gear.AmbuCape.TP, --I have literally no cape that ninja can wear lmao
         }
 
@@ -159,11 +159,13 @@ function init_gear_sets()
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Special Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
-
-    --TH 2+2 = 4
+    
+    --TH 2+1+1, all items work on all jobs and are i119
 	sets.TreasureHunter = {
-		body=gear.HercVest.TH,
-		feet=gear.HercBoots.TH, 
+		body="Volte Jupon", --2
+		hands="Volte Bracers", --1
+        waist="Chaac Belt", --1
 		}
 
+	
 end
