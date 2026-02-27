@@ -1,0 +1,22 @@
+Abyssea Pyxis Lua Notes:
+flags is a decimal number encoding 16 bits of binary and the "rare" flag is thankfully the largest bit so we can just use ">".)
+
+how I figured out how to determine if an item was rare:
+res\items exists
+property "flags" looks binary given the range from low positive to below 65535
+convert to binary, form hypothesis: the largest bit (first flag) is "rare":
+quadav fetich pieces are rare and gobbiebox and have value                                            1000000000000100 (one of these two must be rare, other gobbiebox)
+malignance armor is cansendpol, equippable, not vendorable, not sendable, exclusive, rare, value      1111100001010000 (consistent with rare being first flag, gobbiebox being third from last)
+apademak horn is gobbiebox, cansendpol, not vendorable, not sendable, exclusive, value                0111000001010100 (not rare, first is zero, third from last is 1, yes gobbiebox, consistent)
+carpenter's cuffs is gobbiebox, equippable, rare, ex, not vendorable, not sendable, value             1111100001000100 (looks right! didn't know anything else rare/gobbiebox off the top of my head lol.)
+
+therefore if "flags" > 32767 (which is to say, flags has 1 in the leftmost (16th, 2^16 = 32768) position), then the item is rare
+if "rare" wasn't the leading bit I'd have to convert it into base 2, then use tostring(substring()) blah blah blah, but I don't, because it is, so it's "the top half" of the possible range. nice.
+
+PRETTY sure there aren't any other rare items in [Abyssea Amber Pyxides], but it doesn't actually matter, worst case there is one, we get it once and can keep it until the farm session's over.
+
+
+NOTES ON MOB.SPAWN_TYPE:
+1 and 13 are player (per focustarget.lua)
+2 and 14 are npc (per focustarget.lua, the former is also present in ivaar's work)
+16 is normal mob you can hit (per DT's work)

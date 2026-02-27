@@ -399,7 +399,7 @@ function init_gear_sets()
         neck="Sibyl Scarf",
 		waist="Sacro Cord", --8 mab 8 macc 8 int/mnd
 		left_ear="Friomisi Earring", -- 10 mab
-		right_ear="Hashishin Earring", --right ear only, 10 blu skill, 6 macc
+		right_ear="Hashishin Earring", --right ear only, 10 blu skill, 6 macc (THIS IS IN MY MOG SAFE AT THE MOMENT FOR INVENTORY SPACE)
         left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --11 + 8 blue magic skill
         right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --11 + 8 blue magic skill
 		back="Cornflower Cape", --15 blu skill
@@ -522,7 +522,7 @@ function init_gear_sets()
 		feet=gear.EmpyFeet,
         neck="Incanter's Torque", --no stole lol
 		waist="Luminary Sash", --10
-        right_ear="Hashishin Earring", --10 skill is 10 acc
+        right_ear="Hashishin Earring", --10 skill is 10 acc (again, mog safe)
         --left_ear="Digni. Earring",
         left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --11 + 8 blue magic skill beats 13 on weatherspoon
         right_ring={name="Stikini Ring +1", bag="wardrobe2"},--11 + 8 blue magic skill
@@ -554,13 +554,12 @@ function init_gear_sets()
 		hands=gear.EmpyHands,
 		legs=gear.EmpyLegs,
 		feet=gear.EmpyFeet,
-        --neck="Nodens Gorget", --5 cure pot lol
+        neck="Null Loop", --50 max hp
 		waist="Luminary Sash",
-        left_ear="Eabani Earring", --HP, mendi. earring is 5
+        left_ear="Eabani Earring", --max hp
         right_ear="Regal Earring",
-        left_ring="Menelaus's Ring", --5
+        left_ring="Ilabrat Ring", --60 max hp. not even a joke. sick of losing all my HP to meta +1 ring
 		right_ring={name="Stikini Ring +1", bag="wardrobe2"},
-        left_ring="Metamor. Ring +1",
         back=gear.AmbuCape.MAcc, --DT
         }
 
@@ -575,11 +574,11 @@ function init_gear_sets()
 
     sets.midcast['Blue Magic']['White Wind'] = set_combine(sets.midcast['Blue Magic'].Healing, {
         --head=gear.Adhemar_D_head,
-        --neck="Sanctity Necklace", --is this for HP?
+        --neck="Sanctity Necklace", --must be for hp
         --right_ear="Etiolation Earring",
         --right_ring="Eihwaz Ring",
         --back="Moonlight Cape",
-        waist="Plat. Mog. Belt", --10% HP
+        --waist="Plat. Mog. Belt", --10% HP, inventory
         })
 
     sets.midcast['Blue Magic'].Buff = sets.midcast['Blue Magic']
@@ -593,8 +592,6 @@ function init_gear_sets()
 
 	--I'm using this job for Cruel Joke. So let's make sure it's hardcoded. macc, and nothing but macc
     sets.midcast['Blue Magic']['Cruel Joke'] = set_combine(sets.midcast['Blue Magic'], {
-		main="Naegling", --lol rip sakpata's
-		sub="Bunzi's Rod",
 		head=gear.EmpyHead,
 		body=gear.EmpyBody,
 		hands=gear.EmpyHands,
@@ -602,7 +599,7 @@ function init_gear_sets()
 		feet=gear.EmpyFeet,
         waist="Luminary Sash", --10 macc
 		neck="Incanter's Torque", --10 blue skill = 10 macc, no stole
-		right_ear="Hashishin Earring", --10 skill = 10 macc
+		right_ear="Hashishin Earring", --10 skill = 10 macc (mog safe)
 		left_ear="Eabani Earring", --Digni. Earring from Strophadia i135 has actual macc, regal doesn't without an AF piece on
 		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --11 + 8 blue magic skill
 		right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --11 + 8 blue magic skill
@@ -616,7 +613,7 @@ function init_gear_sets()
     sets.midcast['Blue Magic']['Occultation'] = set_combine(sets.midcast['Blue Magic'], {
         --hands="Hashishin Bazubands +2",
         --left_ear="Njordr Earring",
-        right_ear="Hashishin Earring", --10
+        right_ear="Hashishin Earring", --10 (yep, still mog safe)
 		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8
 		right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8
     	--back="Cornflower Cape", --15
@@ -687,10 +684,11 @@ function init_gear_sets()
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--maxed DT even pre-shell
-    --also 1 refresh so that einherjar botting works because in an hour that'll cap me
+	--maxed DT even pre-shell (number is actually 56 not 53 was too lazy to rewrite)
+    --also 1 refresh from null masque + 1 conditional from sibyl scarf, either of which will make einherjar botting functional on its own
     --also *really* high max HP, like really high. might wanna work on that somehow. already no null loop so idk, but like, I go to 79% after any spell, which is too close to blood aggro for my tastes
     sets.idle = {
+        ammo = "Staunch Tathlum +1", --3 dt whatever
 		head="Null Masque", --10 dt (+3 over numbers below, can move Alabaster out if I want or something) (plus another free refresh)
 		body="Nyame Mail", --9 dt (16)
 		hands="Nyame Gauntlets", --7 dt (23)
@@ -701,21 +699,21 @@ function init_gear_sets()
         left_ear="Alabaster Earring", --5 dt (43)
         right_ear="Eabani Earring", --15 evasion lol
 		left_ring="Shneddick Ring +1", --movespeed lol
-		right_ring="Murky Ring", --10 dt (53)
+		right_ring="Murky Ring", --10 dt (53) (could for sure put a stikini here if more refresh is needed)
 		back="Null Shawl", --meva/eva
 	    }
 
     --not currently used, but I see why I'd want to be doing this, theoretically, for segment farming solo
-    --nyame and malig all 5 pieces have same eva/meva/mdb. some volte all-jobs pieces from jeuno with TH have higher MDB (and status ailment res) but lower everything else. 
+    --5/5 of nyame and malig pieces have same eva/meva/mdb. haven't looked at new limbus stuff or empy+3 because effort
     sets.idle.OmenEvasion = {
-        --ammo="Amar Cluster", --currently not in inventory, 10 eva (could use staunch tathlum for 3 dt if it frees up a main slot elsewhere)
+        --ammo="Amar Cluster", --currently not in inventory, 10 eva (could use staunch tathlum for 3 dt if it frees up a main slot elsewhere/I ever buy one)
 		head="Null Masque", --10 dt (10) and more eva than nyame, wild
 		body="Nyame Mail", --9 dt (19)
 		hands="Nyame Gauntlets", --7 dt (26)
 		legs="Nyame Flanchard", --8 dt (34)
 		feet="Nyame Sollerets", --7 dt (41)
 		neck="Null Loop", --5 dt (46) 
-		waist="Carrier's Sash", --elemental res, still almost caps dt without dring barely, this is -meva relative to play mog belt but I don't mind
+		waist="Carrier's Sash", --elemental res, still almost caps dt without ring barely, this is -meva relative to plat mog belt but I don't mind
         left_ear="Alabaster Earring", --5 dt (51) until "Infused Earring" --for more meva
         right_ear="Eabani Earring", --15 evasion
 		left_ring="Shneddick Ring +1", --movespeed
@@ -730,22 +728,21 @@ function init_gear_sets()
     -- Engaged sets
 
 	--I did not optimize this at all, no DW math, no nothing
-    --46 dt currently
+    --41 dt, this is fine because I only use BLU on fake content anyway
     sets.engaged = {
-		main="Naegling", --laaaaazy
         ammo="Coiste Bodhar",
         head="Malignance Chapeau", --6 dt
         body="Malignance Tabard", --9 dt
         hands="Malignance Gloves", --5 dt
         legs="Malignance Tights", --7 dt
         feet="Malignance Boots", --4 dt
-        neck="Combatant's Torque",
-		waist="Reiki Yotai",
+        neck="Combatant's Torque", --wardrobe 3 forever because rdm
+		waist="Reiki Yotai", --dw straight bussin yes cap
         left_ear="Alabaster Earring", --dt
-        right_ear="Telos Earring",
+        right_ear="Eabani Earring", --cap dw I assume this is right
         left_ring="Epona's Ring", --Petrov is out of my inventory now
         right_ring="Murky Ring", --10 dt
-        back=gear.AmbuCape.TP, --no resin here, 
+        back="Null Shawl", --inventory space over ambu capes
         }
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Special Sets ------------------------------------------

@@ -17,30 +17,17 @@ function job_setup()
     
     include('Mote-TreasureHunter')
     
-    --202407904 replaced "gs c treasuremode cycle" with "gs c set treasuremode Tag"
+    --202407904 replaced "gs c treasuremode cycle" with "gs c set treasuremode Tag" (to always turn on th tag mode when we switch to ninja, because I only use it for abyssea proccing)
 	windower.send_command('gs c set treasuremode Tag')
 
 end
 
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
 
-    --define other stuff
-	gear.HercBoots = {}
-	gear.HercBoots.TH = { name="Herculean Boots", augments={'Pet: VIT+13','AGI+12','"Treasure Hunter"+2',}}
-	gear.HercBoots.FC = { name="Herculean Boots", augments={'"Mag.Atk.Bns."+21','"Fast Cast"+6','CHR+8',}}
-	
-	gear.HercVest = {}
-	gear.HercVest.TH = { name="Herculean Vest", augments={'INT+2','Pet: Haste+1','"Treasure Hunter"+2','Accuracy+5 Attack+5',}}
+	--nobody here but us chickens
 
-	--only one of each of these
-	gear.TaeonTabard = { name="Taeon Tabard", augments={'Accuracy+20 Attack+20','"Fast Cast"+5',}} --fast cast
-	gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}} --fast cast
-	
 end
 
 -- Define sets and vars used by this job file.
@@ -50,18 +37,32 @@ function init_gear_sets()
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--as much as I got
+	--as much as I have that NIN can wear
     sets.precast.FC = {
-        body=gear.TaeonTabard, --9
-        hands=gear.LeylineGloves, --6
-        feet=gear.HercBoots.FC, --6
+        head="Herculean Helm", --7+6=13, I only have the one so I don't need to disambiguate
+        body="Adhemar Jacket +1", --10 and I use it for cor lmao
+        hands="Leyline Gloves", --8
         neck="Orunmila's Torque", --5
-        left_ear="Loquacious Earring", --2
-        right_ear="Etiolation Earring", --1
+        --left_ear="Etiolation Earring", --1 --inventory
+        right_ear="Loquacious Earring", --2 --preserve 5 gear haste from alabaster, though I think I'm capped, it can't hurt to be sure
         left_ring="Prolix Ring", --2
         right_ring="Kishar Ring", --4
         }
-		
+	
+    --testing, testing... this still doesn't seem to be working
+    sets.precast.FC.ElementalNinjutsu = sets.precast.FC
+
+    ------------------------------------------------------------------------------------------------
+    ---------------------------------------- Midcast Sets ------------------------------------------
+    ------------------------------------------------------------------------------------------------
+
+    --hmm. if I'm casting on ninja I just want to be fast, right?
+    sets.midcast = sets.precast.FC
+    sets.midcast.FastRecast = sets.precast.FC
+    sets.midcast.Ninjutsu = sets.precast.FC
+    sets.midcast.ElementalNinjutsu = sets.precast.FC
+    
+
     ------------------------------------------------------------------------------------------------
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
@@ -80,8 +81,8 @@ function init_gear_sets()
         feet="Nyame Sollerets",
         neck="Rep. Plat. Medal",
 		waist="Sailfi Belt +1",
-		left_ear="Moonshade Earring",
-		right_ear="Alabaster Earring", --but also dt?
+        left_ear="Alabaster Earring", --nin can't wear sherida lol
+		right_ear="Moonshade Earring",
         left_ring="Cornelia's Ring",
         right_ring="Regal Ring",
         --back=gear.AmbuCape.PhysWS,
@@ -91,17 +92,17 @@ function init_gear_sets()
     sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS, {
     --ammo="Oshasha's Treatise", --removed so I can ra with Aureole
     head="Nyame Helm", --every piece of this has 30 mab for no reason, how lucky
-    body=gear.HercVest.TH, --"Nyame Mail", --want to th large crowds
-    hands="Nyame Gauntlets",
+    body="Volte Jupon", --TH
+    hands="Volte Bracers", --TH
     legs="Nyame Flanchard",
-    feet=gear.HercBoots.TH, --"Nyame Sollerets",
-    neck="Sibyl Scarf", --+10 int -3 mab vs "Baetyl Pendant",
-    waist="Orpheus's Sash", --15% max
-    left_ear=gear.Moonshade,
+    feet="Nyame Sollerets",
+    neck="Fotia Gorget", --let's try this over "Sibyl Scarf", --see if the ftp improvevment makes me oneshot those stupid marids at 1000 tp
+    waist="Chaac Belt", --TH over 15% damage hopefully this doesn't bite me in the butt... and it looks like it immediately did, sigh, we'll figure something out, we need the TH
+    left_ear="Moonshade Earring", --ftp 2.0 -> 3.0 is not zero improvement from this
     right_ear="Friomisi Earring",
     left_ring="Dingir Ring", --lmao
     right_ring="Cornelia's Ring", --is regal better than this? pretty sure not?
-    --back=
+    --back="Null Shawl", 
     })
  
     --if I'm using this I actually want to heal myself and thus do damage
@@ -114,20 +115,14 @@ function init_gear_sets()
     feet="Nyame Sollerets",
     neck="Sibyl Scarf",  --int
 	waist="Orpheus's Sash", --15% (stacks w/pixie+archon)
-    left_ear=gear.Moonshade, --does nothing iirc
+    left_ear="Moonshade Earring", --does nothing iirc
     right_ear="Friomisi Earring",
-    left_ring="Cornelia's Ring", --10 wsd, eventually with maxed nyame I think this is "Metamor. Ring +1" again, but it might well win back out if I'm ML50
+    left_ring="Cornelia's Ring", --effort
     right_ring="Archon Ring", --5% (stacks w/pixie+sash)
-    --back=
+    --back="Null Shawl", 
 	}
 	
 
-    ------------------------------------------------------------------------------------------------
-    ---------------------------------------- Midcast Sets ------------------------------------------
-    ------------------------------------------------------------------------------------------------
-
-    sets.midcast.FastRecast = sets.precast.FC
-    
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Engaged Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
@@ -142,19 +137,34 @@ function init_gear_sets()
         feet="Malignance Boots",
         neck="Null Loop", --I think this dt caps, or at least comes close, who cares
 		waist="Reiki Yotai", --this shouldn't be this but also I do not care. at all.
-        left_ear="Telos Earring",
-        right_ear="Alabaster Earring", --probably dt capped now, that's for sure
+        left_ear="Alabaster Earring", --dt capped
+        right_ear="Telos Earring", --do I even care about the nin sortie earring? no! am I still sticking to convention? yes!
         left_ring="Chirich Ring +1",
         right_ring="Murky Ring", --dt
-        --back=gear.AmbuCape.TP, --I have literally no cape that ninja can wear lmao
+        back="Null Shawl", --thank god, all jobs
         }
 
     ------------------------------------------------------------------------------------------------
-    ------------------------------------------ DT Sets ---------------------------------------------
+    --------------------------------------- Idle Set, Singular -------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--again, idgaf
-    sets.idle = set_combine(sets.engaged,{left_ring="Shneddick Ring +1"})
+	--stolen from thf, dt capped
+    sets.idle = { 
+	--ammo="Coiste Bodhar", --update no weapons specified here, that's only changed by engaged sets
+	head="Null Masque",
+    body="Malignance Tabard",
+    hands="Nyame Gauntlets",
+    legs="Gleti's Breeches",
+	feet="Nyame Sollerets",
+	neck="Null Loop",
+	waist="Carrier's Sash",
+    left_ear="Alabaster Earring",
+    right_ear="Eabani Earring",
+    left_ring="Shneddick Ring +1",
+	right_ring="Murky Ring",
+	back="Null Shawl",
+	}
+
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Special Sets ------------------------------------------
@@ -167,5 +177,4 @@ function init_gear_sets()
         waist="Chaac Belt", --1
 		}
 
-	
 end

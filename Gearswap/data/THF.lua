@@ -1,6 +1,5 @@
 -- Original: Motenten / Modified: Arislan
 
-
 -------------------------------------------------------------------------------------------------------------------
 --  Custom Commands (preface with /console to use these in macros)
 -------------------------------------------------------------------------------------------------------------------
@@ -10,7 +9,6 @@
 --  TH Modes:  None                 Will never equip TH gear
 --             Tag                  Will equip TH gear sufficient for initial contact with a mob 
 --             SATA / Fulltime (lol)
-
 
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
@@ -23,7 +21,6 @@ function get_sets()
     -- Load and initialize the include file.
     include('Mote-Include.lua')
 end
-
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
@@ -56,38 +53,30 @@ end
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
-    state.CombatForm = M{['description']='Engaged Gear Set', 'Legion', 'Real',} --this takes precedence over weaponset, which I use on corsair. trying to do what you're "supposed" to here
+    state.CombatForm = M{['description']='Engaged Gear Set', 'Legion', 'Real'} --this takes precedence over weaponset, which I use on corsair. trying to do what you're "supposed" to here
     send_command('bind F10 gs c cycle CombatForm')
 
     --define ambu capes
     gear.AmbuCape = {} --if I don't specify one, I don't know which one I want, so leave it blank for sure
     gear.AmbuCape.Evisc = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','Crit.hit rate+10','Phys. dmg. taken-10%',}}
     gear.AmbuCape.TP = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Damage taken-5%',}}
-    
-    --define herculean pieces, in case I ever care about more than one (I don't anymore, but I used to for TH)
-    gear.HercHelm = {}
-    gear.HercHelm.FC = { name="Herculean Helm", augments={'"Mag.Atk.Bns."+8','"Fast Cast"+6','MND+8',}}
-
-    --only one of each of these
-    gear.Moonshade = { name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +250',}}
-    gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
 
     --trying something new
     gear.AFHead = {name="Pillager's Bonnet"} --nope
-    gear.AFBody = {name="Pillager's Vest +3"} --hide duration, 6 crit damage, 7 ta
+    gear.AFBody = {name="Pillager's Vest +4"} --hide duration, 6 crit damage, 7 ta
     gear.AFHands = {name="Pillager's Armlets"} --nope
-    gear.AFLegs = {name="Pillager's Culottes +1"} --at +3, this is 5 ta, 5 crit damage (and right now it's +steal instead lmao, so I'm not actually using it)
-    gear.AFFeet = {name="Pill. Poulaines +1"} --flee duration (also move speed but I have the ring)
+    gear.AFLegs = {name="Pillager's Culottes +1"} --unused, at +3, this is 5 ta / 5 crit damage (and right now it's +steal instead lmao) but it doesn't beat auged gleti's at +3 and doesn't beat r0 gleti's right now
+    gear.AFFeet = {name="Pill. Poulaines +1"} --flee duration (honestly, do I care?!)
     gear.RelicHead = {name="Plunderer's Bonnet"} --nope
-    gear.RelicBody = {name="Plunderer's Vest +3"} --crit hit rate/damage
-    gear.RelicHands = {name="Plunderer's Armlets +1"} --nope (TH+3 and also a Perfect Dodge boost I don't care about vs one inventory slot)
+    gear.RelicBody = {name="Plunderer's Vest +3"} --crit hit rate/damage (evisceration set)
+    gear.RelicHands = {name="Plunderer's Armlets +1"} --nope (TH+3 and also a Perfect Dodge boost I don't care about)
     gear.RelicLegs = {name="Plunderer's Culottes"} --nope
     gear.RelicFeet = {name="Plunderer's Poulaines +3"} --triple attack + also TA damage
     gear.EmpyHead = {name="Skulker's Bonnet +2"} --5 TA, 7 PDL (up to 6/10)
     gear.EmpyBody = {name="Skulker's Vest"} --nope
     gear.EmpyHands = {name="Skulker's Armlets"} --nope
     gear.EmpyLegs = {name="Skulker's Culottes"} --nope
-    gear.EmpyFeet = {name="Skulker's Poulaines +1"} --TH+3, don't need higher with Volte Jupon, it's just a DT and Despoil piece beyond that
+    gear.EmpyFeet = {name="Skulker's Poulaines +1"} --TH+3, don't need higher with Volte Jupon, it's just a DT and Despoil piece beyond that (can't lose this when have Hoxne, that's only 2+2, so use this over Hoxne for no -HP)
 
 end
 
@@ -98,10 +87,10 @@ function init_gear_sets()
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--thief natively has 3, need +5 for 8, this is 3+2 and will never need to be changed
+	--thief natively has 3, need +5 for 8, this is 3+2 (Hoxne Ring + 1 other can replace Empy Feet)
     sets.TreasureHunter = {
         body="Volte Jupon", --2
-        feet=gear.EmpyFeet --3 (can reforge further but will never save an inventory slot cause I use Jupon for other jobs)
+        feet=gear.EmpyFeet --3 (can reforge up to +5 but who cares, jupon's for every other job)
     }
 
     --sets.buff['Sneak Attack'] = {hands="Raid. Armlets +1",
@@ -140,22 +129,22 @@ function init_gear_sets()
         --head="Rogue's Bonnet", --1 (level 54 AF, loses it on any reforge, requires redoing the quest)
     }
 
-	--FC is 44, cap is 80
+	--FC is 45, cap is 80
     sets.precast.FC = {
-	head=gear.HercHelm.FC, --7+6 (13) --bothering with this for now, I think
-	body="Adhemar Jacket", --10 (23) --this is usable on blu too, so it has an excuse to exist
-	hands=gear.LeylineGloves, --5+3 (31)
-	neck="Orunmila's Torque", --5 (36)
-	--legs="Enif Cosciales", --8 --not ilevel so get out because I might be /blm doing stupid proc stuff midcombat
+	head="Herculean Helm", --7+6 (13) --using on cor
+	body="Adhemar Jacket +1", --10 (23) --using on cor
+	hands="Leyline Gloves", --5+3 (31) --using on everyone
+	neck="Orunmila's Torque", --5 (36) --using on everyone
+	--legs="Enif Cosciales", --8 --not ilevel but it is bis (gyve trousers exist, but inventory)
 	--feet=gear.HercBoots.FC, --6 --maxed aug, inventory
-	left_ear="Loquac. Earring", --2 (38)
-	--right_ear="Etiolation Earring", --1, inventory
-	left_ring="Prolix Ring", --2 (40)
-	right_ring="Kishar Ring", --4 (44)
+    --left_ear="Etiolation Earring", --1, inventory
+	right_ear="Loquac. Earring", --2 (38)
+	left_ring="Prolix Ring", --3 (41)
+	right_ring="Kishar Ring", --4 (45)
     --back could be a distinct ambu cape for 10 FC but that's currently DT on all my ambu capes, weird slot to share
 	}
 
-    --moving this here because I have zero other midcast sets
+    --moving this here because I have zero other midcast sets (could care about utsu or something at some point? idk)
 	sets.midcast.FastRecast = sets.precast.FC
 
     --in the SPECIFIC case I'm nuking for damage in abyssea or voidwatch or some shit, uncomment this I guess
@@ -182,9 +171,9 @@ function init_gear_sets()
     legs="Malignance Tights",
     feet="Malignance Boots",
     neck="Asn. Gorget +2", --dex augment haha
-    --waist="Chaac Belt", --5 dex+5 agi, can probably do better but inv
-    left_ear="Odr Earring", --10 dex
-    right_ear="Sherida Earring", --5 dex
+    waist="Chaac Belt", --5 dex+5 agi, actually have this for treasure hunter
+    left_ear="Sherida Earring", --5 dex --this is left ear because it's left in engaged slot etc because of empy ear
+    right_ear="Odr Earring", --10 dex
     left_ring="Ilabrat Ring", --10 dex 10 agi
 	right_ring="Regal Ring", --10 dex 10 agi
     back=gear.AmbuCape.TP, --30 dex
@@ -200,95 +189,74 @@ function init_gear_sets()
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--this is blank, but then we'll define a fallback below
-    sets.precast.WS = {}
+	--this is a savage blade set (wsd, str, no fotia) as fallback for undefined WSes
+    sets.precast.WS = {
+        ammo="Coiste Bodhar", --inventory lol, could be osha treatise for 3 wsd
+        head="Nyame Helm",
+	    body="Nyame Mail",
+        hands="Nyame Gauntlets",
+        legs="Nyame Flanchard",
+        feet="Nyame Sollerets",
+        neck="Rep. Plat. Medal", 
+	    waist="Sailfi Belt +1", --huh, thief's on this?
+	    left_ear="Sherida Earring", --DA (not putting DT here because I'm testing it for Legion)
+        right_ear="Moonshade Earring", --tp bonus good
+        left_ring="Regal Ring", --stats (not putting DT here because I'm testing it for Legion
+        right_ring="Cornelia's Ring", --10 wsd
+	    back=gear.AmbuCape.Evisc, --this completely sucks but I am too lazy to make another cape
+    }
 
-	--this is not optimal but I'm *very* unconvinced by ffxiah's arguments, so I'm gonna fly by the seat of my pants
-    --suffice it to say that triple attack is really good on evisc because it has 5 chances to proc and produce up to 8 hits, but 8's the cap, so... uh... idk.
+    --didn't like this for legion use, but still need it for stupid things like mercing bumba v20
+    sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {})
+
+    --this is not optimal but I'm *very* unconvinced by ffxiah's arguments, so I'm gonna fly by the seat of my pants
+    --triple attack is good on evisc because it has 5 chances to proc and produce up to 8 hits, but 8's the cap, so don't go overboard
 	sets.precast.WS['Evisceration'] = {
 	ammo="Yetshila +1", --2 crit, 6 crit damage
-    head="Adhemar Bonnet +1", --5 crit damage, until empy +3 head "skulker's bonnet +3" (6 ta, 10 pdl, this actually doesn't seem better, apparently multihit procs are actually good?)
+    head="Adhemar Bonnet +1", --5 crit damage, until empy +3 head "skulker's bonnet +3" (6 ta, 10 pdl, apparently TA is better here?)
     body=gear.RelicBody, --6 crit, 5 crit damage, and some atk (vs pill vest 6 crit damage nothing else)
     hands="Mummu Wrists +2", --6 crit rate, confused why this isn't gleti's NQ, will def be gleti's when auged
     legs="Gleti's Breeches", --7 crit rate, until af +3 pants "Pillager's Culottes +3" (5 crit damage), until gleti's again at... R25?
-    feet=gear.RelicFeet, --allegedly +600 average damage on 32k average evisc wtf, but gleti's will win eventually?
-    neck="Fotia Gorget",
-    waist="Fotia Belt",
-	left_ear="Sherida Earring", --allegedly second best earring for evisc, period, which blows my mind
-    right_ear="Odr Earring", --Moonshade is only 2.5% crit rate at 1k tp
-    left_ring="Ilabrat Ring",
-    right_ring="Regal Ring",
+    feet=gear.RelicFeet, --allegedly +600 average damage on 32k average evisc, but gleti's will win eventually?
+    neck="Fotia Gorget", --good for evisc
+    waist="Fotia Belt", --good for evisc
+	left_ear="Sherida Earring", --allegedly second best earring for evisc, period, which blows my mind, Moonshade is only 2.5% crit rate at 1k tp so put actual damage ear here
+    right_ear="Odr Earring", --this is obviously the stone best here
+    left_ring="Ilabrat Ring", --stats
+    right_ring="Regal Ring", --stats
     back=gear.AmbuCape.Evisc,
 	}
 
     --rudra's is 80 dex, physical, single hit, ftp doubles from 1k to 2k but then only 30% more at 3k
-	--also I'm never going to use it because I don't have a real weapon
-	--but if I one day do have a real weapon I'll want this set so let's not remove it
-	sets.precast.WS["Rudra's Storm"] = set_combine(sets.precast.WS['Evisceration'], { --sets.precast.WS, { --heh, don't actually use evisc set for rudras, but atm I want to be not WSing in TP set.
-	--ammo="Yetshila +1",
-    --head="Nyame Helm",
-    --body="Skulker's Vest +3",
-    --hands="Nyame Gauntlets",
-    --legs="Nyame Flanchard",
-    --feet="Nyame Sollerets",
-    --neck="Asn. Gorget +2",
-    --waist="Kentarch Belt +1",
-    --left_ear="Odr Earring",
-    --right_ear=gear.Moonshade,
-    --left_ring="Regal Ring",
-    --right_ring="Cornelia's Ring",
-    --back=gear.AmbuCape.Evisc,
-	})
+	--also I have to care if I make a twashtar
+	sets.precast.WS["Rudra's Storm"] = set_combine(sets.precast.WS['Evisceration'], {}) --this is garbage for now
 
+    --not using a set-combine for magical ws because while the Nyame overlaps I still like having this explicitly defined so I can read it
 	--40 dex 40 int magical aoe
-    sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS, {
-	ammo="Oshasha's Treatise", --meh, whatever, wardrobe 3
+    sets.precast.WS['Aeolian Edge'] = {
+	ammo="Coiste Bodhar", --osha treatise inventory etc
     head="Nyame Helm", --every piece of this has 30 mab for no reason, how lucky
     body="Nyame Mail",
     hands="Nyame Gauntlets",
     legs="Nyame Flanchard",
     feet="Nyame Sollerets",
-    neck="Sibyl Scarf", --+10 int -3 mab vs "Baetyl Pendant",
+    neck="Fotia Gorget", --per my stupid research, I think this is better than Sibyl Scarf's 10 INT 10 MAB
 	waist="Orpheus's Sash", --lol
     left_ear="Friomisi Earring",
-    right_ear=gear.Moonshade,
+    right_ear="Moonshade Earring",
     left_ring="Cornelia's Ring", --is regal better than this? pretty sure not?
     right_ring="Dingir Ring", --lmao
     back=gear.AmbuCape.Evisc, --it's got dex, shrug
-	})
-
-    --bumba want coin
-    sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {
-    ammo="Oshasha's Treatise",
-    head="Nyame Helm",
-	body="Nyame Mail",
-    hands="Nyame Gauntlets",
-    legs="Nyame Flanchard",
-    feet="Nyame Sollerets",
-    neck="Rep. Plat. Medal", 
-	waist="Sailfi Belt +1", --huh, thief's on this?
-	left_ear="Alabaster Earring", --5 dt
-    right_ear=gear.Moonshade, --tp bonus good
-    left_ring="Murky Ring", --10 dt
-    right_ring="Cornelia's Ring", --10 wsd
-	back=gear.AmbuCape.Evisc, --this completely sucks but I am too lazy to change it
-    })
-
-    --fallback for ws without defined set, just use Savage Blade, it's "fine"
-    sets.precast.WS = set_combine(sets.precast.WS['Savage Blade'], {})
+    }
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Engaged Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 	
-	--thf has native 30 DW (25 in thf traits, 5 in jp bonus)
-	--cap is 36 total with capped magical haste
-    --currently 37 because reiki yotai > shetal stone
-
-	--currently 32% TA, +41 TA damage (+6% from traits, +5% from merits, +8% from jp gifts, +20 atk from jp bonus, final total 51% / +41 + 20 are these the same term they don't read like it)
+    --this is the glass-cannon Legion Engaged Set, we will give it a proper name below
+	--thf has native 30 DW (25 in thf traits, 5 in jp bonus). cap is 36 total with capped magical haste. currently at 37 because reiki yotai is way better than shetal stone (gerdr belt +1 exists, 55m, +4 dw)
+	--32% TA, +41 TA damage (+6% from traits, +5% from merits, +8% from jp gifts, +20 atk from jp bonus, final total 51% / +41 + 20 are these the same term they don't read like it)
     sets.engaged = {
-	main="Tauret",
-    sub="Crepuscular Knife",
 	ammo="Coiste Bodhar", --3 stp, 3 da cause it's free
     head=gear.EmpyHead, --5 TA
     body=gear.AFBody, --7 TA
@@ -297,10 +265,10 @@ function init_gear_sets()
     feet=gear.RelicFeet, --5 TA, 11 TA dmg
     neck="Asn. Gorget +2", --4 TA, 5 TA dmg (bot thinks perhaps iskur gorget)
     waist="Reiki Yotai", --7 dw
-	right_ear="Skulker's Earring", --3 TA
-	left_ear="Dedition Earring", --over Sherida
-    right_ring="Gere Ring", --5 TA
+    left_ear="Sherida Earring", --could Dedition but +1 inv slot this way and frankly even if the DA doesn't matter much (only procs on not-TA) the -atk is not super desirable when white thf damage does technically matter
+	right_ear="Skulker's Earring", --3 TA (right ear only etc)
     left_ring="Hetairoi Ring", --2 TA, 5 TA dmg (bot thinks perhaps chirich ring, ffxiah pure tp set recommends Epona's of all things to maximize TA)
+    right_ring="Gere Ring", --5 TA
     back=gear.AmbuCape.TP, --10 stp and some dt (so I think this is better than null shawl?)
 	}
 
@@ -312,21 +280,20 @@ function init_gear_sets()
 	
     --https://github.com/Kinematics/GearSwap-Jobs/wiki/Sets has all the notes on how this works
 
-    --to be backwards compatible with my current stuff. working on it.
-    sets.engaged.Legion = set_combine(sets.engaged, {})
+    --combatmode does this, not sets.Legion or anything, that's like weaponmode
+    --was trying out naegling but no thanks at the moment
+    sets.engaged.Legion = set_combine(sets.engaged, {main="Tauret", sub="Crepuscular Knife"})
 
     --for anything from segment farming and omen to gaol mercing and possibly someday beyond. dt capped.
     sets.engaged.Real = {
-        main="Tauret", --no clue if I actually want to define weapons here, as above
-        sub="Crepuscular Knife",
         ammo="Coiste Bodhar",
         head="Malignance Chapeau",--6 dt (6)
         body="Malignance Tabard", --9 dt (15)
         hands="Malignance Gloves", --5 dt (20)
         legs="Malignance Tights", --7 dt (27)
         feet="Malignance Boots", --4 dt (31)
-        neck="Asn. Gorget +2",
-        waist="Reiki Yotai",
+        neck="Asn. Gorget +2", --no idea if this is actually optimal. is iskur gorget better?
+        waist="Reiki Yotai", --one source of dual wield because thf needs 6 with capped magic haste
         left_ear="Alabaster Earring", --5 dt (36)
         right_ear="Skulker's Earring",
         left_ring="Gere Ring",
@@ -334,43 +301,31 @@ function init_gear_sets()
         back=gear.AmbuCape.TP, --5 dt (51)
     }
 
-    --for any stuation where I have to drop savage blades and not die
-    sets.engaged.Naegling = set_combine(sets.engaged.Real, {
-        main="Naegling",
-        sub="Crepuscular Knife",
-    })
-
-    --for abyssea farming, or Omen, or anywhere else I'm expected to drop aeolian edges and not die
-    sets.engaged.Aeolian = set_combine(sets.engaged.Real, {
-        main="Tauret",
-        sub="Naegling", --someday we get another magic damage dagger that can compare, give it ten years
-    })
+    --also hardcoded weapons on the "real" engaged set
+    sets.engaged.Real = set_combine(sets.engaged.Real, {main="Tauret", sub="Crepuscular Knife"})
 
     ------------------------------------------------------------------------------------------------
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--capped DT, with some hp that sucks for blood aggro, but we'll deal because lol thief
-    --once gleti hands are auged, put those in over nyame, then find 2 more dt somewhere (ear 2 odnowa is the best I can come up with, so -1 inv slot but that's ok)
+	--DT: 59/51 overcap, also 5 regain currently
+    --once gleti hands are auged, put those in over nyame and use null loop in neck + ambu cape for 10 mdt to replace that 7 if I want more regain
     sets.idle = { 
-	main="Tauret",
-    sub="Crepuscular Knife",
-	ammo="Coiste Bodhar", --could be staunch tathlum if I buy it for a "real" job
-	head="Null Masque", --10 dt (10) and 2 regain (2)
-    body="Malignance Tabard", --9 dt (19) (same dt/meva as nyame but more store tp for tp gain when getting hit, what an optimization) (also doesn't make me look as stupid)
-    hands="Nyame Gauntlets", --7 dt (26) vs "Gleti's Gauntlets", --7 pdt, also +2 regain (inventory space, but when I aug the gleti's they're bis for evisc/tping so then it's not inventory space anymore)
-    legs="Gleti's Breeches", --8 pdt (34+26) vs 8 dt on Nyame, but also 3 regain (5)
-	feet="Nyame Sollerets", --7 dt (41+33)
-	neck="Null Loop", --5 dt (46+38)
+    --oops. no weapons specified here, that's only changed by engaged sets.
+	ammo="Staunch Tathlum +1", --3 dt (this is ok, I don't use a ranged weapon on anything)
+	head="Null Masque", --10 dt (13) and 2 regain
+    body="Malignance Tabard", --9 dt (22) (same dt/meva as nyame but more store tp for tp gain when getting hit, what an optimization) (also doesn't make me look as stupid)
+    hands="Nyame Gauntlets", --7 dt (29) --"Gleti's Gauntlets", --7 pdt, also +2 regain (once aug'd)
+    legs="Gleti's Breeches", --8 pdt (37+29) --8 dt on Nyame, but this has 3 regain
+	feet="Nyame Sollerets", --7 dt (44+36)
+	neck="Warder's Charm +1", --elemental resistance
 	waist="Carrier's Sash", --elemental resistance
-    left_ear="Alabaster Earring", --5 dt (51+43 pdt capped)
-    right_ear="Eabani Earring", --evasion lmao (odnowa once I aug gleti)
+    left_ear="Alabaster Earring", --5 dt (49+41)
+    right_ear="Eabani Earring", --evasion lmao (second ear is still the worst idle slot in existence)
     left_ring="Shneddick Ring +1", --18 movespeed, this is the slot Warp Ring goes in when myhome uses it to keep dt while warping
-	right_ring="Murky Ring", --10 dt (61+53 mdt capped)
-	back="Null Shawl", --meva
+	right_ring="Murky Ring", --10 dt (59+51)
+	back="Null Shawl", --meva, no need for cape dt for now
 	}
-
-
 
 end
 
@@ -437,7 +392,6 @@ end
 -- User code that supplements standard library decisions.
 -------------------------------------------------------------------------------------------------------------------
 
---idk something about th
 function job_update(cmdParams, eventArgs)
     handle_equipping_gear(player.status)
     th_update(cmdParams, eventArgs)

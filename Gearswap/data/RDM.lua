@@ -53,11 +53,10 @@ end
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
-    --state.HybridMode:options('Normal', 'DT') --removed because I fulltime 50 DT in engaged/idle sets instead, could have this do meva or something
+    --state.HybridMode:options('Normal', 'DT') --removed because I fulltime 50 DT
     
-    state.WeaponSet = M{['description']='Weapon Set', 'Crocea', 'Naegling', 'Tauret', 'Maxentius', 'Daggers'}
-    state.EnspellSet = M(false, 'Enspell') --okay I think I did this right. adding a toggle for enspell set.
-    state.WeaponLock = M(false, 'Weapon Lock') --currently not used
+    state.WeaponSet = M{['description']='Weapon Set', 'Crocea', 'Naegling', 'Tauret', 'Maxentius', 'Daggers'} --Daggers is kind of misleading, because it's the enspell set, but whatever
+    state.EnspellSet = M(false, 'Enspell') --okay I think I did this right. adding a toggle for enspell set. not that I will ever use it.
 	state.MagicBurst = M(false, 'Magic Burst') --maybe someday I will care so not deleted
     
 	--F10 is my button to do this on COR too
@@ -68,20 +67,20 @@ function user_setup()
 
     --capes
 	gear.AmbuCape = {} --if I don't specify one, I have stopped breathing, so I can leave this node blank
-	gear.AmbuCape.TP = { name="Sucellos's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}} --stp over DW now that I have reiki yotai
+	--gear.AmbuCape.TP = { name="Sucellos's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}} --stp over DW now that I have reiki yotai
 	gear.AmbuCape.INT = { name="Sucellos's Cape", augments={'INT+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Mag.Atk.Bns."+10','Spell interruption rate down-10%',}} --SIRD
 	gear.AmbuCape.Seraph = { name="Sucellos's Cape", augments={'MND+20','Mag. Acc+20 /Mag. Dmg.+20','MND+10','Weapon skill damage +10%','Damage taken-5%',}} --note DT (not PDT) here, to use for idle set too
 	gear.AmbuCape.Savage = { name="Sucellos's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%','Damage taken-5%',}} --dt is actually right when I'm trying for 50 on everything
 
     --somehow, I made this entire cape and I never use it. it would work for Banish I guess. or a magical mnd ws, except that it doesn't have wsd on it
-    gear.AmbuCape.MND = { name="Sucellos's Cape", augments={'MND+20','Mag. Acc+20 /Mag. Dmg.+20','MND+10','"Mag.Atk.Bns."+10','Spell interruption rate down-10%',}} --10 mnd over macc because... um?
+    --gear.AmbuCape.MND = { name="Sucellos's Cape", augments={'MND+20','Mag. Acc+20 /Mag. Dmg.+20','MND+10','"Mag.Atk.Bns."+10','Spell interruption rate down-10%',}} --10 mnd over macc because... um?
 
-    --may want chironic hose with +macc for optimal immunobreaking someday but that seems like a toggle situation
-    --also not going to want the TH once I have VOLTE
-	gear.Chironic = {}
-	--gear.Chironic.THHead = { name="Chironic Hat", augments={'Pet: "Mag.Atk.Bns."+4','"Mag.Atk.Bns."+18','"Treasure Hunter"+2','Accuracy+18 Attack+18','Mag. Acc.+9 "Mag.Atk.Bns."+9',}}
-	gear.Chironic.THLegs = { name="Chironic Hose", augments={'Rng.Acc.+1','"Mag.Atk.Bns."+26','"Treasure Hunter"+2','Mag. Acc.+8 "Mag.Atk.Bns."+8',}}
-	
+    --Occult Acumen gear for Impact for Aminon TP generation
+	gear.MerlinicHandsImpact = { name="Merlinic Dastanas", augments={'"Mag.Atk.Bns."+6','"Occult Acumen"+11','Mag. Acc.+2',}}
+    gear.MerlinicFeetImpact = { name="Merlinic Crackows", augments={'"Occult Acumen"+11',}}
+
+    --have a chironic hose with +macc for optimal immunobreaking just because the DM augs are free, have to put that in my enfeeble sets, lazy
+
 	--I only have one relevant copy of each of these things, but it never hurts to be foolproof
 	gear.Moonshade = { name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +250',}}
 	gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
@@ -89,24 +88,24 @@ function user_setup()
 	gear.TelchineBody = { name="Telchine Chas.", augments={'Enh. Mag. eff. dur. +10',}}
 	gear.TelchineLegs = { name="Telchine Braconi", augments={'Enh. Mag. eff. dur. +10',}}
 
-    --not listed here: my current Ghostfyre Cape is 19 aug duration (max 20), 9 enh skill (max 10) (could reroll that someday, I suppose)
+    --not listed here: my current Ghostfyre Cape is 19 aug duration (max 20), 9 enh skill (max 10) (could reroll that someday, I suppose, but I'll never have TWO)
 
     --trying something new
     gear.AFHead = {name="Atrophy Chapeau +3"} --16 fc
     gear.AFBody = {name="Atrophy Tabard +3"} --21 enfeeble skill, 2 refresh potency
     gear.AFHands = {name="Atrophy Gloves +3"} --20 enhance duration normal
     gear.AFLegs = {name="Atrophy Tights +3"} --21 enhance skill, 12 cure pot
-    gear.AFFeet = {name="Atrophy Boots +2"} --nope (reforged +4 has max macc in foot slot I think, but I cannot bring myself to care at this time since I'm off rdm)
+    gear.AFFeet = {name="Atrophy Boots +2"} --nope (reforged +4 has max macc for slot, but I cannot bring myself to care at this time since I'm off rdm)
     gear.RelicHead = {name="Vitiation Chapeau +3"} --26 enfeeble skill, 3 refresh, 15 macc augment if merited (it is)
     gear.RelicBody = {name="Vitiation Tabard +3"} --23 enhance skill, 15 enhance duration, 15 fc, +20 sec chainspell duration
     gear.RelicHands = {name="Vitiation Gloves +3"} --24 enhance skill, 30 gain-spell stat, 15 enh duration if merited (it isn't)
-    gear.RelicLegs = {name="Vitiation Tights +3"} --oh my god this is an enspell piece
+    gear.RelicLegs = {name="Vitiation Tights +3"} --enspell piece
     gear.RelicFeet = {name="Vitiation Boots +3"} --16 enfeeble skill, 10 enfeeble effect, 5 immunobreak chance if merited
     gear.EmpyHead = {name="Lethargy Chappel +2"} --10 dt, composure set bonus
     gear.EmpyBody = {name="Lethargy Sayon +2"} --3 refresh, 13 dt, 16 enfeeble effect, composure set bonus
     gear.EmpyHands = {name="Lethargy Gantherots +2"} --24 enfeeble skill, saboteur +13% potency/duration, 10 dt, composure set bonus
     gear.EmpyLegs = {name="Lethargy Fuseau +2"} --3 refresh potency, composure set bonus
-    gear.EmpyFeet = {name="Lethargy Houseaux +2"} --8 wsd, 30 enhance skill, 35% enhance duration normal, 45 MAB, 20 raw magic damage, composure set bonus
+    gear.EmpyFeet = {name="Lethargy Houseaux +2"} --8 wsd, 30 enhance skill, 35% enhance duration normal, 45 MAB, 20 magic damage, composure set bonus
 
 end
 
@@ -130,13 +129,13 @@ function init_gear_sets()
 	--JA precast goes above spell precast because there isn't much of it. Saboteur cares about the buff being on, not the initial activation, so this is the only one I have at the moment.
     sets.precast.JA['Chainspell'] = {body="Vitiation Tabard +3"}
 
-	--FC cap is 80, rdm has 38 native FC => 42 from gear needed, this set caps without weapon swap to Crocea Mors (with the exception of Impact, see set below)
-	--other slots have HP swaps with priority=HP the item gives (the goal is to not get blood aggro ever - so not too high here to trigger it, and not too low to end up in it from idle start)
+	--FC cap is 80, rdm has 38 native => 42 from gear needed, this set caps without weapon swap to Crocea Mors for 20 more
+	--other slots have HP swaps with priority=HP the item gives (the goal is to not get blood aggro ever - so not too high here to trigger it, and not too low to end up in it when we stop casting)
     sets.precast.FC = {
 	head=gear.AFHead, --16 (16)
 	body=gear.RelicBody, --15 (31)
 	hands={name="Nyame Gauntlets",priority=91}, --these have priority equal to the HP they give
-	waist={name="Plat. Mog. Belt",priority=200}, --10% HP, number arbitrary
+	--waist={name="Plat. Mog. Belt",priority=200}, --10% HP, but inventory
 	legs={name="Nyame Flanchard",priority=114},
 	feet={name="Nyame Sollerets",priority=68},
 	left_ear={name="Alabaster Earring",priority=100}, --this thing has 100 HP in addition to the 5 dt?!
@@ -145,20 +144,20 @@ function init_gear_sets()
     right_ring="Murky Ring", --no reason not to put DT here, i think we're not actually capped
 	}
 
-	--only relevant spell-specific set, because Crepuscular Cloak doesn't have FC on it
-    --to cast Impact, you need to have the Crepuscular Cloak in your body slot, obviously.
-    --in total, lose 31, gain 13 from these pieces = 18 short of cap, and then Croc has 20 so we're fine that way, but...
-    --to avoid demanding the croc, 8 on Volte Brais, 6 on Volte Gaiters, 2 on Loquacious Earring, 2 on Prolix Ring is +18 exactly (at the cost of the Murky Ring)
+	--only relevant spell-specific set, because Crepuscular Cloak doesn't have FC on it (-31 FC from head and body)
+    --this is 5 + 8 + 8 + 2 + 2 = 25 is 6 short (also loses alabaster/murky DT)
     sets.precast.FC.Impact = set_combine(sets.precast.FC, {
 	body="Crepuscular Cloak", --mandatory
     neck="Orunmila's Torque", --5
 	hands=gear.LeylineGloves, --8
     legs="Volte Brais", --8
+    --feet="Volte Gaiters", --6 (would cap, tied with augmented Herculean feet, inventory)
 	left_ear="Loquac. Earring", --2
     right_ring="Prolix Ring", --2
 	})
 	
-	--to cast Dispelga, you need to have Daybreak in your main hand, which means it can't be in the offhand because then equipping to mainhand fails, so put Ammurapi in the offhand first
+	--to cast Dispelga, you need to have Daybreak in your main hand
+    --this means it can't be in your offhand because then equipping to mainhand fails, so put Ammurapi in the offhand first. this is not an issue anymore but was when I was using Seraph Blade fulltime to drop WSes.
 	--priority is equipped in order from highest to lowest, default is priority = 0 for all unspecified items
 	--default behavior for items of the same priority (including an unprioritized set) is equip left to right, top to bottom (in that order, so main first feet last)
 	sets.precast.Dispelga = set_combine(sets.precast.FC, {main={name="Daybreak", priority=999},sub={name='Ammurapi Shield', priority=1000}})
@@ -206,7 +205,7 @@ function init_gear_sets()
 	--sanguine: magical, 50% mnd 30% str, but dstat is based on target's int like black magic for some reason? tp bonus blank because tp only affects damage -> HP gain conversion rate
     --relative to savage blade set, this is -7 dt from nyame helm +5 from Null Loop = 51, still capped
     sets.precast.WS['Sanguine Blade'] = {
-	ammo="Sroda Tathlum", --10% chance for a +25% crit --and frankly this is not great but there's not really much else to go in that slot either
+	ammo="Coiste Bodhar", --over "Sroda Tathlum" for inventory
 	head="Pixie Hairpin +1", --28% (stacks w/archon+sash)
     body="Nyame Mail", --dt
     hands="Nyame Gauntlets", --dt
@@ -221,10 +220,10 @@ function init_gear_sets()
     back=gear.AmbuCape.Seraph, --10 wsd and mnd, even if it was not the intended main use
 	}
 	
-	--seraph: magical, 40% str 40% mnd, tp bonus good, ftp good, ws damage does work on these things
+	--seraph: magical, 40% str 40% mnd, tp bonus good, ftp bad, ws damage does work on these things
 	--dt capped
 	sets.precast.WS['Seraph Blade'] = {
-	ammo="Sroda Tathlum", --10% chance for a +25% crit
+	ammo="Coiste Bodhar", --over "Sroda Tathlum" for inventory
     head="Nyame Helm", --dt
     body="Nyame Mail", --dt
     hands="Nyame Gauntlets", --dt
@@ -278,9 +277,9 @@ function init_gear_sets()
     back=gear.AmbuCape.Savage, --if I cared, I'd make a CDC cape. I do not care.
 	}
 	
-	--aeolian: magical, 40 dex / 40 int, aoe, wind damage so can't do anything fun with affinity on relevant gear
+	--aeolian: magical, 40 dex / 40 int, aoe, wind damage so can't do anything fun with affinity on relevant gear other than sash
 	sets.precast.WS['Aeolian Edge'] = {
-	ammo="Sroda Tathlum", --crit chance whoo
+	ammo="Coiste Bodhar", --over "Sroda Tathlum" for inventory
     head="Nyame Helm", --dt
     body="Nyame Mail", --dt
     hands="Nyame Gauntlets", --dt
@@ -308,8 +307,8 @@ function init_gear_sets()
 	--also, I have 10% in merits if I actually care about legitimately trying to cap this, which I might, it's kind of useful for utsusemi
     --no idea when this set'd be used for non-utsusemi purposes with Aquaveil existing
     sets.midcast.SpellInterrupt = {
-	ammo="Impatiens", --10
-	legs="Carmine Cuisses +1", --20
+	--ammo="Impatiens", --10 --inventory
+	--legs="Carmine Cuisses +1", --20 --inventory
 	--neck="Loricate Torque +1", --5 inventory
 	left_ring = "Freke Ring", --10
 	--right_ring ="Evanescence Ring", --10 inventory
@@ -326,11 +325,12 @@ function init_gear_sets()
 	sets.midcast.Cure = {
 	sub="Daybreak", --this thing has 30 cure potency for no reason! (30, at the cost of TP, because if I'm curing something has gone south)
 	head={name="Nyame Helm",priority=50}, --no clue how much HP it actually has
-	waist={name="Plat. Mog. Belt",priority=200}, --HP swap to lose less midcast
+	--waist={name="Plat. Mog. Belt",priority=200}, --inventory
 	body={name="Nyame Mail",priority=100}, --HP, fake --body="Bunzi's Robe", --15 --inventory
 	hands={name="Nyame Gauntlets",priority=70}, --HP, priority fake
 	legs=gear.AFLegs, --12 (42)
     feet={name="Nyame Sollerets",priority=68}, --68 HP
+    neck="Null Loop", --50 HP to try to drop less, why was I even losing so much max HP here anyway?
     back="Ghostfyre Cape", --6 (48)
 	}
 
@@ -349,7 +349,7 @@ function init_gear_sets()
 	--simplifies to (base + explicit seconds) * (lethargy or composure, mutually exclusive) * (percentage on gear) * (percentage on augment)
 
 	--default enhancing magic set. listed values are DURATION only! composure sets for casting on others below - this is self-casting since I "always" have composure up
-	--currently 520+ enh skill in this set and (almost) everything caps at 500 so I don't need to use vitiation tabard +3 in body for +23 enh skill (but see below)
+	--currently 554 enhancing skill in this set and everything but temper2/enspell1 caps at 500
 	--using ghostfyre cape totals 1.82 * 1.68 = 3.0576 duration multiplier, slightly greater than:
 	--with ambu cape instead it's 2.02 * 1.49 = 3.0098
     sets.midcast['Enhancing Magic'] = {
@@ -362,14 +362,14 @@ function init_gear_sets()
 	feet=gear.EmpyFeet, --35 reg
 	neck="Dls. Torque +2", --25 aug
 	waist="Embla Sash", --10 reg
-	left_ear="Mimir Earring", --10 skill
+	left_ear="Alabaster Earring", --Mimir earring is 10 skill but I'm worried about the HP drop from this set when weak
     right_ear="Lethargy Earring", --7 reg
 	left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8 skill
-	right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8 skill
+	right_ring="Ilabrat Ring", --somehow, not a joke, 60 max HP --{name="Stikini Ring +1", bag="wardrobe2"}, --8 skill
 	back="Ghostfyre Cape", --19 aug vs ambu cape's 20 reg, see above math
 	}
 
-	--for anything that is not affected by skill at all (it's just haste) (there's not actually any duration gear that I'm not using in the default set, so this is the same)
+	--for anything that is not affected by skill at all (it's just haste), I could put something like DT here instead over the few skill pieces I still have
 	sets.midcast.EnhancingDuration = set_combine(sets.midcast['Enhancing Magic'], {})
 	
 	--when targeting someone else with Composure, with five Lethargy pieces it's bonus 1.5  * (1+regular)    [where regular = "rest of the regular non-augmented duration term"]
@@ -388,8 +388,8 @@ function init_gear_sets()
 	--this is the set for raw enhancing skill points - relevant uncapped spells are Temper II (10 skill = 1% TA) and Enspells I (25 skill = 3 damage)
     sets.midcast.EnhancingSkill = 
 	{
-	--sub="Forfend +1", --unity shield, wing augments are cheap, from i135 Tolba, augments to +10
-	head="Umuthi Hat", --13, Befouled Crown from Vagary is +3 relative to this
+	--sub="Forfend +1", --unity shield, wing augments are cheap, from i135 Tolba, augments to +10, but inventory / changing weapons
+	head="Befouled Crown", --16
 	body=gear.RelicBody, --23
     hands=gear.RelicHands,  --24
 	legs=gear.AFLegs, --21
@@ -428,7 +428,6 @@ function init_gear_sets()
 	--main="Sakpata's Sword", --5, does not go up with augments
 	--sub="Egeking", --from Oboro
 	--five possible pieces of taeon augmented with phalanx received +3 from duskdim stones/merlinic or chironic augmented with phalanx received +4-5 from dark matter campaign
-    --I actually have a +3 chironic kicking around my bags somewhere cause I didn't have anything else to dump DM onto during an aug campaign lol
 	})
 
 	sets.midcast.Aquaveil = set_combine(sets.midcast.EnhancingDuration, {
@@ -452,7 +451,7 @@ function init_gear_sets()
     head=gear.RelicHead, --26 skill, 15 skill merits augment, 37 macc
     body=gear.EmpyBody, --18 pot, 54 macc
     hands="Regal Cuffs", --20 duration (alternatives are 24 enf skill, +7 macc over this from empy hands +2, which are always on during saboteur)
-    legs="Psycloth Lappas", --18 skill, 30 macc, loses to leth. fuseau +3
+    legs=gear.EmpyLegs, --"Psycloth Lappas", better until +3, this is +2, I'm lazy
     feet=gear.RelicFeet, --10 pot, 16 skill, 43 macc
     neck="Dls. Torque +2", --10 pot, 30 macc, 15 mnd, 25 duration, this thing has it all
 	waist="Obstin. Sash", --5 mnd, 5 duration vs "Luminary Sash", --10 macc 10 mnd
@@ -469,7 +468,7 @@ function init_gear_sets()
 
     --for when accuracy is a more important concern than potency (i.e. stuff that doesn't scale with potency)
     sets.midcast.MndEnfeeblesAcc = set_combine(sets.midcast.MndEnfeebles, {
-	ranged="Ullr", --40 macc, costs tp
+	--ranged="Ullr", --40 macc, costs tp, commenting out for now
 	legs=gear.EmpyLegs, --53 beats malignance 50
 	feet=gear.EmpyFeet, --50
 	})
@@ -501,18 +500,18 @@ function init_gear_sets()
     sets.midcast['Slow II'] = set_combine(sets.midcast.MndEnfeebles, {})
 
     --generic nuke set
-    --currently costs tp because I do not nuke and relevant-weaponskill at the same time
+    --commented out costing TP
     sets.midcast['Elemental Magic'] = {
-	main="Bunzi's Rod", --someday, augment this, but it'll be a longass time, rip my maxentius
-	sub="Daybreak", --offhand's magic damage works
-	ranged="Ullr", --I am a coward, this is +50 macc relative to "Sroda Tathlum" 10% chance of +25% damage, I hate getting resisted and if I'm nuking I don't care about TP
-	head="C. Palug Crown", --empy +3 better
+	--main="Bunzi's Rod", --someday, augment this, but it'll be a longass time, rip my maxentius
+	--sub="Daybreak", --offhand's magic damage works
+	--ranged="Ullr", --I am a coward, this is +50 macc relative to "Sroda Tathlum" 10% chance of +25% damage, I hate getting resisted and if I'm nuking I don't care about TP
+	head=gear.EmpyHead, --doesn't actually beat cait crown until +3 but +1 inv
     body=gear.EmpyBody,
     hands=gear.EmpyHands,
     legs=gear.EmpyLegs,
     feet=gear.EmpyFeet,
     neck="Sibyl Scarf", --10 int > 3 more mab from baetyl pendant
-    waist="Sacro Cord", --not sash because stand far away if nuking
+    waist="Orpheus's Sash", --screw it, even standing far away this is +1 inv over "Sacro Cord", even 1% is a lot though I imagine the 
     left_ear="Regal Earring",
     right_ear="Malignance Earring",
     left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --"Metamor. Ring +1", --this is the literal only place I reference this, it's 16 int / 15 macc, swapped out for +1 inventory even though that's bad
@@ -520,10 +519,10 @@ function init_gear_sets()
     back="Aurist's Cape +1", --gear.AmbuCape.INT has 20 mab but loses some macc and int and I hate getting resisted
 	}
 
-	--Absorb-TP is weird. Literally no one on the internet knows if it's dependent on anything other than main job level, like not even macc, but it's real in Sortie so I have to care about it
+    --this is probably wrong honestly
     sets.midcast['Dark Magic'] = set_combine(sets.midcast['Elemental Magic'], {
-	left_ring="Archon Ring",
-	--right_ring="Evanescence Ring", --not wasting a wardrobe slot until I'm ACTUALLY doing Aminon fight
+	    left_ring="Archon Ring",
+	    --right_ring="Evanescence Ring", --not wasting a wardrobe slot until I'm ACTUALLY doing Aminon fight, but I do have this
 	})
 
 	--dark affinity works on Drain too, since it deals damage
@@ -534,42 +533,61 @@ function init_gear_sets()
     sets.midcast.Aspir = sets.midcast.Drain --Aspir deals damage, just to MP and not HP (this is really how the formula works)
     sets.midcast.Stun = set_combine(sets.midcast['Dark Magic'], {}) --what is this second one even for? accuracy set? I guess?
     sets.midcast['Bio III'] = set_combine(sets.midcast['Dark Magic'], {})
+    
+    --this spell is actually used for Aminon (the pendant is just chilling in some safe somewhere I'm sure)
+    --per a Japanese twitter post I cannot read, Erra does work. beyond that we want maximum macc, so I'm gonna just write a whole set out here...
+    sets.midcast['Absorb-TP'] = set_combine(sets.midcast['Dark Magic'], {neck="Erra Pendant",})
 
-	--again, you need crep cloak on to cast Impact
-    sets.midcast.Impact = set_combine(sets.midcast.MndEnfeeblesAcc, {body="Crepuscular Cloak"})
+	--you need crep cloak on to cast Impact
+    --beyond that, its best use is to spend 666 MP, thereby returning a lot of TP with Occult Acumen + Store TP (Impact can't miss, only get a duration down resist, so macc doesn't matter)
+    sets.midcast.Impact = set_combine(sets.midcast.MndEnfeeblesAcc, {
+        ammo="Coiste Bodhar", --3 stp
+        head=empty, --I believe this does not require specification, but I am not willing to risk it
+        body="Crepuscular Cloak", --impact, thank you
+        hands=gear.MerlinicHandsImpact, --11 OA
+        legs="Perdition Slops", --30 OA for some godawful reason why did the shadow lord have these okay it kind of makes flavor sense
+        feet=gear.MerlinicFeetImpact, --11 OA
+        neck="Combatant's Torque", --4 stp
+        waist="Reiki Yotai", --4 stp
+        left_ear="Crepuscular Earring", --5 stp
+        right_ear="Telos Earring", --5 stp
+        left_ring="Crepuscular Ring", --6 stp
+        right_ring="Chirich Ring +1", --6 stp
+        back="Null Shawl", --7 stp
+    })
 
-	--to cast Dispelga, you need to have Daybreak in your main hand. thanks, Daybreak!
+	--to cast Dispelga, you need to have Daybreak in your main hand.
 	--this actually does not work as defined if Daybreak is in your offhand when you trigger it. see the alias I have defined for specifically Dispelga in init.txt for full details.
 	sets.midcast.Dispelga = set_combine(sets.midcast.IntEnfeeblesAcc, {main="Daybreak"})
 
-    --Trusts have to come out at i119 base, so make sure that you don't swap out of the i119 fast cast gear
+    --Trusts have to come out at i119 base, so make sure that you don't swap out of the i119 fast cast gear (and my fc gear is i119) - I'm frankly uncertain if this needs to exist, or if it's just because generic midcast is undefined?
     sets.midcast.Trust = sets.precast.FC
 
     --Job-specific buff sets
     --this is "while casting with Saboteur active", since that is what Saboteur cares about
     sets.buff.Saboteur = {
-	hands=gear.EmpyHands, --currently 13 potency+duration (regal cuffs is 0 potency 20 duration, so this is better at the cost of a small amount of duration)
-	right_ear="Regal Earring", --having a Lethargy piece on makes Regal give 10 macc, making it better than Malignance
+	    hands=gear.EmpyHands, --currently 13 potency+duration (regal cuffs is 0 potency 20 duration, so this is better at the cost of a small amount of duration)
+	    right_ear="Regal Earring", --having a Lethargy piece on makes Regal give 10 macc, making it better than Malignance
 	}
 
     ------------------------------------------------------------------------------------------------
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--PDT/MDT capped
+    --capped dt, 4 refresh. may have max hp issues with enhancing? haven't checked. watch for blood aggro I guess.
     sets.idle = {
-	ammo="Homiliary", --1 refresh (1)
-	head="Null Masque", --10 dt, 1 refresh (10, 2)
-    body=gear.EmpyBody, --12 dt, 3 refresh (22, 6)
-    hands="Nyame Gauntlets", --7 dt (29, 6)
-    legs="Nyame Flanchard", --8 dt (37, 6)
-    feet="Nyame Sollerets", --7 dt (44, 6)
-	neck="Sibyl Scarf", --1 refresh (44, 7)
+	ammo="Staunch Tathlum +1", --3 dt (3)
+	head="Null Masque", --10 dt, 1 refresh (13)
+    body=gear.EmpyBody, --12 dt, 3 refresh (25)
+    hands="Nyame Gauntlets", --7 dt (32)
+    legs="Nyame Flanchard", --8 dt (40)
+    feet="Nyame Sollerets", --7 dt (47)
+	neck="Warder's Charm +1", --elemental res/magic null
     waist="Carrier's Sash", --elemental resistance
-	left_ear="Alabaster Earring", --5 dt (49, 7)
-	right_ear="Eabani Earring", --15 eva lmao (once I'm using Odnowa for THF I can put it here too and get Stikini idle refresh in the other ring slot)
+	left_ear="Alabaster Earring", --5 dt (51)
+	right_ear="Eabani Earring", --15 eva lmao
     left_ring="Shneddick Ring +1", --movespeed
-    right_ring="Murky Ring", -- 10 DT (59, 7)
+    right_ring="Shadow Ring", --magic null (could put stikini in for 1 more refresh, don't care. regen isn't at 0 because of null masque so I don't need chirich)
 	back="Null Shawl", --meva
 	}
 
@@ -586,60 +604,60 @@ function init_gear_sets()
     }
 
     ------------------------------------------------------------------------------------------------
-    ---------------------------------------- Engaged Sets ------------------------------------------
+    --------------------------------------- In-Combat Sets -----------------------------------------
     ------------------------------------------------------------------------------------------------
 
 	--equip haste cap is 25%, malignance has that covered
-	--magic haste cap is 43.75%, that's self-haste 2 + one external haste source (Ulmia/Joachim/Cornelia/another human giving a different haste buff)
+	--magic haste cap is 43.75%, that's self-haste 2 + one external haste source (Ulmia/Joachim/Cornelia/another human/...Mayakov?)
 	--nin dw trait is 25% (until nin 65, master levels might make that relevant in 2040) so need 11 DW, have 11 (reiki yotai 7 + 4 eabani earring)
-	--current engaged DT is 31 from malignance + 10 from Ring + 10 PDT from cape is 51/41 and I always have Shell on myself to cap MDT (Shell V is 26) (alternatively I can do alabaster at some point I guess?)
+	--current engaged DT is 31 from malignance + 10 from Ring + 5 from Alabaster Earring is 46 DT eh close enough (saves having a proper TP cape, it's in my mog locker)
     sets.engaged = {
 	ammo="Coiste Bodhar", --DA
 	head="Malignance Chapeau", --eventually bunzi hat at like r25+, but the other four aren't going anywhere (I will have that because brd uses it too)
     body="Malignance Tabard", --because I prioritize DT cap
-    hands="Malignance Gloves", --over slightly more damage
+    hands="Malignance Gloves", --over slightly more damage --no wait bunzi's gloves has 8 dt too
     legs="Malignance Tights", --from better pieces
     feet="Malignance Boots", --for melee damage
-    neck="Combatant's Torque", --15 acc 15 atk 4 store tp
+    neck="Combatant's Torque", --15 acc 15 atk 4 store tp (wardrobe 3 for inventory)
 	waist="Reiki Yotai", --7 DW
     left_ear="Eabani Earring", --4 DW to hit exact cap
-    right_ear="Telos Earring", --on "real" content I'll need acc, so no dedition here
+    right_ear="Alabaster Earring", --5 DT
     left_ring="Chirich Ring +1", --store tp, some subtle blow to be considerate to other people too
-    right_ring="Murky Ring", --second Chirich Ring is great and all but I'd rather die less
-    back=gear.AmbuCape.TP, --10 stp since I'm good on DW, 10 PDT for damage cap
+    right_ring="Murky Ring", --10 dt
+    back="Null Shawl", --oops
 	}
 	
-    --at some point I may want a subtle blow capped set but I don't think I'm bringing rdm and meleeing in those situations
+    --at some point I may want a subtle blow capped set but I don't think I'm bringing rdm and meleeing in those situations YET (or ever, really)
     --if I do, figure one out
 
     --swapped in automatically, see far below, wow it does orph sash based on proximity too, what nice mathw
     sets.Obi = {waist="Hachirin-no-Obi"}
 
 	--fancy automatic weaponsets! thanks arislan!
-    --note lack of a nuke-weapon-set. that's all done in the individual gearsets above for now
 	sets.Crocea = {main="Crocea Mors", sub="Bunzi's Rod"} --my default, really, 500% to enfire is cracked
     sets.Naegling = {main="Naegling", sub="Bunzi's Rod"} --no Thibron here, I don't want to sacrifice accuracy blindly
 	sets.Tauret = {main="Tauret", sub="Bunzi's Rod"} --Aeolian Edge set
 	sets.Maxentius = {main="Maxentius", sub="Bunzi's Rod"} --Black Halo set, really
-    sets.Daggers = {main="Aern Dagger", sub="Aern Dagger II"} --lol.
+    sets.Daggers = {main="Aern Dagger", sub="Aern Dagger II"} --lowest-delay I have (master trial dagger better, lmao)
+    --note lack of a nuke-weapon-set. that's all done in the individual gearsets above for now
+    --note lack of a dedicated Seraph Blade set (mh croc, oh db for +50 light affinity)
 
-    --possible todo: get the lyco. earring lol
-    --definite todo: swap rdm category 2 merit points out of either immunobreak chance or magic accuracy (no idea if 25 macc is worth 15% immunobreak chance) to put in enspell
-    --notes: the enspell +X is additive with base enspell damage, applied before the multiplicative boost from composure (and from crocea mors, which I believe is additive with composure, but not relevant here)
+    --IF I EVER PLAN TO USE THIS SET: swap rdm category 2 merit points out of either immunobreak chance or magic accuracy (no idea if 25 macc is worth 15% immunobreak chance? immunobreak seems better?) to put in enspell
+    --notes: enspell +X is additive with base damage and applied before the multiplicative boost from composure (and also crocea mors, which I think is additive with composure?)
     --yes, elemental affinity works on enspells
-    --current stats: enspell +35, element affinity +15, 27 gear haste (capped, thanks to alabaster earring), capped pdt (capped mdt also with Shell V)
+    --current stats: enspell +28, earth affinity +20, sroda tathlum crit2 chance. if legs merited, enspell +5 more.
     sets.Enspell = {
-    ammo="Sroda Tathlum", --10% for +25% damage, including on enspell
+    ammo="Sroda Tathlum", --10% for +25% damage, including on enspell, and nothing else is better in the ranged slot (mab doesn't seem to do anything, right?)
     head="Umuthi Hat", --enspell +8
-    body="Malignance Chapeau", --9 dt (9)
-    hands="Aya. Manopolas +2", --enspell +17, 3 dt (12)
-    legs=RelicLegs, --enspell +5 when enspell is fully merited, 5 pdt (17+12)
-    feet="Malignance Boots", --4 dt (21+16)
+    body="Malignance Chapeau", --9 dt because nothing else more relevant
+    hands="Aya. Manopolas +2", --enspell +17, 3 dt
+    legs=gear.RelicLegs, --enspell +5 when enspell is fully merited, 5 pdt (this only benefits enspells WHEN MERITED, see notes above, so if not, eh, I don't care enough to change this)
+    feet="Malignance Boots", --4 dt
     waist="Orpheus's Sash", --15 all affinity
-    neck="Null Loop", --5 dt (26+21)   --neck="Quanpur Necklace", --5 earth affinity for Ongo purposes
-    left_ear="Alabaster Earring", --5 gear haste, 5 dt, haha yessss (31+26)    --right_ear="Lycopodium Earring", --enspell +2 IF I HAD IT (never will at this rate, sheesh)
+    neck="Quanpur Necklace", --5 earth affinity - there's not any better specific affinity on any other piece so Enstone it is (Ongo V25 actively want stone, Odin indifferent)
+    left_ear="Alabaster Earring", --5 gear haste, 5 dt (the gear haste actually matters)    --right_ear="Lycopodium Earring", --enspell +2 IF I HAD IT (never will at this rate, sheesh)
     right_ear="Hollow Earring", --enspell +3
-    left_ring="Chirich Ring +1", --subtle blow and store tp
+    left_ring="Chirich Ring +1", --subtle blow and store tp (could use Hetairoi Ring for 2% TA on top of Temper, but it also gives +TA damage and I don't want to risk hitting Odin for 1. RDM not on Epona's.)
     right_ring="Murky Ring", --10 dt (41+36)
     back=gear.AmbuCape.TP, --stp, 10 pdt (51+36 and capped with Shell V)
     }
@@ -650,14 +668,13 @@ function init_gear_sets()
 
 	--for omen cure 500 hp objective, here's a +HP set to target myself with cure4 after equipping sets.naked, of course it's full nyame, lol.
 	sets.HP = {
-	ammo="Homiliary", --1 refresh
 	head="Nyame Helm", --91 HP
     body="Nyame Mail", --136 HP
     hands="Nyame Gauntlets", --91 HP
     legs="Nyame Flanchard", --114 HP
     feet="Nyame Sollerets", --68 HP
 	neck="Null Loop", --100 HP
-	waist="Plat. Mog. Belt", --10% HP wowie zowie
+	--waist="Plat. Mog. Belt", --10% HP lol inventory
 	left_ear="Eabani Earring", --45 HP
 	right_ear="Malignance Earring", --4 FC
 	left_ring="Prolix Ring", --2 FC
@@ -769,11 +786,7 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
 end
 
 function job_aftercast(spell, action, spellMap, eventArgs)
-    if 
-	--player.status ~= 'Engaged' and --20230528 well, actually, I'd like to be able to change weapons midcombat, I'm not hitting f9 by accident...
-	state.WeaponLock.value == false then
         check_weaponset()
-    end
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -796,12 +809,6 @@ end
 
 -- Handle notifications of general user state change.
 function job_state_change(stateField, newValue, oldValue)
-    if state.WeaponLock.value == true then
-        disable('main','sub','range')
-    else
-        enable('main','sub','range')
-    end
-
     check_weaponset()
 end
 
@@ -810,10 +817,11 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 -- Called by the 'update' self-command, for common needs.
--- Set eventArgs.handled to true if we don't want automatic equipping of gear.
 function job_handle_equipping_gear(playerStatus, eventArgs)
+    --do nothing, lmao
 end
 
+--eventargs is some gearinfo garbage
 function job_update(cmdParams, eventArgs)
     handle_equipping_gear(player.status)
 end
@@ -855,14 +863,17 @@ function job_get_spell_map(spell, default_spell_map)
 end
 
 function customize_melee_set(meleeSet)
+    --this will never be true
     if state.TreasureMode.value == 'Fulltime' then
         meleeSet = set_combine(meleeSet, sets.TreasureHunter)
     end 
 
+    --this is weapon set, real
     check_weaponset()
 
+    --I don't know why it's called sets.engaged.enspell for arislan by default
     if state.EnspellSet.value == true then
-        meleeSet = set_combine(meleeSet, sets.Enspell) --I don't know why it's called sets.engaged.enspell for arislan by default
+        meleeSet = set_combine(meleeSet, sets.Enspell) 
     end
     
     return meleeSet
@@ -877,9 +888,9 @@ end
 -- This will only ever be called if TreasureMode is not 'None'.
 -- Category and Param are as specified in the action event packet.
 function th_action_check(category, param)
-    if category == 2 --or --any ranged attack
-        --category == 4 or -- any magic action
-        --(category == 3 and param == 30) or -- Aeolian Edge
+    if category == 2 or --any ranged attack
+        category == 4 or -- any magic action
+        (category == 3 and param == 30) -- Aeolian Edge
         then return true
     end
 end

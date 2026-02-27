@@ -1,3 +1,6 @@
+--NOTE TO SELF: MOST OF THIS GEAR'S IN A MOG SAFE SOMEWHERE, THE SMN-ONLY STUFF ISN'T EVEN IN WARDROBE 3
+--SORRY SMN!
+
 --this is Kinematics, which builds off Mote. Arislan doesn't have a SMN lua. So really it's just a shell and I did the rest of the work.
 
 -------------------------------------------------------------------------------------------------------------------
@@ -236,14 +239,14 @@ function init_gear_sets()
 		head="Apogee Crown +1",
 		body=gear.AFBody,
 		hands=gear.MerlinicDastanas.BP,
-		legs="Apogee Slacks +1",
-		feet=gear.ApogeePumps.PathB, --per frod, the +1 level from bunzi's raw stats is not nearly as good as this
+		legs="Apogee Slacks +1", --genuinely uncertain if the tp bonus on enticer's pants makes them superior even here
+		feet=gear.ApogeePumps.PathB, --per frod, the +1 level from bunzi's raw stats is not nearly as good as this (I'm actually kind of skeptical)
 		neck="Smn. Collar +2",
 		waist="Incarnation Sash", --the DA makes this better than Regal, allegedly
 		left_ring={name="Varar Ring +1", bag="wardrobe1"},
 		right_ring={name="Varar Ring +1", bag="wardrobe2"},
 		left_ear="Lugalbanda Earring",
-		right_ear="Gelos Earring", --until smn sortie earring, even NQ
+		right_ear="Beck. Earring", --+1 level is on any, regardless of augments
 		back=gear.AmbuCape.PhysicalBP,
 		}
 
@@ -252,17 +255,17 @@ function init_gear_sets()
 		main=gear.Espiritus.PathA, --sorry Nirvana!
 		sub="Elan Strap +1",
 		ammo="Sancus Sachet +1",
-		head="C. Palug Crown",
+		head="Apogee Crown +1", --this is far inferior to "C. Palug Crown", but inventory +1
 		body="Apo. Dalmatica +1",
 		hands=gear.MerlinicDastanas.BP,
-		legs="Enticer's Pants", --haha yesss thanks deeds
+		legs="Enticer's Pants", --3 pet da, 12 bp damage, 650 tp bonus (is this better even for physical ones because of that?!)
 		feet=gear.ApogeePumps.PathA,
 		neck="Smn. Collar +2",
 		waist="Regal Belt",
 		left_ring={name="Varar Ring +1", bag="wardrobe1"},
 		right_ring={name="Varar Ring +1", bag="wardrobe2"},
 		left_ear="Lugalbanda Earring",
-		right_ear="Gelos Earring", --until sortie earring, even NQ
+		right_ear="Beck. Earring", --+1 level is on any, regardless of augments
 		back=gear.AmbuCape.MagicBP,
 		}
 
@@ -298,24 +301,24 @@ function init_gear_sets()
     -- Engaged set
     --------------------------------------
     
-    --god help me I'm below gear haste cap here, it's literally 4+3+3+3+5+3 = 21
-	--also I just have nothing better than nyame in these slots, like no store tp gear that smn can wear or anything
+	--I just have nothing better than nyame in these slots, like no store tp gear that smn can wear or anything.
+	--being engaged means I am TPing for nirvana aftermath, so I guess focus on that.
     sets.engaged = {
-		main="Nirvana", --if I'm engaged, I'm building TP for Nirvana aftermath
-		sub="Khonsu", --if I'm engaged, want -DT, 4 haste
-		ammo="Sancus Sachet +1", --keep avatar at 119 at all times
+		--main="Nirvana", --if I'm engaged, I'm building TP for Nirvana aftermath
+		--sub="Khonsu", --if I'm engaged, want -DT, 4 haste
+		--ammo="Sancus Sachet +1", --keep avatar at 119 at all times
 		head=gear.EmpyHead, --favor tiers, 3 haste
 		body="Nyame Mail", --3 haste
 		hands="Nyame Gauntlets", --3 haste
 		legs="Nyame Flanchard", --5 haste
 		feet="Bunzi's Sabots", --+1 avatar level, 3 haste
 		neck="Combatant's Torque", --thank god for job-agnostic store TP
-		waist="Plat. Mog. Belt", --literally have no relevant melee belt, so keep the meva/dt
+		--waist="Plat. Mog. Belt", --literally have no relevant melee belt, so keep the meva/dt
 		left_ring="Chirich Ring +1", --stp
-		right_ring="Murky Ring", --dt
-        left_ear="Telos Earring", --da
-		right_ear="Dedition Earring", --minus 10 acc but I'm assuming that if I'm meleeing I can hit stuff, because otherwise I'd be using wings/corsair regain roll
-		back=gear.AmbuCape.PhysicalBP, --for the DT
+		right_ring="Crepuscular Ring", --stp
+        left_ear="Alabaster Earring", --haha gear haste yaaaas
+		right_ear="Telos Earring", --sure, da
+		back="Null Shawl", --whatever, this is fine --gear.AmbuCape.PhysicalBP
 		}
 
     --------------------------------------
@@ -342,7 +345,7 @@ function init_gear_sets()
 	--magical, 70 mnd 30 str, formula based on dmnd, stack mnd and mab
 	--at some point, some of this mab stuff should go to nyame once I augment it, except it's just nyame now because #lazy
     sets.precast.WS['Garland of Bliss'] = {
-		head="C. Palug Crown", --in wardrobe 3 because rdm, so during free login use nyame
+		head="Nyame Helm", --over cait crown because I am lazy
 		body="Nyame Mail",
 		hands="Nyame Gauntlets",
 		legs="Nyame Flanchard",

@@ -34,7 +34,7 @@ end
 function user_setup()
 
     --weapon set, used for dual wielding compatibility
-    state.WeaponSet = M{['description']='Weapon Set', 'Default'}
+    --state.WeaponSet = M{['description']='Weapon Set', 'Default'}
 
 end
 
@@ -45,20 +45,22 @@ function init_gear_sets()
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--non-thf TH cap is 4
-    sets.TreasureHunter = {
-	}
+    --TH 2+1+1, all items work on all jobs and are i119
+	sets.TreasureHunter = {
+		body="Volte Jupon", --2
+		hands="Volte Bracers", --1
+        waist="Chaac Belt", --1
+		}
 	
+    --don't have lots of stuff for this, don't care either
     sets.precast.FC = {
-	head="Amalric Coif +1", --11
-    --legs="Amalric Slops +1", --8 elemental magic recast delay, lmao
+    legs="Volte Brais", --8
 	left_ear="Loquac. Earring", --2
 	right_ear="Malignance Earring", --4
-	left_ring="Weather. Ring +1", --6 + 4 occ
+	left_ring="Prolix Ring", --3
 	right_ring="Kishar Ring", --4
     waist="Embla Sash", --5
-    neck="Baetyl Pendant", --4
-	back="Perimede Cape", --4 occ
+    neck="Orunmila's Torque", --5
 	}
 
 	
@@ -68,7 +70,6 @@ function init_gear_sets()
 
 	--have to kill physical fetters, god help me
     sets.precast.WS = {
-	ammo="Oshasha's Treatise",
 	head="Nyame Helm",
 	body="Nyame Mail",
 	hands="Nyame Gauntlets",
@@ -109,45 +110,43 @@ function init_gear_sets()
     ------------------------------------------------------------------------------------------------
 
 	sets.idle = {
-    ammo="Impatiens", --meh
-	head="Nyame Helm", --dt
+	head="Null Masque", --dt
     body="Nyame Mail", --dt
     hands="Nyame Gauntlets", --dt
     legs="Nyame Flanchard", --dt
     feet="Nyame Sollerets", --dt
-	neck="Loricate Torque +1", --dt
-	waist="Plat. Mog. Belt", --dt
+	neck="Sibyl Scarf", --refresh
+	waist="Embla Sash", --lmao whatever
 	left_ear="Alabaster Earring", --dt
 	right_ear="Etiolation Earring", --mdt I guess
-	left_ring="Stikini Ring +1", --1 refresh
+	left_ring="Shneddick Ring +1", --movespeed
 	right_ring="Stikini Ring +1", --1 refresh
-	back="Perimede Cape" --meh
+	back="Null Shawl" --meva
 	}
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Engaged Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    --tp gain mostly irrelevant, maximizing dt
+    --tp gain, god help me
     sets.engaged = {
-    ammo="Impatiens",
     head="Nyame Helm",
     body="Nyame Mail",
     hands="Nyame Gauntlets",
     legs="Nyame Flanchard",
     feet="Nyame Sollerets",
-    neck="Loricate Torque +1", --dt
-    waist="Plat. Mog. Belt", --dt
-    left_ear="Odnowa Earring +1", --dt
-    right_ear="Etiolation Earring", --dt
-    left_ring="Stikini Ring +1", --1 refresh
-    right_ring="Defending Ring", --dt
-    back="Aurist's Cape +1", --macc
+    neck="Combatant's Torque", 
+    --waist="Plat. Mog. Belt", --literally nothing relevant
+    left_ear="Alabaster Earring", --gear haste, LOL
+    right_ear="Telos Earring",
+    left_ring="Chirich Ring +1",
+    right_ring="Crepuscular Ring",
+    back="Null Shawl",
     }
 
     --by default, this is the engaged set
-    sets.Default = {main="Maxentius", sub="Ammurapi Shield"}
-    sets.DualWieldWeapons = {main="Maxentius", sub="Bunzi's Rod"}
+    --sets.Default = {main="Maxentius", sub="Ammurapi Shield"}
+    --sets.DualWieldWeapons = {main="Maxentius", sub="Bunzi's Rod"}
 
 
 end
@@ -155,14 +154,14 @@ end
 -------------------------------------------------------------------------------------------------------------------
 -- Utility functions specific to this job. (stolen from corsair logic, then reversed)
 -------------------------------------------------------------------------------------------------------------------
-function job_aftercast(spell, action, spellMap, eventArgs)
-    check_weaponset()
-end
-
-function check_weaponset()
-    equip(sets[state.WeaponSet.current])
- 
-     if player.sub_job == 'NIN' or player.sub_job == 'DNC' then
-         equip(sets.DualWieldWeapons)
-     end
- end
+--function job_aftercast(spell, action, spellMap, eventArgs)
+--    check_weaponset()
+--end
+--
+--function check_weaponset()
+--    equip(sets[state.WeaponSet.current])
+-- 
+--     if player.sub_job == 'NIN' or player.sub_job == 'DNC' then
+--         equip(sets.DualWieldWeapons)
+--     end
+--end

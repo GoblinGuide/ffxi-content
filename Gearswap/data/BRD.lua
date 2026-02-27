@@ -1,7 +1,6 @@
+--todo: make sure one of the paeons has a specific set to have daurdabla + 0 other duration so that I can overwrite it as the dummy song
+
 -- Original: Motenten / Modified: Arislan / Gutted: me :)
---todo: confirm equipping two stikini ring +1s in same wardrobe works properly. if not, update this, and rdm, and blu
---todo: finish burning this to the ground, figure some stuff out, you know how it is
---figure out if I'm gonna get the stupid prime
 
 -------------------------------------------------------------------------------------------------------------------
 --  Keybinds
@@ -16,6 +15,7 @@
 --[[
 
     --TODO: FIGURE OUT ALL THIS SHIT EVENTUALLY
+    --BROADLY, JUST MAKE A MACRO FOR A PLACEHOLDER SONG LIKE THIS
     Custom commands:
     SongMode may take one of three values: None, Placeholder, FullLength
 
@@ -46,6 +46,14 @@ end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
+
+    include('Mote-TreasureHunter')
+
+    --set TH mode to tag by default
+	windower.send_command('gs c set treasuremode Tag')
+
+    --NOT included: special JA TH stuff. I don't care, I'm on bard, this is for like dynamis trials.
+
     state.SongMode = M{['description']='Song Mode', 'None', 'Placeholder'}
 
     state.Buff['Pianissimo'] = buffactive['pianissimo'] or false
@@ -67,7 +75,6 @@ function user_setup()
     --are these the weapons I care about?
     state.WeaponSet = M{['description']='Weapon Set', 'Carnwenhan', 'Twashtar', 'Tauret', 'Naegling'}
 
-
     state.LullabyMode = M{['description']='Lullaby Instrument', 'Harp', 'Horn'}
 
     state.Carol = M{['description']='Carol',
@@ -85,10 +92,10 @@ function user_setup()
         'Quick Etude', 'Swift Etude', 'Vivacious Etude', 'Vital Etude', 'Dextrous Etude', 'Uncanny Etude',
         'Spirited Etude', 'Logical Etude', 'Enchanting Etude', 'Bewitching Etude'}
 
-    -- Adjust this if using the Terpander (new +song instrument)
+    -- Adjust this if I make Loughnashade
     info.ExtraSongInstrument = 'Daurdabla'
 
-    -- How many extra songs we can keep from Daurdabla/Terpander
+    -- How many extra songs we can keep from Daurdabla/Terpander/Loughnashade
     info.ExtraSongs = 2
 
     -- Designates instruments used to sing Horde Lullaby
@@ -103,38 +110,48 @@ function init_gear_sets()
 
     --Individual pieces of equipment
     gear.Linos = {}
-    gear.Linos.TP = {range={ name="Linos", augments={'Accuracy+20','"Store TP"+4','Quadruple Attack +3',}},}
-    gear.Linos.WS = {range={ name="Linos", augments={'Attack+20','Weapon skill damage +3%','STR+6 DEX+6',}},} --never gonna make TWO of these lmao
+    gear.Linos.TP = {range={ name="Linos", augments={'Accuracy+20','"Store TP"+4','Quadruple Attack +3',}},} --could be 15 acc+att, but that roll is too rare for me
+    gear.Linos.WS = {range={ name="Linos", augments={'Attack+20','Weapon skill damage +3%','STR+6 DEX+6',}},} --never gonna make two distinct ws ones, so 6/6 rather than 8/0 on these two stats. see acc+att note above
     
     gear.AmbuCape = {}
-    gear.AmbuCape.Savage = {} --str
-    gear.AmbuCape.Rudras = {} --dex
-    gear.AmbuCape.TP = {}
-    gear.AmbuCape.MAcc = {}
+    gear.AmbuCape.Savage = {back={ name="Intarabus's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%','Damage taken-5%',}},}
+    gear.AmbuCape.Rudras = gear.AmbuCape.Savage --need to make same stats except dex (can reuse for mordant rime, or mordant rime can use chr which is better (70/30 ws mods) but -1 inv slot)
+    gear.AmbuCape.TP = {back={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dual Wield"+10','Damage taken-5%',}},}
+    gear.AmbuCape.MAcc = {back={ name="Intarabus's Cape", augments={'CHR+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Fast Cast"+10','Damage taken-5%',}},}
 
+    --leftover rdm pieces that cost me nothing but inventory... but I still need inventory slots so I might not keep all these
     gear.TelchineHead = { name="Telchine Cap", augments={'Enh. Mag. eff. dur. +10',}}
 	gear.TelchineBody = { name="Telchine Chas.", augments={'Enh. Mag. eff. dur. +10',}}
 	gear.TelchineLegs = { name="Telchine Braconi", augments={'Enh. Mag. eff. dur. +10',}}
 
-    gear.AFHead = {name="Brioso Roundlet +3"} --macc (+15 per piece of set / regal ear in addition to what's on here natively)
-    gear.AFBody = {name="Brioso Justaucorps +3"} --macc
-    gear.AFHands = {name="Brioso Cuffs +3"} --lullaby only, really
-    gear.AFLegs = {name="Brioso Cannions +3"} --macc, 8 dt
-    gear.AFFeet = {name="Brioso Slippers+2"} --15 song duration also macc
-    gear.RelicHead = {name="Bihu Roundlet +3"} --unused, ws piece that doesn't beat nyame
-    gear.RelicBody = {name="Bihu Justaucorps +3"} --ws piece at +4, troubadour augment
-    gear.RelicHands = {name="Bihu Cuffs +3"} --unused
-    gear.RelicLegs = {name="Bihu Cannions +3"} --soul voice duration
-    gear.RelicFeet = {name="Bihu Slippers +3"} --nightingale duration, string skill
+    gear.AFHead = {name="Brioso Roundlet +3"} --macc (+15 per piece of set / regal ear in addition to what's on here natively) (need +4 for lullaby)
+    gear.AFBody = {name="Brioso Justaucorps +3"} --macc (can skip +4 for lullaby specifically here to save units, but eventually I'll care so might as well)
+    gear.AFHands = {name="Brioso Cuffs +3"} --lullaby only, really, but we still care
+    gear.AFLegs = {name="Brioso Cannions +3"} --UNUSED
+    gear.AFFeet = {name="Brioso Slippers +4"} --song duration, also macc
+    gear.RelicHead = {name="Bard's Roundlet"} --UNUSED, raw stat piece without wsd + useless augment
+    gear.RelicBody = {name="Bihu Justaucorps +4"} --ws piece at +4, troubadour augment
+    gear.RelicHands = {name="Bard's Cuffs"} --UNUSED, useless stats + useless augment
+    gear.RelicLegs = {name="Bihu Cannions +3"} --soul voice duration augment (didn't need to +3 this but I guess I'm just that swag huh)
+    gear.RelicFeet = {name="Bihu Slippers +3"} --nightingale duration, string skill (need +4 for lullaby)
     gear.EmpyHead = {name="Fili Calot +2"} --madrigal
     gear.EmpyBody = {name="Fili Hongreline +2"} --minuet, 14 duration
     gear.EmpyHands = {name="Fili Manchettes +2"} --march, 11 dt
-    gear.EmpyLegs = {name="Fili Rhingrave +2"} --ballad, 13 dt, not actually good for ballad to keep duration working with overwriting
-    gear.EmpyFeet = {name="Fili Cothurnes +2"} --fast cast. not a joke, somehow. 10 at +2 -> 13 at +3
+    gear.EmpyLegs = {name="Fili Rhingrave +1"} --UNUSED FOR NOW. ballad, 13 dt, 1 mp/tick from ballad not worth inventory slot / loss of duration from ambu pants, do I want this at all? it beats nyame on dt / meva? 
+    gear.EmpyFeet = {name="Fili Cothurnes +1"} --fast cast 10 at +2 -> 13 at +3. generates more inventory slots than it consumes.
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
+
+    --honestly, I don't expect to do ANY solo content on bard, but I'm still going to define this just in case I end up using it for some weird reason.
+    --may be optimal to change Volte pieces at some point, or use Hoxne Ring with HP swaps, or whatever. this is fine for now.
+    --TH 2+1+1, all items work on all jobs and are i119
+	sets.TreasureHunter = {
+		body="Volte Jupon", --2
+		hands="Volte Bracers", --1
+        waist="Chaac Belt", --1
+		}
 
     --FC cap is 80, this is 2 over cap without requiring any tp-loss swaps (6 FC Linos does exist, won't lose TP. but -1 inventory.)
     --could swap prolix ring for enchntr. earring +1 for -1 fc, +5 dt... but also -1 inventory slot so it will not happen.
@@ -199,36 +216,58 @@ function init_gear_sets()
 
     --this is the Naegling ws
     --40 str, 40 mnd, fotia good
-    --Sroda Ring is a lot of stat but I actively want 50 dt in all my sets so I don't have it
-    --DT: 29 from 4xNyame + 7 pdt from relic body + 5 from alabaster = 41 pdt / 39 mdt
-    --putting 10 PDT on the SB cape caps me and lets me use Sroda Ring over Murky Ring cause either way I'd need Shell V to be MDT capped
-    sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {
+    --DT: 29 from 4xNyame + 7 pdt from relic body + 5 from alabaster + 10 pdt from cape = 51 pdt / 39 mdt (caps with shell V)
+    sets.precast.WS['Savage Blade'] = {
+        range=gear.Linos.WS,
+        head="Nyame Helm", --7 dt
+        body=gear.RelicBody, --7 PDT
+        hands="Nyame Gauntlets", --7 dt
+        legs="Nyame Flanchard", --8 dt
+        feet="Nyame Sollerets", --7 dt
         neck="Rep. Plat. Medal",
         waist="Sailfi Belt +1",
-        right_ear="Regal Earring", --over Ishvara, apparently, since Moonshade's no good
+        left_ear="Alabaster Earring", --5 dt
+        right_ear="Regal Earring", --until I get Hoxne Earring, and consider not using Alabaster here?
+        left_ring="Cornelia's Ring",
         right_ring="Sroda Ring",
-        back=gear.AmbuCape.Savage, --this is in my default set above, but I'm confirming it here too
-        })
-
-    --this is the Twashtar WS
-    --80 dex, multihit good, fotia good
-    sets.precast.WS['Rudra\'s Storm'] = set_combine(sets.precast.WS, {
-        feet="Nyame Sollerets",
-        neck="Bard's Charm +2",
-        --waist="Kentarch Belt +1", --10 dex + da, if this ws is that good this is worth it
-        --left_ear="Mache Earring +1",
-        back=gear.AmbuCape.Rudras, --yay dex
-        })
+        back=gear.AmbuCape.Savage, --10 pdt
+        }
 
     --this is the Carnwenhan WS
-    --70 chr, 30 dex, fotia bad, multihit probably good idk whatever
-    sets.precast.WS['Mordant Rime'] = set_combine(sets.precast.WS, { 
+    --70 chr, 30 dex, fotia bad, multihit probably good idk, tp bonus increases chance of movement speed decrease?! (NIXON: (Muttering) Jesus Christ.)
+    sets.precast.WS['Mordant Rime'] = { 
+        range=gear.Linos.WS,
+        head="Nyame Helm", --7 dt
+        body=gear.RelicBody, --7 PDT (0 mdt!)
+        hands="Nyame Gauntlets", --7 dt
+        legs="Nyame Flanchard", --8 dt
+        feet="Nyame Sollerets", --7 dt
         neck="Bard's Charm +2",
-        left_ear="Regal Earring",
         waist="Sailfi Belt +1",
+        left_ear="Alabaster Earring", --5 dt
+        right_ear="Regal Earring",
+        left_ring="Cornelia's Ring",
+        right_ring="Murky Ring", --10 dt
         back=gear.AmbuCape.MordantRime,
-        })
+        }
 
+    --this is the Twashtar WS
+    --80 dex, multihit good, fotia apparently not good
+    sets.precast.WS['Rudra\'s Storm'] = {
+        range=gear.Linos.WS,
+        head="Nyame Helm", --7 dt
+        body=gear.RelicBody, --7 PDT (0 mdt!)
+        hands="Nyame Gauntlets", --7 dt
+        legs="Nyame Flanchard", --8 dt
+        feet="Nyame Sollerets", --7 dt
+        neck="Bard's Charm +2", --quad attack lmao, does this really beat fotia gorget?
+        waist="Kentarch Belt +1", --haha stat go brr
+        left_ear="Alabaster Earring", --5 dt
+        right_ear="Moonshade Earring", --left_ear="Mache Earring +1", --apparently?
+        left_ring="Cornelia's Ring",
+        right_ring="Murky Ring", --10 dt not necessary lmao
+        back=gear.AmbuCape.Rudras, --yay dex
+        }
 
     --this is the Tauret WS
     --honestly, this is never happening, so I won't bother wasting time to define it
@@ -264,7 +303,7 @@ function init_gear_sets()
     --in general, keep fc for recast benefits (sorry about lack of dt, not sorry)
     sets.midcast.FastRecast = sets.precast.FC
 
-    --this is not real
+    --this is not real, at least not yet
     sets.midcast.SpellInterrupt = {
         --ammo="Staunch Tathlum +1", --11
         --body="Ros. Jaseran +1", --25
@@ -287,18 +326,18 @@ function init_gear_sets()
     sets.midcast.HonorMarch = {range="Marsyas", hands=gear.EmpyHands}
     sets.midcast.Lullaby = {body=gear.EmpyBody, hands=gear.AFHands}
     sets.midcast.Madrigal = {head=gear.EmpyHead, feet=gear.EmpyFeet}
-    --sets.midcast.Mambo = {feet="Mou. Crackows +1"} --lol evasion song
+    --sets.midcast.Mambo = {feet="Mou. Crackows +1"} --lol evasion song, inventory
     sets.midcast.March = {hands=gear.EmpyHands}
     sets.midcast.Minne = {legs="Mou. Seraweels +1"}
     sets.midcast.Minuet = {body=gear.EmpyBody}
     sets.midcast.Paeon = {head=gear.AFHead}
     sets.midcast.Prelude = {feet=gear.EmpyFeet}
-    sets.midcast.Threnody = {body="Mou. Manteel +1"} --is this real? it's -20 resist -10 meva? seems real
+    sets.midcast.Threnody = {body="Mou. Manteel +1"} --20 resist and 10 meva extra taken away from target
     sets.midcast['Adventurer\'s Dirge'] = {range="Marsyas"} --for some reason there were relic hands in this set and I don't know why, I think it was some kind of placeholder thing to avoid buffing duration?
     sets.midcast['Foe Sirvente'] = {head=gear.RelicHead}
-    sets.midcast['Magic Finale'] = {legs=gear.EmpyLegs}
+    --sets.midcast['Magic Finale'] = {legs=gear.EmpyLegs} --there is no reason for this that I can tell
     sets.midcast["Sentinel's Scherzo"] = {feet=gear.EmpyFeet}
-    sets.midcast["Chocobo Mazurka"] = {range="Marsyas"} --this is probably for range? string has bigger range, right?
+    sets.midcast["Chocobo Mazurka"] = {range="Marsyas"} --this is probably for range?
 
     -- For song buffs (duration and AF3 set bonus)
     sets.midcast.SongEnhancing = {
@@ -340,11 +379,26 @@ function init_gear_sets()
     -- For song defbuffs (accuracy primary, duration secondary)
     sets.midcast.SongEnfeebleAcc = set_combine(sets.midcast.SongEnfeeble, {legs="Brioso Cannions +3"})
 
-    -- For Horde Lullaby maxiumum AOE range.
+    --For NOTHING BUT Horde Lullaby maxiumum AOE range.
+    --String skill breakpoints: 6, 7, 8 yalms at 486, 567, 648. (last one basically impossible with current gear, need bis + hoxne torque + ML46+, sacrifices Moonbow Neck, which is 30 macc + 9 seconds duration)
+    --425 base with merits, 1 skill per ML, so say ML20 for 445 means we need 122 to hit the 7 yalm breakpoint
+    --need the empy +3 hands (+5 skill vs +3) and 2/3 of af head/af body/relic feet +4 for +1 each over +3.
+    --alternatives: Kali has 10 string skill augment. still consumes an inventory slot but lets me use the Lullaby +2 Relic Hands at ML32, or 37 if I just swap Harfner's for it
+    --theoretical minimum to use the relic hands: Erato's Cape, *two* Kalis, ML18 (no skill on legs, every other slot bis)
     sets.midcast.SongStringSkill = {
-        left_ear="Gersemi Earring",
-        right_ear="Darkside Earring",
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"},
+        --main="Kali", --10, but inventory
+        --sub="Kali", --10, but inventory
+        range="Daurdabla", --20 (20)
+        head=gear.AFHead, --14 at +4 (34)
+        body=gear.AFBody, --15 at +4 (49)
+        hands=gear.EmpyHands, --22 at +3 (71) --see all the above notes
+        feet=gear.RelicFeet, --16 at +4 (87)
+        waist="Harfner's Sash", --5 (92)
+        --back="Erato's Cape", --4, but inventory
+        left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8 (100)
+        right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8 (108)
+        left_ear="Gersemi Earring", --10 (118)
+        right_ear="Darkside Earring", --5 (123)
         }
 
     -- Placeholder song; minimize duration to make it easy to overwrite.
@@ -379,7 +433,7 @@ function init_gear_sets()
     sets.midcast.StatusRemoval = {
         --head="Vanya Hood",
         --body="Vanya Robe",
-        --legs="Aya. Cosciales +2",
+        --legs="Aya. Cosciales +2", --is this just dt?
         --feet="Vanya Clogs",
         neck="Incanter's Torque",
         --waist="Bishop's Sash",
@@ -423,9 +477,9 @@ function init_gear_sets()
         main="Carnwenhan",
         sub="Ammurapi Shield",
         head=gear.AFHead,
-        body=gear.AFBody, --"Cohort Cloak +1", --brd isn't on crep cloak, huh. oh well. too lazy to farm. the A in AF is for Accuracy anyway
+        body=gear.AFBody, --"Cohort Cloak +1", --brd isn't on crep cloak, huh. oh well. too lazy to +1 this, the A in AF is for Accuracy, etc
         hands=gear.AFHands,
-        legs=gear.AFLegs,
+        legs=gear.EmpyLegs, --AF legs are marginally superior but Regal Earring maxes out the set bonus so it's -1 inventory slot for 3 macc on spells I never cast anyway
         feet=gear.AFFeet,
         neck="Mnbw. Whistle +1",
         waist="Acuity Belt +1",
@@ -442,21 +496,22 @@ function init_gear_sets()
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    --over DT cap, don't really have anything else to put here though
+    --dt capped, 18 magic absorb
+    --higher dt on empy head, legs, hands if I truly care, other options do exist as well - broadly, swap empy in when I get them for more meva
     sets.idle = {
-        range="Gjallarhorn", --not sure why a horn. could maybe have stats of some sort here? no clue what though. staunch tathlum loses tp on swap right?
-        head="Nyame Helm", --7 dt
-        body="Nyame Mail", --9 dt
-        hands="Nyame Gauntlets", --7 dt
-        legs="Nyame Flanchard", --8 dt
-        feet="Nyame Sollerets", --7 dt
-        neck="Null Loop", -- 5 dt (I could put a Warder's Charm +1 here if I ever farm one)
-        waist="Carrier's Sash",
-        left_ear="Alabaster Earring", -- 5 DT
-        right_ear="Eabani Earring", --still the best I got
+        range="Daurdabla", --should this be a horn?
+        head="Null Masque", --10 dt (also regen/regain) (10)
+        body="Nyame Mail", --9 dt (19)
+        hands="Bunzi's Gloves", --8 dt (27)
+        legs="Nyame Flanchard", --8 dt (35) (could by empy piece?)
+        feet="Nyame Sollerets", --7 dt (42)
+        neck="Warder's Charm +1", --elemental resistance/magic absorb
+        waist="Carrier's Sash", --elemental resistance, plat mog belt has meva but I hate the hp bump to the idle set
+        left_ear="Alabaster Earring", -- 5 DT (47)
+        right_ear="Fili Earring +1", --5 DT (52, capped)
         left_ring="Shneddick Ring +1", --movespeed
-        right_ring="Murky Ring", --10 DT
-        back=gear.AmbuCape.TP, --assuming 5 dt. --"Moonlight Cape" has 6 dt but 275 HP that's so much omg
+        right_ring="Shadow Ring", --magic absorb
+        back="Null Shawl", --meva
         }
 
     ------------------------------------------------------------------------------------------------
@@ -485,8 +540,9 @@ function init_gear_sets()
     ---------------------------------------- Special Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    sets.SongDWDuration = {main="Carnwenhan", sub="Kali"}
+    sets.SongDWDuration = {main="Carnwenhan",} --sub="Kali"} --carnwenhan should be sufficient duration on its own imo, inventory
 
+    --for cursna received/holy water received. inevntory space etc.
     sets.buff.Doom = {
         --neck="Nicander's Necklace", --20
         --left_ring={name="Eshmun's Ring", bag="wardrobe5"}, --20
@@ -499,7 +555,7 @@ function init_gear_sets()
     sets.Carnwenhan = {main="Carnwenhan", sub="Gleti's Knife"} --is this actually Gleti's? I have no idea
     sets.Twashtar = {main="Twashtar", sub="Centovente"} --is this always Centovente?
     sets.Tauret = {main="Tauret", sub="Gleti's Knife"} --so many questions
-    sets.Naegling = {main="Naegling", sub="Centovente"} --this one I'm pretty sure on at least, I guess
+    sets.Naegling = {main="Naegling", sub="Centovente"} --this one I'm pretty sure on at least!
 
     sets.DefaultShield = {sub="Ammurapi Shield"}
 
@@ -742,36 +798,44 @@ end
 
 
 function check_gear()
+
     if no_swap_gear:contains(player.equipment.left_ring) then
         disable("left_ring")
     else
         enable("left_ring")
     end
+
+
     if no_swap_gear:contains(player.equipment.right_ring) then
         disable("right_ring")
     else
         enable("right_ring")
     end
+
 end
 
 function check_weaponset()
+
     equip(sets[state.WeaponSet.current])
+
+    --overwrite DW offhand weapon when not DWing
     if (player.sub_job ~= 'NIN' and player.sub_job ~= 'DNC') then
         equip(sets.DefaultShield)
-    elseif player.sub_job == 'NIN' and player.sub_job_level < 10 or player.sub_job == 'DNC' and player.sub_job_level < 20 then
-        equip(sets.DefaultShield)
     end
+
 end
 
-windower.register_event('zone change',
-    function()
+windower.register_event('zone change',function()
+
         if no_swap_gear:contains(player.equipment.left_ring) then
             enable("left_ring")
             equip(sets.idle)
         end
+
         if no_swap_gear:contains(player.equipment.right_ring) then
             enable("right_ring")
             equip(sets.idle)
         end
+
     end
 )
