@@ -1,26 +1,29 @@
 _addon.name = 'trailblazer'
-_addon.version = '1.1' --20240816 DACK look, it's 1.0! all done! --20240817 better reporting out, I wasn't done
-_addon.author = 'DACK'
+_addon.version = '1.1' --20260303 add support for me typing stuff wrong, update some text
+_addon.author = 'me'
 _addon.commands = {'tb', 'trailblazer'}
 
 packets = require('packets')
 resources = require('resources')
 logger = require('logger')
-events = require('events') --events is a jerk sometimes, you know how it is
---wait, tables isn't required for the T thing on line 15 below?!
+events = require('events') --this is hackish, apparently, but it works
 
 windower.register_event("addon command", function(...)
 
-    --I don't ever make these local variables rather than global but people who aren't me usually do, I don't really know how that stuff works
-    args = T{...}
-    cmd = args[1]:lower()
-    qty = args[2] --no need to lowercase this, it's a number 
+    local args = T{...}
+    local cmd = args[1]:lower()
+    local qty = args[2] --no need to lowercase this, it's a number 
 
     --check whether input was a valid tool type. you can add aliases here to be lazy, like 'pick', if you prefer
     if (cmd == 'pickaxe' or cmd == 'sickle' or cmd == 'hatchet') then
         buy_tool(cmd, qty)
+	
+	--accept them in reverse order, too, since I'm dumb
+	elseif (qty:lower() == 'pickaxe' or qty:lower() == 'sickle' or qty:lower() == 'hatchet') then
+		buy_tool(qty, cmd)
+
     else
-        notice("Accepted commands are 'pickaxe', 'sickle', and 'hatchet', to buy those one of those three tools from Floralie, followed by the number to buy.")
+        notice("Accepted commands are 'pickaxe', 'sickle', and 'hatchet', to buy those three tools from Floralie. (Followed by the number to buy.)")
     end
 
 end)
@@ -44,9 +47,8 @@ function buy_tool(cmd, qty)
         notice("Got into the buying function with an improperly specified tool. I'm not certain how, but please unload this addon (and zone because we sent a bad packet here) and try again.")
     end
 
-	--turn the command into a proper item name to make this reporting out cleaner, then inform the user we are starting
-    purchased_item = 'Trailblazing ' .. string.upper(string.sub(cmd, 1, 1)) .. string.sub(cmd, 2) .. ' +1'
-	notice("Beginning to purchase " .. qty .. ' ' .. purchased_item .. '.')
+	local purchased_item = 'Trailblazing ' .. string.upper(string.sub(cmd, 1, 1)) .. string.sub(cmd, 2) .. ' +1'
+	notice("Purchasing " .. qty .. ' ' .. purchased_item .. '...')
 
     --purchasing loop
     for i = 1, qty, 1 do
@@ -59,16 +61,17 @@ function buy_tool(cmd, qty)
 
     end
 
-    --send packet to exit the menu because otherwise you lock up and have to run out the door to Ceizak
+    --send packet to exit the menu, because otherwise you lock up and have to run out the door to Ceizak
     send_dialog_packet(mob_id, menu_id, 0, false, 16384, 0)
     coroutine.sleep(0.1)
 
     --notify the user that we're done
-    notice("Finished purchasing " .. qty .. ' ' .. purchased_item .. '.')
+    --first, turn the command into a proper item name to make this reporting out cleaner
+    notice("We should have purchased " .. qty .. ' ' .. purchased_item .. '.')
   
 end
 
---below this point is DT's work, repurposed from others I'm sure
+--below this point is thicket's work, repurposed from others I'm sure
 --sends a dialog packet
 function send_dialog_packet(mob_id, menu_id, option_index, automated, unknown_1, unknown_2)
 	local mob = get_mob_by_id(mob_id)
@@ -103,18 +106,15 @@ end
 function start_dialog(mob_id)
 
     interact_with_mob(mob_id)
-
 	local menu_id = wait_for_dialog_start()
-
 	if menu_id then
 		return menu_id
 	end
 	
 end
 
---sends an interact packet to the specified mob id
+--sends an interact packet to specified mob id
 function interact_with_mob(mob_id)
-
 	local mob = get_mob_by_id(mob_id)
 	
     if not mob then
@@ -129,9 +129,8 @@ function interact_with_mob(mob_id)
 	}))
 end
 
---waits for the npc dialog to start so we can intercept it, because sending packets doesn't work right with a visible dialog menu open
+--waits for the npc dialog to start so we can intercept it
 function wait_for_dialog_start()
-
 	local menu_id = nil
 
 	wait_for('incoming chunk', function(id, data)
@@ -146,9 +145,8 @@ end
 
 --block the menu from opening when it's not supposed to be opening (because then we can't send nice packets)
 function wait_for(event_type, f, block, threshold)
-	
 	block = block or false
-	threshold = threshold or 5 --by default, wait five seconds for the callback below
+	threshold = threshold or 5
 	local debug_info = {}
 
 	local success = false
@@ -180,12 +178,10 @@ function wait_for(event_type, f, block, threshold)
 
 	events.unregister_event(event_type, handler)
 	return success
-
 end
 
 --get id for a mob given its name
 function get_nearest_mob_by_name(names)
-	
 	if type(names) == 'string' then
 		names = S{names}
 	end
