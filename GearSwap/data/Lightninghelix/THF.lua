@@ -56,7 +56,7 @@ function user_setup()
     state.CombatForm = M{['description']='Engaged Gear Set', 'Legion', 'Real'} --this takes precedence over weaponset, which I use on corsair. trying to do what you're "supposed" to here
     send_command('bind F10 gs c cycle CombatForm')
 
-    --define ambu capes
+   --when on new character, check my notes about damage taken, these might be wrong
     gear.AmbuCape = {} --if I don't specify one, I don't know which one I want, so leave it blank for sure
     gear.AmbuCape.Evisc = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','Crit.hit rate+10','Phys. dmg. taken-10%',}}
     gear.AmbuCape.TP = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Damage taken-5%',}}
@@ -65,13 +65,15 @@ function user_setup()
     gear.AFHead = {name="Pillager's Bonnet"} --nope
     gear.AFBody = {name="Pillager's Vest +4"} --hide duration, 6 crit damage, 7 ta
     gear.AFHands = {name="Pillager's Armlets"} --nope
-    gear.AFLegs = {name="Pillager's Culottes +1"} --unused, at +3, this is 5 ta / 5 crit damage (and right now it's +steal instead lmao) but it doesn't beat auged gleti's at +3 and doesn't beat r0 gleti's right now
+    gear.AFLegs = {name="Pillager's Culottes +1"} --unused, doesn't beat auged gleti's even at +4, don't bother
     gear.AFFeet = {name="Pill. Poulaines +1"} --flee duration (honestly, do I care?!)
+
     gear.RelicHead = {name="Plunderer's Bonnet"} --nope
     gear.RelicBody = {name="Plunderer's Vest +3"} --crit hit rate/damage (evisceration set)
     gear.RelicHands = {name="Plunderer's Armlets +1"} --nope (TH+3 and also a Perfect Dodge boost I don't care about)
     gear.RelicLegs = {name="Plunderer's Culottes"} --nope
     gear.RelicFeet = {name="Plunderer's Poulaines +3"} --triple attack + also TA damage
+    
     gear.EmpyHead = {name="Skulker's Bonnet +2"} --5 TA, 7 PDL (up to 6/10)
     gear.EmpyBody = {name="Skulker's Vest"} --nope
     gear.EmpyHands = {name="Skulker's Armlets"} --nope
@@ -147,7 +149,7 @@ function init_gear_sets()
     --moving this here because I have zero other midcast sets (could care about utsu or something at some point? idk)
 	sets.midcast.FastRecast = sets.precast.FC
 
-    --in the SPECIFIC case I'm nuking for damage in abyssea or voidwatch or some shit, uncomment this I guess
+    --in the SPECIFIC case I'm nuking for damage in abyssea or voidwatch or something, uncomment this I guess
     --sets.midcast = {
     --head="Nyame Helm", --every piece of this has 30 mab for no reason, how lucky
     --body="Nyame Mail",
@@ -227,9 +229,8 @@ function init_gear_sets()
     back=gear.AmbuCape.Evisc,
 	}
 
-    --rudra's is 80 dex, physical, single hit, ftp doubles from 1k to 2k but then only 30% more at 3k
-	--also I have to care if I make a twashtar
-	sets.precast.WS["Rudra's Storm"] = set_combine(sets.precast.WS['Evisceration'], {}) --this is garbage for now
+    --rudra's is 80 dex, physical, single hit, ftp doubles from 1k to 2k but then only 30% more at 3k, fix this when I make a twashtar, add tp logic too
+	sets.precast.WS["Rudra's Storm"] = set_combine(sets.precast.WS['Evisceration'], {}) --this is garbage for now, fix it
 
     --not using a set-combine for magical ws because while the Nyame overlaps I still like having this explicitly defined so I can read it
 	--40 dex 40 int magical aoe
@@ -272,19 +273,13 @@ function init_gear_sets()
     back=gear.AmbuCape.TP, --10 stp and some dt (so I think this is better than null shawl?)
 	}
 
-    --per ffxiah, changes to this for the the "optimal" glass cannon don't-care-about-dt set is
-    --gil: aurgelmir +1, gerdr belt +1
-    --actual work: empy +3 head, gleti's hands, gleti's legs
-    --have: iskur gorget, epona's ring over hetairoi
-    --suspect I'd want to change most of these at once because it messes with my DW numbers and so on
-	
     --https://github.com/Kinematics/GearSwap-Jobs/wiki/Sets has all the notes on how this works
-
     --combatmode does this, not sets.Legion or anything, that's like weaponmode
     --was trying out naegling but no thanks at the moment
-    sets.engaged.Legion = set_combine(sets.engaged, {main="Tauret", sub="Crepuscular Knife"})
+    sets.engaged.Legion = set_combine(sets.engaged, {main="Tauret", sub="Gleti's Knife"})
 
     --for anything from segment farming and omen to gaol mercing and possibly someday beyond. dt capped.
+    --this will be removed once the "normal" tp set is also 50 dt, but until then, legion set can be separate :)
     sets.engaged.Real = {
         ammo="Coiste Bodhar",
         head="Malignance Chapeau",--6 dt (6)
@@ -293,23 +288,23 @@ function init_gear_sets()
         legs="Malignance Tights", --7 dt (27)
         feet="Malignance Boots", --4 dt (31)
         neck="Asn. Gorget +2", --no idea if this is actually optimal. is iskur gorget better?
-        waist="Reiki Yotai", --one source of dual wield because thf needs 6 with capped magic haste
+        waist="Reiki Yotai", --DW, need 6 with capped magic haste so close enough
         left_ear="Alabaster Earring", --5 dt (36)
         right_ear="Skulker's Earring",
-        left_ring="Gere Ring",
-        right_ring="Murky Ring", --10 dt (46)
+        left_ring={name="Moonlight Ring", bag="wardrobe1"}, --5 dt (41)
+        right_ring={name="Moonlight Ring", bag="wardrobe2"}, --5 dt (46)
         back=gear.AmbuCape.TP, --5 dt (51)
     }
 
     --also hardcoded weapons on the "real" engaged set
-    sets.engaged.Real = set_combine(sets.engaged.Real, {main="Tauret", sub="Crepuscular Knife"})
+    sets.engaged.Real = set_combine(sets.engaged.Real, {main="Tauret", sub="Gleti's Knife"})
 
     ------------------------------------------------------------------------------------------------
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
 	--DT: 59/51 overcap, also 5 regain currently
-    --once gleti hands are auged, put those in over nyame and use null loop in neck + ambu cape for 10 mdt to replace that 7 if I want more regain
+    --once gleti hands are auged, put those in over nyame and use null loop in neck + ambu cape for 10 mdt to replace that 7 if I want more regain? no clue. that's -1 inv slot though.
     sets.idle = { 
     --oops. no weapons specified here, that's only changed by engaged sets.
 	ammo="Staunch Tathlum +1", --3 dt (this is ok, I don't use a ranged weapon on anything)

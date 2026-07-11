@@ -71,7 +71,7 @@ function init_gear_sets()
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--look I don't have real ws gear for goddamn GEOMANCER so we'll make do
+	--look I don't have real ws gear for GEOMANCER, we'll make do
     sets.precast.WS = {
 	--ammo="Oshasha's Treatise", --we have bell
 	head="Nyame Helm",

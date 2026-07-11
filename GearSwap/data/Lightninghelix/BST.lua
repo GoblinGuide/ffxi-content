@@ -1,11 +1,6 @@
 --Motenten gearswap, flattened by me to just use to farm RP in Sheol Gaol with hp-10% debuff
 
---[[
-    Custom commands:
-    
-    Ctrl-F8 : Cycle through available pet food options.
-    Alt-F8 : Cycle through correlation modes for pet attacks.
-]]
+--only "real" set containing gear I own is the engaged set. everything else is totally fake because I do not care even a little.
 
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
@@ -83,16 +78,13 @@ function init_gear_sets()
     sets.precast.JA['Charm'] = {}
     sets.precast.WS = {} --hell yeah no WSes ever, get out
 
-    --total FC is 30+6 quick
     --this is kinda lousy but hell, I ain't even summoning trusts...
     sets.precast.FC = {
-        ammo="Impatiens", --0+2
-        body=gear.TaeonTabard, --9
-        hands=gear.LeylineGloves, --8
-        left_ring="Weatherspoon Ring +1", --6+4
-        neck="Baetyl Pendant", --4
-        left_ear="Loquacious Earring", --2
-        right_ear="Etiolation Earring", --1
+        --adhemar jacket?
+        hands=gear.LeylineGloves,
+        left_ring="Prolix Ring"
+        neck="Orunmila's Torque",
+        left_ear="Loquacious Earring",
         }
 
     --------------------------------------
@@ -104,52 +96,59 @@ function init_gear_sets()
 
     --The Pet Set(tm)
     sets.midcast.Pet.WS = {
-        main="Pangu", --to save gil, could use Mdomo Axe +1, it is also pet 50 macc just like this, this has a big dt augment but I don't know if I actually care
-        offhand="Agwu's Axe", --ongo clear+gil
-        ammo="Hesperiidae", --dealan-dhe clear+gil
-        head="Nyame Helm", --nyame 50 macc, same as gleti's, so give myself dt just in case it matters
+        main="Agwu's Axe",
+        --if I could dw, Pangu or Mdomo axe +1
+        ammo="Hesperiidae", --"Voluspa Tathlum" better
+        head="Nyame Helm", --nyame 50 pet macc, same as gleti's, so give myself dt just in case it matters
         neck="Bst. Collar +2", --gil
-        body="Nyame Mail",
-        hands="Nyame Gauntlets",
-        legs="Nyame Flanchard",
-        feet="Gleti's Boots", --do I have to fulltime these for the pet level? no macc diff so let's do it
-        left_ear="Enmerkar Earring",
-        right_ear="Kyrene Earring", --20k gil on AH until I get the sortie BST earring
-        left_ring="Tali'ah Ring", --ambu finger voucher
-        right_ring="Cath Palug Ring",
-        waist="Incarnation Sash",
+        body="Nyame Mail", --see above notes
+        hands="Nyame Gauntlets", --see above notes
+        legs="Nyame Flanchard", --see above notes
+        feet="Gleti's Boots", --fulltime these for the pet level? no macc diff so let's do it
+        left_ear="Alabaster Earring", --tied for highest macc with real drops, "Kyrene's Earring" if I care about actual pet stats long-term
+        right_ear="Nukumi Earring",
+        left_ring="Murky Ring", --highest macc
+        right_ring="Varar Ring", --2 less than "Cath Palug Ring" but it's 2m gil rather than a htmb drop
+        waist="Incarnation Sash", --don't have
         back=gear.AmbuCape.PetMacc,
         }
 
-    --------------------------------------
-    -- Idle/resting/defense/etc sets
-    --------------------------------------
-
+    
     --idle set, which includes pet stats
     sets.idle = {
-        main="Pangu", --same weapons as above
-        offhand="Agwu's Axe", --couuld be Izizoeksi (plasm) for pet dt
+        main="Agwu's Axe", --ongo clear+gil
+        --offhand="Agwu's Axe", --could be Izizoeksi (plasm) for pet dt, is there a shield?
         ammo="Hesperiidae",
-        head="Twilight Helm", --auto-reraise set bonus (1/2) [could be crep lol]
-        body="Twilight Mail", --auto-reraise set bonus (2/2) [but I need both halves lol]
+        head="Nyame Helm", --"Crepuscular Helm", --auto-reraise set bonus (1/2)
+        body="Nyame Mail", --"Crepuscular Mail", --auto-reraise set bonus (2/2)
         hands="Nyame Gauntlets", --dt
         legs="Nyame Flanchard", --dt
-        feet="Gleti's Boots", --pet level +1 is probably better, idk, don't make the stats go boom
-        neck="Loricate Torque +1", --don't need pet dt here, do I? (Shepherd's Chain)
+        feet="Gleti's Boots", --pet level +1
+        neck="Warder's Charm +1",
         left_ring="Chirich Ring +1", --no DT option for pet here that I know of
-        right_ring="Murky Ring Ring",
-        left_ear="Alabaster Earring", --or here that I know of
-        right_ear="Eabani Earring", --will be sortie BST ear eventually
-        waist="Plat. Mog. Belt", --or here (Isa belt?)
+        right_ring="Murky Ring",
+        left_ear="Alabaster Earring",
+        right_ear="Nukumi Earring", --keep pet level
+        waist="Carrier's Sash",
         back=gear.AmbuCape.PetMacc, --sure whatever
         }
 
-    --------------------------------------
-    -- Engaged sets
-    --------------------------------------
-
-    --lol whatever
-    sets.engaged = sets.midcast.Pet.WS
+    --lol whatever not bothering
+    sets.engaged = {
+        ammo="Coiste Bodhar",
+        head="Malignance Chapeau",
+        body="Malignance Tabard",
+        hands="Malignance Gloves", 
+        legs="Malignance Tights",
+        feet="Malignance Boots",
+        neck="Combatant's Torque",
+        left_ring="Chirich Ring +1", --no DT option for pet here that I know of
+        right_ring="Murky Ring",
+        left_ear="Alabaster Earring", --or here that I know of
+        right_ear="Nukumi Earring", --will be sortie BST ear eventually
+        waist="Reiki Yotai", --dw lol
+        back="Null Shawl",
+    }
 
 end
 
@@ -165,4 +164,4 @@ function job_precast(spell, action, spellMap, eventArgs)
     end
 end
 
---removed all custom modes and such. we'll see if it breaks.
+--removed all custom modes and such. we'll see if it breaks?

@@ -1,4 +1,5 @@
--- Original: Motenten / Modified: Arislan / gutted: DACK (this was COR and I'm just using it for Abyssea procs)
+-- Original: Motenten / Modified: Arislan / gutted: DACK (just using it for Abyssea procs)
+--todo: make sure this is good now that it's Joe and not Helix
 
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
@@ -17,7 +18,7 @@ function job_setup()
     
     include('Mote-TreasureHunter')
     
-    --202407904 replaced "gs c treasuremode cycle" with "gs c set treasuremode Tag" (to always turn on th tag mode when we switch to ninja, because I only use it for abyssea proccing)
+    --202407904 replaced "gs c cycle treasuremode" with "gs c set treasuremode Tag" (to always turn on th tag mode when we switch to ninja, because I only use it for abyssea proccing)
 	windower.send_command('gs c set treasuremode Tag')
 
 end
@@ -26,7 +27,11 @@ end
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
 
-	--nobody here but us chickens
+	--fc hat
+    gear.HercHelmFC = { name="Herculean Helm", augments={'Mag. Acc.+11','"Fast Cast"+6','"Mag.Atk.Bns."+12',}}
+    
+    --quick stopgap until Volte Jupon
+    gear.HercBootsTH = { name="Herculean Boots", augments={'Enmity-2','"Mag.Atk.Bns."+6','"Treasure Hunter"+2',}}
 
 end
 
@@ -39,14 +44,14 @@ function init_gear_sets()
 
 	--as much as I have that NIN can wear
     sets.precast.FC = {
-        head="Herculean Helm", --7+6=13, I only have the one so I don't need to disambiguate
+        head=gear.HercHelmFC,
         body="Adhemar Jacket +1", --10 and I use it for cor lmao
-        hands="Leyline Gloves", --8
+        --hands="Leyline Gloves", --8
         neck="Orunmila's Torque", --5
         --left_ear="Etiolation Earring", --1 --inventory
-        right_ear="Loquacious Earring", --2 --preserve 5 gear haste from alabaster, though I think I'm capped, it can't hurt to be sure
+        right_ear="Loquacious Earring", --2
         left_ring="Prolix Ring", --2
-        right_ring="Kishar Ring", --4
+        --right_ring="Kishar Ring", --4
         }
 	
     --testing, testing... this still doesn't seem to be working
@@ -67,61 +72,40 @@ function init_gear_sets()
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--deliberately blank, trying to abyssea proc, don't kill the target
-    sets.precast.WS = {
-        }
+	--deliberately blank, so that when I'm trying to Abyssea proc I don't kill the target
+    sets.precast.WS = {}
         
     --if I'm using this I actually want to do damage
     sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {
-        --ammo="Oshasha's Treatise",  --removed so I can ra with Aureole to pull
+        ammo="Coiste Bodhar",
         head="Nyame Helm",
         body="Nyame Mail",
         hands="Nyame Gauntlets",
         legs="Nyame Flanchard",
         feet="Nyame Sollerets",
-        neck="Rep. Plat. Medal",
-		waist="Sailfi Belt +1",
-        left_ear="Alabaster Earring", --nin can't wear sherida lol
-		right_ear="Moonshade Earring",
+        neck="Fotia Gorget",
+        waist="Fotia Belt",
+	    left_ear="Moonshade Earring",
+        right_ear="Odr Earring", --wev
         left_ring="Cornelia's Ring",
-        right_ring="Regal Ring",
-        --back=gear.AmbuCape.PhysWS,
-        })
+        right_ring="Sroda Ring",
+        back="Null Shawl",
+	    })
 
-    --if I'm using this I actually want to do damage and also default to TH4
-    sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS, {
-    --ammo="Oshasha's Treatise", --removed so I can ra with Aureole
-    head="Nyame Helm", --every piece of this has 30 mab for no reason, how lucky
-    body="Volte Jupon", --TH
-    hands="Volte Bracers", --TH
-    legs="Nyame Flanchard",
-    feet="Nyame Sollerets",
+    --someday maybe who cares blah blah
+    sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS['Savage Blade'], {
     neck="Fotia Gorget", --let's try this over "Sibyl Scarf", --see if the ftp improvevment makes me oneshot those stupid marids at 1000 tp
-    waist="Chaac Belt", --TH over 15% damage hopefully this doesn't bite me in the butt... and it looks like it immediately did, sigh, we'll figure something out, we need the TH
-    left_ear="Moonshade Earring", --ftp 2.0 -> 3.0 is not zero improvement from this
-    right_ear="Friomisi Earring",
-    left_ring="Dingir Ring", --lmao
-    right_ring="Cornelia's Ring", --is regal better than this? pretty sure not?
-    --back="Null Shawl", 
+    waist="Orpheus's Sash", --affinity
+    right_ear="Friomisi Earring", --mab
+    right_ring="Dingir Ring", --mab
     })
- 
+    
     --if I'm using this I actually want to heal myself and thus do damage
-    sets.precast.WS['Sanguine Blade'] = {
-    --ammo="Oshasha's Treatise", --removed so I can ra with Aureole
-	head="Pixie Hairpin +1", --28% (stacks w/archon+sash)
-    body="Nyame Mail",
-    hands="Nyame Gauntlets",
-    legs="Nyame Flanchard", 
-    feet="Nyame Sollerets",
-    neck="Sibyl Scarf",  --int
-	waist="Orpheus's Sash", --15% (stacks w/pixie+archon)
-    left_ear="Moonshade Earring", --does nothing iirc
-    right_ear="Friomisi Earring",
-    left_ring="Cornelia's Ring", --effort
-    right_ring="Archon Ring", --5% (stacks w/pixie+sash)
-    --back="Null Shawl", 
-	}
-	
+    sets.precast.WS['Sanguine Blade'] = set_combine(sets.precast.WS['Aeolian Edge'],
+        {
+        head="Pixie Hairpin +1", --28% (stacks w/archon+sash)
+        right_ring="Archon Ring", --5% (stacks w/pixie+sash) (beats the dingir mab I think)
+        })	
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Engaged Sets ------------------------------------------
@@ -129,18 +113,18 @@ function init_gear_sets()
 
 	--no optimization at all. big ol DT, some TP in other slots.
     sets.engaged = {
-        --ammo="Coiste Bodhar", --removed so I can ra with Aureole
+        ammo="Coiste Bodhar",
         head="Malignance Chapeau",
         body="Malignance Tabard",
         hands="Malignance Gloves",
         legs="Malignance Tights",
         feet="Malignance Boots",
-        neck="Null Loop", --I think this dt caps, or at least comes close, who cares
-		waist="Reiki Yotai", --this shouldn't be this but also I do not care. at all.
-        left_ear="Alabaster Earring", --dt capped
-        right_ear="Telos Earring", --do I even care about the nin sortie earring? no! am I still sticking to convention? yes!
-        left_ring="Chirich Ring +1",
-        right_ring="Murky Ring", --dt
+        neck="Null Loop", --"Combatant's Torque", --whatever
+		waist="Sailfi Belt +1", --gear haste to counteract 15% slow from Atma of the Sea Daughter if I'm in Abyssea, also DA etc
+        left_ear="Alabaster Earring", --dt and gear haste
+        right_ear="Dedition Earring",
+        left_ring="Epona's Ring",
+        right_ring="Ilabrat Ring",
         back="Null Shawl", --thank god, all jobs
         }
 
@@ -148,20 +132,20 @@ function init_gear_sets()
     --------------------------------------- Idle Set, Singular -------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--stolen from thf, dt capped
+	--whatever, dt capped with nyame
     sets.idle = { 
 	--ammo="Coiste Bodhar", --update no weapons specified here, that's only changed by engaged sets
-	head="Null Masque",
-    body="Malignance Tabard",
-    hands="Nyame Gauntlets",
-    legs="Gleti's Breeches",
-	feet="Nyame Sollerets",
-	neck="Null Loop",
+    head="Malignance Chapeau", --"Null Masque"
+    body="Malignance Tabard", --"Nyame Mail"
+    hands="Malignance Gloves", --"Nyame Gauntlets"
+    legs="Malignance Tights", --"Nyame Flanchard"
+    feet="Malignance Boots", --"Nyame Sollerets"
+	neck="Null Loop", --"Warder's Charm +1",
 	waist="Carrier's Sash",
     left_ear="Alabaster Earring",
     right_ear="Eabani Earring",
     left_ring="Shneddick Ring +1",
-	right_ring="Murky Ring",
+	right_ring="Murky Ring", --want to dt cap for sure
 	back="Null Shawl",
 	}
 
@@ -170,11 +154,10 @@ function init_gear_sets()
     ---------------------------------------- Special Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
     
-    --TH 2+1+1, all items work on all jobs and are i119
+    --TH 2+2 until jupon functional
 	sets.TreasureHunter = {
-		body="Volte Jupon", --2
-		hands="Volte Bracers", --1
-        waist="Chaac Belt", --1
+        feet=gear.HercBootsTH,
+        left_ring="Hoxne Ring",
 		}
 
 end

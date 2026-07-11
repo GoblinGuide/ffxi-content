@@ -103,7 +103,7 @@ function init_gear_sets()
 		right_ring={name="Stikini Ring +1", bag="wardrobe2"},
 		left_ear="C. Palug Earring",
 		right_ear="Lodurr Earring",
-		--waist="Kobo Obi", --if inventory space is unlimited there's "Ligeia Sash" from siren fight
+		waist="Kobo Obi",
 		neck="Incanter's Torque",
 		back=gear.JSECape.SummoningSkill, --the base effect on this cape is +30 mp returned
 		}
@@ -129,7 +129,7 @@ function init_gear_sets()
 		right_ring={name="Stikini Ring +1", bag="wardrobe2"},
 		left_ear="C. Palug Earring",
 		right_ear="Lodurr Earring",
-		--waist="Kobo Obi", --seiryu in escha-ruaun
+		waist="Kobo Obi",
 		neck="Incanter's Torque",
 		back=gear.JSECape.SummoningSkill,
 		}
@@ -209,7 +209,7 @@ function init_gear_sets()
 		left_ear="C. Palug Earring",
 		right_ear="Lodurr Earring",
 		neck="Incanter's Torque",
-        --waist="Kobo Obi", --seiryu in escha ruaun
+        waist="Kobo Obi",
 		back=gear.JSECape.SummoningSkill,
 		}
 
@@ -277,23 +277,23 @@ function init_gear_sets()
     -- Idle set
     --------------------------------------
     
-	--15 perp + 4 refresh + 2 refresh from smn traits = 21 total = 21 max perp cost with avatar's favor (because it's 14 * 1.5)
-	--dt is capped, could needle cape to meva
+	--21 max perp cost with avatar's favor (it's 14 * 1.5). 2 refresh from smn traits = want 19 perp+refresh. (this set is 20)
+	--dt overcapped with Alabaster, could needle cape to meva if I truly cared, or Evans Earring for 2 perp cost, or something else?
 	sets.idle = {
-		main="Nirvana", --8 perp cost (8 perp)
+		main="Nirvana", --8 perp cost (8 perp) [also 2 avatar level, etc]
 		sub="Khonsu", --6 dt (6 dt, 8 perp)
 		ammo="Sancus Sachet +1", --keep avatar at 119 at all times
-        head=gear.EmpyHead, --9 dt, 4 favor tiers (15 dt, 8 perp)
-		body=gear.EmpyBody, --12 dt, 7 perp cost (27 dt, 15 perp)
-		hands="Nyame Gauntlets", --7 dt (34 dt, 15 perp) (-5 perp option here with lamassu mitts +1 if I need it)
-		legs="Nyame Flanchard", --8 dt (42 dt, 15 perp) (over "Assiduity Pants +1" which give refresh/perp)
-		feet="Bunzi's Sabots", --6 dt, avatar level +1 (48 dt, 15 perp, 1 refresh)
-		neck="Sibyl Scarf", --1 refresh WHEN WINDURST CITIZEN [always] (48 dt, 15 perp, 2 refresh) (yes I genuinely need this 1 refresh here)
-		waist="Carrier's Sash", --elemental resistance (48 dt, 15 perp, 2 refresh)
-		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --1 refresh (48 dt, 15 perp, 3 refresh)
-		right_ring="Shneddick Ring +1", --movespeed (48 dt, 15 perp, 3 refresh)
-        left_ear="Alabaster Earring", --5 dt (53 dt, 15 perp, 3 refresh)
-		right_ear="C. Palug Earring", --1 refresh (53 dt, 15 perp, 4 refresh)
+        head=gear.EmpyHead, --9 dt, 4 favor tiers, 3 refresh (15 dt, 8 perp, 3 REFRESH) [up to 10/5/4 at +3]
+		body=gear.EmpyBody, --12 dt, 7 perp cost (27 dt, 15 perp, 3 refresh) [up to 13/8 at +3]
+		hands="Nyame Gauntlets", --7 dt (34 dt, 15 perp, 3 refresh)
+		legs="Nyame Flanchard", --8 dt (42 dt, 15 perp, 3 refresh)
+		feet="Bunzi's Sabots", --6 dt, avatar level +1 (48 dt, 15 perp, 3 refresh)
+		neck="Warder's Charm +1", --elemental resistance (48 dt, 15 perp, 3 refresh)
+		waist="Carrier's Sash", --elemental resistance (48 dt, 15 perp, 3 refresh)
+		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --1 refresh (48 dt, 15 perp, 4 refresh)
+		right_ring="Shneddick Ring +1", --movespeed (48 dt, 15 perp, 4 refresh)
+        left_ear="Alabaster Earring", --5 dt (53 dt, 15 perp, 4 refresh)
+		right_ear="C. Palug Earring", --1 refresh (53 dt, 15 perp, 5 refresh)
         back=gear.AmbuCape.MagicBP --5 DT (58 dt, 18 perp, 4 refresh)
 		}
 

@@ -1,5 +1,4 @@
--- Original: Motenten / Modified: Arislan
---stripped the fuck outta this one by DACK
+-- Original: Motenten / Modified: Arislan / gutted: me :)
 
 --------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
@@ -11,6 +10,7 @@ function get_sets()
 
     -- Load and initialize the include file.
     include('Mote-Include.lua')
+    
 end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
@@ -152,39 +152,33 @@ end
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
  
+    --don't load this unless I actually want to load it
+    --todo: steal my sets from azuresets folder and make sure they're right
     --send_command('lua l azureSets')
 
-	--define specific pieces below
+    --the casting cape is not yet made
 	gear.AmbuCape = {}
-	gear.AmbuCape.TP = { name="Rosmerta's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dual Wield"+10',}} --could put dt on this to cap engaged
-	gear.AmbuCape.WS = { name="Rosmerta's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
-	gear.AmbuCape.MAcc = { name="Rosmerta's Cape", augments={'INT+20','Mag. Acc+20 /Mag. Dmg.+20','INT+10','"Mag.Atk.Bns."+10','Damage taken-5%',}} --also for int nukes
-	
-	gear.Moonshade = { name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +250',}}
-	gear.LeylineGloves = { name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
-	gear.TelchineHead = { name="Telchine Cap", augments={'Enh. Mag. eff. dur. +10',}}
-	gear.TelchineBody = { name="Telchine Chas.", augments={'Enh. Mag. eff. dur. +10',}}
-	gear.TelchineLegs = { name="Telchine Braconi", augments={'Enh. Mag. eff. dur. +10',}}
+	--gear.AmbuCape.MAcc = { name="Rosmerta's Cape", augments={'INT+20','Mag. Acc+20 /Mag. Dmg.+20','INT+10','"Mag.Atk.Bns."+10','Damage taken-5%',}} --also for int nukes
 
-    gear.HercHelm = {}
-    gear.HercHelm.FC = { name="Herculean Helm", augments={'"Mag.Atk.Bns."+8','"Fast Cast"+6','MND+8',}}
-	
-    --lol I didn't even rewrite the names of the not-empy gear here
-    --gear.AFHead = {name="Pillager's Bonnet"} --nope
-    --gear.AFBody = {name="Pillager's Vest +3"} --hide duration, 6 crit damage, 7 ta
-    --gear.AFHands = {name="Pillager's Armlets"} --nope
-    --gear.AFLegs = {name="Pillager's Culottes +1"} --at +3, this is 5 ta, 5 crit damage (and right now it's +steal instead lmao)
-    --gear.AFFeet = {name="Pillager's Poulaines +1"} --flee duration, 18 move speed
-    --gear.RelicHead = {name="Plunderer's Bonnet"} --nope
-    --gear.RelicBody = {name="Plunderer's Vest +3"} --crit hit rate/damage
-    --gear.RelicHands = {name="Plunderer's Armlets +1"} --TH+3 until I spend galli on the boots
-    --gear.RelicLegs = {name="Plunderer's Culottes"} --nope
-    --gear.RelicFeet = {name="Plunderer's Poulaines +3"} --triple attack + also TA damage
-    gear.EmpyHead = {name="Hashishin Kavuk +2"}
-    gear.EmpyBody = {name="Hashishin Mintan +2"}
-    gear.EmpyHands = {name="Hashi. Bazu. +2"}
-    gear.EmpyLegs = {name="Hashishin Tayt +2"}
-    gear.EmpyFeet = {name="Hashishin Basmak +2"}
+    gear.HercHelmFC = { name="Herculean Helm", augments={'Mag. Acc.+11','"Fast Cast"+6','"Mag.Atk.Bns."+12',}}
+    gear.HercBootsTH = { name="Herculean Boots", augments={'Enmity-2','"Mag.Atk.Bns."+6','"Treasure Hunter"+2',}}
+
+    --do not care about this job enough to have the rest of the item details
+    --gear.AFHead = {name="Assimilator's Keffiyeh"}
+    --gear.AFBody = {name="Assimilator's Jubbah"}
+    gear.AFHands = {name="Assimilator's Bazubands +1"} --BLUE MAGIC LEARNING CHANCE UP HELL YEAH
+    --gear.AFLegs = {name="Assimilator's Shalwar"}
+    --gear.AFFeet = {name="Assimilator's Charuqs"}
+    --gear.RelicHead = {name="Luhlaza Keffiyeh"}
+    --gear.RelicBody = {name="Luhlaza Jubbah"}
+    --gear.RelicHands = {name="Luhlaza Bazubands"}
+    --gear.RelicLegs = {name="Luhlaza Shalwar"}
+    --gear.RelicFeet = {name="Luhlaza Charuqs"}
+    --gear.EmpyHead = {name="Hashishin Kavuk +2"}
+    --gear.EmpyBody = {name="Hashishin Mintan +2"}
+    --gear.EmpyHands = {name="Hashi. Bazu. +2"}
+    --gear.EmpyLegs = {name="Hashishin Tayt +2"}
+    --gear.EmpyFeet = {name="Hashishin Basmak +2"}
 
 end
 
@@ -219,55 +213,44 @@ function init_gear_sets()
 
     --sets.precast.JA['Provoke'] = sets.Enmity
 
-    --TH 2+1+1, all items work on all jobs and are i119
+    --TH 2+2 fine for now
 	sets.TreasureHunter = {
-		body="Volte Jupon", --2
-		hands="Volte Bracers", --1
-        waist="Chaac Belt", --1
+        left_ring="Hoxne Ring", --2
+        feet=gear.HercBootsTH,
 		}
-	
-    --these will all just fail gracefully, it's fine
-	sets.buff['Burst Affinity'] = {}--legs="Assim. Shalwar +3", feet="Hashi. Basmak +1"}
-    sets.buff['Diffusion'] = {}--feet="Luhlaza Charuqs +3"}
-    sets.buff['Efflux'] = {}--legs="Hashishin Tayt +1"}
-
-    sets.precast.JA['Azure Lore'] = {}--hands="Luh. Bazubands +1"}
-    sets.precast.JA['Chain Affinity'] = {}--feet="Assim. Charuqs +1"}
-    sets.precast.JA['Convergence'] = {}--head="Luh. Keffiyeh +3"}
-    sets.precast.JA['Enchainment'] = {}--body="Luhlaza Jubbah +3"}
 
 	--FC cap is 80
 	--BLU gets FC traits - current spells set is Erratic Flutter (mandatory) + Auroral Drape + Wind Breath to spend an extra 6 points to get 10% FC instead of 5%
     --gear is 44, traits is +10 = 54/80 total, if I cared about this job I would at least put fc on an ambu cape and get some boots
     sets.precast.FC = {
-        head=gear.HercHelm.FC, --13 (beats amalric coif +1 which is 11 and I'm using it on COR and THF too)
+        head="Herculean Helm", --13 (beats amalric coif +1 which is 11 and I'm using it on COR and THF too)
         body="Adhemar Jacket +1", --10 (23) (path D)
-        hands="Leyline Gloves", --8 (31)
+        hands="Leyline Gloves", --8 (31) --actually 7 rn
         --legs="Gyve Trousers" --4, inventory space (enif cosciales 8 but not ilevel so not happening)
         --feet=gear.HercBoots.FC, --6 augment, inventory space (carmine greaves +1 8, amalric nails +1 6)
         neck="Orunmila's Torque", --5 (36)
 		--waist="Witful Belt", --3, inventory space
         left_ear="Loquacious Earring", --2 (38)
         --right_ear="Etiolation Earring", --1, inventory space
-        left_ring="Kishar Ring", --4 (42)
+        --left_ring="Kishar Ring", --4 (42)
         right_ring="Prolix Ring", --2 (44)
         --could use an ambu cape here for 10 fc if I actually care about BLU
         }
 
     sets.precast.FC['Blue Magic'] = set_combine(sets.precast.FC, {
-	body=EmpyBody, --idk what this does lmao
+    	--body=gear.EmpyBody, --clearly this is relevant
 	})
     
 	sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {
-	--waist="Siegel Sash"
+	    --waist="Siegel Sash"
 	})
     
 	sets.precast.FC.Cure = set_combine(sets.precast.FC, {
 	})
 
     sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {
-    --left_ring="Lebeche Ring",
-    --waist="Rumination Sash",
+        --left_ring="Lebeche Ring",
+        --waist="Rumination Sash",
     })
 
 
@@ -275,92 +258,93 @@ function init_gear_sets()
     ------------------------------------- Weapon Skill Sets ----------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--copypasted savage blade set, don't care
+	--whatever
     sets.precast.WS = {
-        ammo="Oshasha's Treatise",
-		head="Nyame Helm",
-		body="Nyame Mail",
-		hands="Nyame Gauntlets",
-		legs="Nyame Flanchard",
-		feet="Nyame Sollerets",
-		neck="Rep. Plat. Medal",
-		waist="Sailfi Belt +1",
-		left_ear=gear.Moonshade,
-		right_ear="Regal Earring",
-		left_ring="Cornelia's Ring",
-		right_ring="Murky Ring", --screw it, dt
-		back=gear.AmbuCape.WS,
-        }
+        ammo="Coiste Bodhar",
+        head="Nyame Helm",
+        body="Nyame Mail",
+        hands="Nyame Gauntlets",
+        legs="Nyame Flanchard",
+        feet="Nyame Sollerets",
+        neck="Fotia Gorget",
+        waist="Fotia Belt",
+	    left_ear="Moonshade Earring",
+        right_ear="Odr Earring",
+        left_ring="Cornelia's Ring",
+        right_ring="Sroda Ring",
+        back="Null Shawl", --whatever
+    }
 
-	--intended use
+	--this is fine for now
     sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {
-		ammo="Oshasha's Treatise",
-		head="Nyame Helm",
-		body="Nyame Mail",
-		hands="Nyame Gauntlets",
-		legs="Nyame Flanchard",
-		feet="Nyame Sollerets",
-		neck="Rep. Plat. Medal",
-		waist="Sailfi Belt +1",
-		left_ear=gear.Moonshade,
-		right_ear="Regal Earring",
-		left_ring="Cornelia's Ring",
-		right_ring="Murky Ring", --screw it, dt
-		back=gear.AmbuCape.WS,
-        })
+        ammo="Coiste Bodhar",
+        head="Nyame Helm",
+        body="Nyame Mail",
+        hands="Nyame Gauntlets",
+        legs="Nyame Flanchard",
+        feet="Nyame Sollerets",
+        neck="Rep. Plat. Medal",
+        waist="Sailfi Belt +1",
+	    left_ear="Moonshade Earring",
+        right_ear="Hoxne Earring", --lol
+        left_ring="Cornelia's Ring",
+        right_ring="Sroda Ring",
+        --back=gear.AmbuCape.Rudras, --wrong main stat, ok for now
+	    })
 
     sets.precast.WS['Chant du Cygne'] = set_combine(sets.precast.WS, {
-        ammo="Oshasha's Treatise",
-		head="Nyame Helm",
-		body="Nyame Mail",
-		hands="Nyame Gauntlets",
-		legs="Nyame Flanchard",
-		feet="Nyame Sollerets",
-		neck="Fotia Gorget",
-		waist="Fotia Belt",
-		left_ear=gear.Moonshade,
-		right_ear="Regal Earring",
-		left_ring="Cornelia's Ring",
-		right_ring="Murky Ring", --screw it, dt
-		back=gear.AmbuCape.WS,
+        --ammo="Oshasha's Treatise",
+		--head="Nyame Helm",
+		--body="Nyame Mail",
+		--hands="Nyame Gauntlets",
+		--legs="Nyame Flanchard",
+		--feet="Nyame Sollerets",
+		--neck="Fotia Gorget",
+		--waist="Fotia Belt",
+		--left_ear="Moonshade Earring",
+		--right_ear="Regal Earring",
+		--left_ring="Cornelia's Ring",
+		--right_ring="Murky Ring", --screw it, dt
+		--back=gear.AmbuCape.WS,
         })
 
     sets.precast.WS['Vorpal Blade'] = sets.precast.WS['Chant du Cygne']
 
     sets.precast.WS['Requiescat'] = {
-        ammo="Oshasha's Treatise",
-		head="Nyame Helm",
-		body="Nyame Mail",
-		hands="Nyame Gauntlets",
-		legs="Nyame Flanchard",
-		feet="Nyame Sollerets",
-		neck="Fotia Gorget",
-		waist="Fotia Belt",
-		left_ear=gear.Moonshade,
-		right_ear="Regal Earring",
-		left_ring="Cornelia's Ring",
-		right_ring="Murky Ring", --screw it, dt
-		back=gear.AmbuCape.WS,
+        --ammo="Oshasha's Treatise",
+		--head="Nyame Helm",
+		--body="Nyame Mail",
+		--hands="Nyame Gauntlets",
+		--legs="Nyame Flanchard",
+		--feet="Nyame Sollerets",
+		--neck="Fotia Gorget",
+		--waist="Fotia Belt",
+		--left_ear="Moonshade Earring",
+		--right_ear="Regal Earring",
+		--left_ring="Cornelia's Ring",
+		--right_ring="Murky Ring", --screw it, dt
+		--back=gear.AmbuCape.WS,
         }
 
     sets.precast.WS['Expiacion'] = sets.precast.WS['Savage Blade']
 
 	--bothering to actually use this one because it full heals me no matter what so I'm going to use it sometimes and therefore might as well max damage
-    sets.precast.WS['Sanguine Blade'] = {
-		ammo="Sroda Tathlum", --10% chance for a +25% crit
+    --2026 this should not be precast savage blade if I ever truly care
+    sets.precast.WS['Sanguine Blade'] = set_combine(sets.precast.WS['Savage Blade'], {
+		--ammo="Sroda Tathlum", --10% chance for a +25% crit, inventory
 		head="Pixie Hairpin +1", --28% (stacks w/archon)
-		body="Nyame Mail",
-		hands="Nyame Gauntlets",
-		legs="Nyame Flanchard",
-		feet="Nyame Sollerets",
+		--body="Nyame Mail",
+		--hands="Nyame Gauntlets",
+		--legs="Nyame Flanchard",
+		--feet="Nyame Sollerets",
 		neck="Sibyl Scarf",
-		waist="Orpheus's Sash", --15%
-		left_ear=gear.Moonshade, --2.5% more healing! not even joking!
-		right_ear="Regal Earring",
-		left_ring="Cornelia's Ring",
+		--waist="Orpheus's Sash", --15%
+		--left_ear="Friomisi Earring", --moonshade is 2.5% more healing, so add mab instead
+		--right_ear="Regal Earring",
+		--left_ring="Cornelia's Ring",
 		right_ring="Archon Ring", --5% (stacks w/pixie)
-		back=gear.AmbuCape.MAcc, --wrong mainstat and everything but it has MAB so it's "fine"
-		}
+		--back=gear.AmbuCape.MAcc, --wrong mainstat and everything but it has MAB so it's "fine"
+		})
 	
     sets.precast.WS['True Strike'] = sets.precast.WS['Savage Blade']
     sets.precast.WS['Judgment'] = sets.precast.WS['True Strike']
@@ -388,280 +372,126 @@ function init_gear_sets()
 
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 
+    --insane: temporarily add MAB for dia so that it deas at least 1 damage to higher mdef mobs to feed tp better :)
+    sets.midcast['Dia'] = set_combine(sets.midcast.FastRecast, {
+        right_ear = "Friomisi Earring", 
+    })
+
 	--honestly, this set's made up of what I have lying around
     sets.midcast['Blue Magic'] = {
         --ammo="Mavi Tathlum", --lol I had one of these once but 5 for an inv slot? no thank you!
-		head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
+		head="Nyame Helm",
+		body="Nyame Mail",
+		hands="Nyame Gauntlets",
+		legs="Nyame Flanchard",
+		feet="Nyame Sollerets", 
         neck="Sibyl Scarf",
-		waist="Sacro Cord", --8 mab 8 macc 8 int/mnd
-		left_ear="Friomisi Earring", -- 10 mab
-		right_ear="Hashishin Earring", --right ear only, 10 blu skill, 6 macc (THIS IS IN MY MOG SAFE AT THE MOMENT FOR INVENTORY SPACE)
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --11 + 8 blue magic skill
+		waist="Orpheus's Sash",
+		left_ear="Alabaster Earring",
+        right_ear="Friomisi Earring", -- 10 mab
+        left_ring="Mummu Ring", --sold second stikini and this is the best macc I have
         right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --11 + 8 blue magic skill
-		back="Cornflower Cape", --15 blu skill
+		back="Null Shawl", --"Cornflower Cape", --15 blu skill --or an ambu cape or something
         }
 
-    sets.midcast['Blue Magic'].Physical = {
+    sets.midcast['Blue Magic'].Physical = set_combine(sets.midcast['Blue Magic'], {
         ammo="Coiste Bodhar",
-		head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
-        neck="Rep. Plat. Medal",
+		--neck="Rep. Plat. Medal",
 		waist="Sailfi Belt +1",
         left_ear="Odr Earring",
 		right_ear="Telos Earring", --10 acc lol
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --"Petrov Ring", --str, inventory
-        right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --lol whatever
-		back=gear.AmbuCape.WS, --physical damage cape
-        }
+        })
+
+    sets.midcast['Blue Magic'].Magical = set_combine(sets.midcast['Blue Magic'], {})
 
     sets.midcast['Blue Magic'].PhysicalStr = sets.midcast['Blue Magic'].Physical
 
-    sets.midcast['Blue Magic'].PhysicalDex = set_combine(sets.midcast['Blue Magic'].Physical, {
-        left_ear="Odr Earring",
-		--right_ear="Mache Earring +1",
-        --right_ring="Ilabrat Ring",
-		back=gear.AmbuCape.TP,
-        --waist="Chaac Belt", --5 dex lmao
-        })
+    sets.midcast['Blue Magic'].PhysicalDex = set_combine(sets.midcast['Blue Magic'].Physical, {})
 
     sets.midcast['Blue Magic'].PhysicalVit = sets.midcast['Blue Magic'].Physical
 
-    sets.midcast['Blue Magic'].PhysicalAgi = set_combine(sets.midcast['Blue Magic'].Physical, {
-        --hands=gear.Adhemar_B_hands,
-        --right_ring="Ilabrat Ring",
-        })
+    sets.midcast['Blue Magic'].PhysicalAgi = set_combine(sets.midcast['Blue Magic'].Physical, {})
 
-    sets.midcast['Blue Magic'].PhysicalInt = set_combine(sets.midcast['Blue Magic'].Physical, {
-        left_ring="Metamor. Ring +1", --this isn't actually anywhere atm but that's fine it may be when I get around to BRD
-		waist="Sacro Cord", --wardrobe 3 but so is the rest of blu now
-		left_ear="Regal Earring",
-        back=gear.AmbuCape.MAcc,
-        })
+    sets.midcast['Blue Magic'].PhysicalInt = set_combine(sets.midcast['Blue Magic'].Physical, {})
 
-    sets.midcast['Blue Magic'].PhysicalMnd = set_combine(sets.midcast['Blue Magic'].Physical, {
-		left_ear="Regal Earring",
-        right_ring="Metamor. Ring +1",
-        })
+    sets.midcast['Blue Magic'].PhysicalMnd = set_combine(sets.midcast['Blue Magic'].Physical, {})
 
-    sets.midcast['Blue Magic'].PhysicalChr = set_combine(sets.midcast['Blue Magic'].Physical, {
-		left_ear="Regal Earring",
-		--right_ear="Enchntr. Earring +1"
-		right_ring="Metamor. Ring +1",
-		})
-
-    sets.midcast['Blue Magic'].Magical = {
-        ammo="Sroda Tathlum", --negative 10 macc but I'm defining the important sets separately
-		head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
-        neck="Sibyl Scarf", --over bae because inv/int
-        left_ear="Friomisi Earring",
-        right_ear="Regal Earring",
-		left_ring="Metamor. Ring +1",
-        right_ring={name="Stikini Ring +1", bag="wardrobe2"},
-        back=gear.AmbuCape.MAcc,
-        waist="Orpheus's Sash", --haha yessss
-        }
-
-    sets.midcast['Blue Magic'].Magical.Resistant = set_combine(sets.midcast['Blue Magic'].Magical, {
-        --head="Assim. Keffiyeh +3",
-        --hands="Jhakri Cuffs +2",
-        --legs="Luhlaza Shalwar +3",
-        --neck="Mirage Stole +2",
-        --left_ear="Digni. Earring",
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"},
-        --waist="Acuity Belt +1",
-        })
+    sets.midcast['Blue Magic'].PhysicalChr = set_combine(sets.midcast['Blue Magic'].Physical, {})
+    
+    --this is macc
+    sets.midcast['Blue Magic'].Magical.Resistant = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
     sets.midcast['Blue Magic'].MagicalDark = set_combine(sets.midcast['Blue Magic'].Magical, {
         head="Pixie Hairpin +1",
-        right_ring="Archon Ring",
+        --right_ring="Archon Ring",
         })
 
-    sets.midcast['Blue Magic'].MagicalLight = set_combine(sets.midcast['Blue Magic'].Magical, {
-        --right_ring="Weather. Ring +1"
-        })
+    --rip weatherspoon ring, it never scored
+    sets.midcast['Blue Magic'].MagicalLight = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].MagicalMnd = set_combine(sets.midcast['Blue Magic'].Magical, {
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"},
-        right_ring={name="Stikini Ring +1", bag="wardrobe2"},
-        back="Aurist's Cape +1",
-        })
+    sets.midcast['Blue Magic'].MagicalMnd = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].MagicalDex = set_combine(sets.midcast['Blue Magic'].Magical, {
-        --ammo="Aurgelmir Orb +1",
-        --right_ear="Mache Earring +1", --sold this.
-        right_ring="Ilabrat Ring",
-        })
+    sets.midcast['Blue Magic'].MagicalDex = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].MagicalVit = set_combine(sets.midcast['Blue Magic'].Magical, {
-        --ammo="Aurgelmir Orb +1",
-        })
+    sets.midcast['Blue Magic'].MagicalVit = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].MagicalChr = set_combine(sets.midcast['Blue Magic'].Magical, {
-        --ammo="Voluspa Tathlum",
-        left_ear="Regal Earring",
-        --right_ear="Enchntr. Earring +1"
-        })
+    sets.midcast['Blue Magic'].MagicalChr = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].MagicAccuracy = {
-        ammo="Coiste Bodhar", --get sroda tathlum unequipped just in case
-        head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
-        neck="Incanter's Torque", --no stole lol
-		waist="Luminary Sash", --10
-        right_ear="Hashishin Earring", --10 skill is 10 acc (again, mog safe)
-        --left_ear="Digni. Earring",
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --11 + 8 blue magic skill beats 13 on weatherspoon
-        right_ring={name="Stikini Ring +1", bag="wardrobe2"},--11 + 8 blue magic skill
-        back=gear.AmbuCape.MAcc,
-        }
+    sets.midcast['Blue Magic'].MagicAccuracy = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].Breath = set_combine(sets.midcast['Blue Magic'].Magical, {
-		--head="Luh. Keffiyeh +3"
-		})
+    sets.midcast['Blue Magic'].Breath = set_combine(sets.midcast['Blue Magic'].Magical, {})
 
-    sets.midcast['Blue Magic'].StunPhysical = set_combine(sets.midcast['Blue Magic'].MagicAccuracy, {
-        --ammo="Voluspa Tathlum",
-        head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
-        --neck="Mirage Stole +2",
-        --right_ear="Mache Earring +1",
-        --waist="Eschan Stone",
-        back="Aurist's Cape +1",
-        })
+    sets.midcast['Blue Magic'].StunPhysical = set_combine(sets.midcast['Blue Magic'].MagicAccuracy, {})
 
     sets.midcast['Blue Magic'].StunMagical = sets.midcast['Blue Magic'].MagicAccuracy
 
-    sets.midcast['Blue Magic'].Healing = {
-        head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
-        neck="Null Loop", --50 max hp
-		waist="Luminary Sash",
-        left_ear="Eabani Earring", --max hp
-        right_ear="Regal Earring",
-        left_ring="Ilabrat Ring", --60 max hp. not even a joke. sick of losing all my HP to meta +1 ring
-		right_ring={name="Stikini Ring +1", bag="wardrobe2"},
-        back=gear.AmbuCape.MAcc, --DT
-        }
+    sets.midcast['Blue Magic'].Healing = set_combine(sets.midcast['Blue Magic'].MagicalMnd, {})
+        
+    sets.midcast['Blue Magic'].HealingSelf = set_combine(sets.midcast['Blue Magic'].Healing, {})
 
-    sets.midcast['Blue Magic'].HealingSelf = set_combine(sets.midcast['Blue Magic'].Healing, {
-		--hands="Buremte Gloves", --13
-        --legs="Gyve Trousers", -- 10
-        --neck="Phalaina Locket", -- 4(4)
-        --right_ring="Asklepian Ring", -- (3)
-        --back="Solemnity Cape", --7
-        --waist="Gishdubar Sash", -- (10)
-        })
-
-    sets.midcast['Blue Magic']['White Wind'] = set_combine(sets.midcast['Blue Magic'].Healing, {
-        --head=gear.Adhemar_D_head,
-        --neck="Sanctity Necklace", --must be for hp
-        --right_ear="Etiolation Earring",
-        --right_ring="Eihwaz Ring",
-        --back="Moonlight Cape",
-        --waist="Plat. Mog. Belt", --10% HP, inventory
-        })
+    sets.midcast['Blue Magic']['White Wind'] = set_combine(sets.midcast['Blue Magic'].Healing, {})
 
     sets.midcast['Blue Magic'].Buff = sets.midcast['Blue Magic']
     sets.midcast['Blue Magic'].SkillBasedBuff = sets.midcast['Blue Magic']
 
 	sets.midcast['Blue Magic'].Refresh = set_combine(sets.midcast['Blue Magic'], {
-		head="Amalric Coif +1", --2 potency
-		--waist="Gishdubar Sash",
-		--back="Grapevine Cape",
+		--head="Amalric Coif +1", --2 potency
 		})
 
-	--I'm using this job for Cruel Joke. So let's make sure it's hardcoded. macc, and nothing but macc
-    sets.midcast['Blue Magic']['Cruel Joke'] = set_combine(sets.midcast['Blue Magic'], {
-		head=gear.EmpyHead,
-		body=gear.EmpyBody,
-		hands=gear.EmpyHands,
-		legs=gear.EmpyLegs,
-		feet=gear.EmpyFeet,
-        waist="Luminary Sash", --10 macc
-		neck="Incanter's Torque", --10 blue skill = 10 macc, no stole
-		right_ear="Hashishin Earring", --10 skill = 10 macc (mog safe)
-		left_ear="Eabani Earring", --Digni. Earring from Strophadia i135 has actual macc, regal doesn't without an AF piece on
-		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --11 + 8 blue magic skill
-		right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --11 + 8 blue magic skill
-		back=gear.AmbuCape.MAcc, --20
-		})
-
-    --20241113 OKAY FARMING TESTING
-    sets.midcast['Blue Magic']['Subduction'] = set_combine(sets.midcast['Blue Magic'].Magical, sets.TreasureHunter)
+	--might ever actually use this job for Cruel Joke. macc and nothing but macc except I don't actually care about this job at all right now
+    sets.midcast['Blue Magic']['Cruel Joke'] = set_combine(sets.midcast['Blue Magic'].Magical, {})
+		
+    --20241113 OKAY FARMING TESTING YEAH OKAY THIS IS FINE I DIDN'T NOTICE MY LACK OF DAMAGE
+    --UNLESS I WANT TO KEEP MAX MP SIGH
+    --sets.midcast['Blue Magic']['Subduction'] = set_combine(sets.midcast['Blue Magic'].Magical, sets.TreasureHunter)
 	
-	--1 shadow per 50 skill, so 500/550/600 breakpoints. this is 507 (10 shadows) and would not hit 550 with every other item I know of
+	--1 shadow per 50 skill, so 500/550/600 breakpoints. this is 507 (10 shadows)
     sets.midcast['Blue Magic']['Occultation'] = set_combine(sets.midcast['Blue Magic'], {
-        --hands="Hashishin Bazubands +2",
-        --left_ear="Njordr Earring",
-        right_ear="Hashishin Earring", --10 (yep, still mog safe)
-		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8
+        --hands=gear.EmpyHands,
+        --left_ear="Njordr Earring", --what even is this
+        --right_ear="Hashishin Earring", --10 (yep, still mog safe)
+		--left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8 --sold this
 		right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8
     	--back="Cornflower Cape", --15
         })
 
     sets.midcast['Blue Magic']['Carcharian Verve'] = set_combine(sets.midcast['Blue Magic'].Buff, {
-        head="Amalric Coif +1", --it's aquaveil
-        hands="Regal Cuffs", --still aquaveil
-        --waist="Emphatikos Rope",
+        --head="Amalric Coif +1", --it's aquaveil
+        --hands="Regal Cuffs", --still aquaveil
         })
 
-    sets.midcast['Enhancing Magic'] = {
-        --ammo="Pemphredo Tathlum",
-        head=gear.TelchineHead, --10 duration
-        body=gear.TelchineBody, --10 duration
-        hands="Hashishin Bazubands +2", --9 dt
-        legs=gear.TelchineLegs, --10 duration over "Carmine Cuisses +1", 18 skill
-        feet="Malignance Boots",
-        neck="Incanter's Torque", --10 skill
-        left_ear="Mimir Earring", --10 skill
-        right_ear="Andoaa Earring", --5 skill
-		left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8
-		right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8
-        waist="Olympus Sash", --5 skill
-		--back="Fi Follet Cape +1",
-        }
+    sets.midcast['Enhancing Magic'] = set_combine(sets.midcast['Blue Magic'].Buff, {})
 
-    sets.midcast.EnhancingDuration = set_combine(sets.midcast['Enhancing Magic'], {
-        head=gear.TelchineHead,
-        body=gear.TelchineBody,
-        legs=gear.TelchineLegs,
-        })
+    sets.midcast.EnhancingDuration = set_combine(sets.midcast['Enhancing Magic'], {})
 
     sets.midcast.Refresh = set_combine(sets.midcast.EnhancingDuration, {
-		head="Amalric Coif +1",
-		--waist="Gishdubar Sash",
-		--back="Grapevine Cape"
+		--head="Amalric Coif +1",
 		})
 	
     sets.midcast.Stoneskin = set_combine(sets.midcast.EnhancingDuration, {})
 
 	--I do not have any Phalanx Received gear, nor do I care about not having any etc
-    sets.midcast.Phalanx = set_combine(sets.midcast.EnhancingDuration, {
-        --body=gear.Taeon_Phalanx_body, --3(10)
-        --hands=gear.Taeon_Phalanx_hands, --3(10)
-        --legs=gear.Taeon_Phalanx_legs, --3(10)
-        --feet=gear.Taeon_Phalanx_feet, --3(10)
-        })
+    sets.midcast.Phalanx = set_combine(sets.midcast.EnhancingDuration, {})
 
 	--aquaveil is aquaveil
     sets.midcast.Aquaveil = set_combine(sets.midcast['Blue Magic']['Carcharian Verve'], {})
@@ -671,12 +501,7 @@ function init_gear_sets()
     sets.midcast.Shell = sets.midcast.Protect
     sets.midcast.Shellra = sets.midcast.Protect
 
-    sets.midcast['Enfeebling Magic'] = set_combine(sets.midcast['Blue Magic'].MagicAccuracy, {
-        --head=empty;
-        --body="Cohort Cloak +1",
-		hands="Regal Cuffs", --20 duration, cause if you got it, flaunt it
-        --right_ear="Vor Earring",
-        })
+    sets.midcast['Enfeebling Magic'] = set_combine(sets.midcast['Blue Magic'].MagicAccuracy, {})
 
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 
@@ -684,51 +509,28 @@ function init_gear_sets()
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-	--maxed DT even pre-shell (number is actually 56 not 53 was too lazy to rewrite)
-    --also 1 refresh from null masque + 1 conditional from sibyl scarf, either of which will make einherjar botting functional on its own
-    --also *really* high max HP, like really high. might wanna work on that somehow. already no null loop so idk, but like, I go to 79% after any spell, which is too close to blood aggro for my tastes
+	--want null masque for one more idle refresh, watch max hp
     sets.idle = {
-        ammo = "Staunch Tathlum +1", --3 dt whatever
-		head="Null Masque", --10 dt (+3 over numbers below, can move Alabaster out if I want or something) (plus another free refresh)
-		body="Nyame Mail", --9 dt (16)
-		hands="Nyame Gauntlets", --7 dt (23)
-		legs="Nyame Flanchard", --8 dt (31)
-		feet="Nyame Sollerets", --7 dt (38)
-		neck="Sibyl Scarf", --1 refresh when Windurst native (if I change nation, put a Stikini on instead and Loricate Torque here to get to 49 dt?)
+        ammo = "Staunch Tathlum +1", --3 dt (3)
+		head="Malignance Chapeau", --7 dt (10) until "Null Masque", --10 dt (+3 over numbers below) (plus another free refresh)
+		body="Malignance Tabard", --9 dt (19) (more stp lol)
+		hands="Nyame Gauntlets", --7 dt (26)
+		legs="Nyame Flanchard", --8 dt (27)
+		feet="Nyame Sollerets", --7 dt (34)
+		neck="Sibyl Scarf", --1 refresh --"Warder's Charm +1", --magic null
 		waist="Carrier's Sash", --elemental resistance
-        left_ear="Alabaster Earring", --5 dt (43)
+        left_ear="Alabaster Earring", --5 dt (39)
         right_ear="Eabani Earring", --15 evasion lol
 		left_ring="Shneddick Ring +1", --movespeed lol
-		right_ring="Murky Ring", --10 dt (53) (could for sure put a stikini here if more refresh is needed)
+		right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --1 refresh --"Murky Ring" if dt concerns etc etc
 		back="Null Shawl", --meva/eva
 	    }
 
-    --not currently used, but I see why I'd want to be doing this, theoretically, for segment farming solo
-    --5/5 of nyame and malig pieces have same eva/meva/mdb. haven't looked at new limbus stuff or empy+3 because effort
-    sets.idle.OmenEvasion = {
-        --ammo="Amar Cluster", --currently not in inventory, 10 eva (could use staunch tathlum for 3 dt if it frees up a main slot elsewhere/I ever buy one)
-		head="Null Masque", --10 dt (10) and more eva than nyame, wild
-		body="Nyame Mail", --9 dt (19)
-		hands="Nyame Gauntlets", --7 dt (26)
-		legs="Nyame Flanchard", --8 dt (34)
-		feet="Nyame Sollerets", --7 dt (41)
-		neck="Null Loop", --5 dt (46) 
-		waist="Carrier's Sash", --elemental res, still almost caps dt without ring barely, this is -meva relative to plat mog belt but I don't mind
-        left_ear="Alabaster Earring", --5 dt (51) until "Infused Earring" --for more meva
-        right_ear="Eabani Earring", --15 evasion
-		left_ring="Shneddick Ring +1", --movespeed
-		right_ring="Murky Ring", --10 dt (over cap without this, can use something else here)
-		back="Null Shawl", --lots and lots of eva
-	    }
-
     ------------------------------------------------------------------------------------------------
-    ---------------------------------------- Engaged Sets ------------------------------------------
+    ---------------------------------------- Engaged Set ------------------------------------------=
     ------------------------------------------------------------------------------------------------
 
-    -- Engaged sets
-
-	--I did not optimize this at all, no DW math, no nothing
-    --41 dt, this is fine because I only use BLU on fake content anyway
+    --46 dt, no optimization at all
     sets.engaged = {
         ammo="Coiste Bodhar",
         head="Malignance Chapeau", --6 dt
@@ -736,50 +538,42 @@ function init_gear_sets()
         hands="Malignance Gloves", --5 dt
         legs="Malignance Tights", --7 dt
         feet="Malignance Boots", --4 dt
-        neck="Combatant's Torque", --wardrobe 3 forever because rdm
-		waist="Reiki Yotai", --dw straight bussin yes cap
-        left_ear="Alabaster Earring", --dt
-        right_ear="Eabani Earring", --cap dw I assume this is right
-        left_ring="Epona's Ring", --Petrov is out of my inventory now
-        right_ring="Murky Ring", --10 dt
+        neck="Null Loop", --"Combatant's Torque",  --5 dt
+		waist="Reiki Yotai", --DW
+        left_ear="Alabaster Earring", --5 dt
+        right_ear="Eabani Earring", --DW
+        left_ring="Murky Ring", --10 dt
+        right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --"Epona's Ring", --I like refresh tbh
         back="Null Shawl", --inventory space over ambu capes
         }
+
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Special Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    sets.magic_burst = set_combine(sets.midcast['Blue Magic'].Magical, {
-        --legs="Assim. Shalwar +3", --10
-        --feet="Hashishin Basmak +2", --10
-        --neck="Warder's Charm +1", --10
-        --left_ear="Static Earring",--5
-        --left_ring="Mujin Band", --(5)
-        --right_ring="Locus Ring", --5
-        --back="Seshaw Cape", --5
-        })
+    sets.magic_burst = set_combine(sets.midcast['Blue Magic'].Magical,{})
 
-    --sets.Kiting = {legs="Carmine Cuisses +1"}
-    --sets.Learning = {hands="Assim. Bazu. +1"}
-    --sets.latent_refresh = {waist="Fucho-no-obi"}
+    --realistically, this is sets.cursna, but whatever.
+    sets.buff.Doom = {} --"Nicander's Necklace","Eshmun's Ring","Eshmun's Ring","Gishdubar Sash"
 
-	--realistically, this is sets.cursna, but whatever.
-    sets.buff.Doom = {
-        --neck="Nicander's Necklace", --20
-        --left_ring="Eshmun's Ring", --20
-        --right_ring="Eshmun's Ring",--20
-        --waist="Gishdubar Sash", --10
-        }
+    --for the healing RoEs and also I guess for Omen objectives in the faaaar future. needs like 100 more HP to be correct
+    sets.maxhpset = {
+        main="Bunzi's Rod", --30 cure potency to get white wind from 700 to > 750 for RoE
+        ammo="Staunch Tathlum +1", --0, don't have anything
+        head="Nyame Helm", --91
+        body="Nyame Mail", --136
+        hands="Nyame Gauntlets", --91
+        legs="Nyame Flanchard", --114
+        feet="Nyame Sollerets", --68
+        neck="Null Loop", --50
+		waist="Carrier's Sash", --20
+        left_ear="Alabaster Earring", --100
+        right_ear="Eabani Earring", --45
+        left_ring="Ilabrat Ring", --60
+        right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --0, didn't have another ring, refresh
+        back="Null Shawl", --0, don't have anything
+    }
 
-	--removed: this should not ALWAYS be the case, just when tagging
-    --sets.midcast.Dia = sets.TreasureHunter
-    --sets.midcast.Diaga = sets.TreasureHunter
-    --sets.midcast.Bio = sets.TreasureHunter
-    --sets.Reive = {neck="Ygnas's Resolve +1"}
-
-    --sets.Almace = {main="Almace", sub="Sequence"}
-    --sets.Naegling = {main="Naegling", sub="Thibron"}
-    --sets.Maxentius = {main="Maxentius", sub="Thibron"}
-    --sets.Nuking = {main="Naegling", sub="Bunzi's Rod"} --lol, lazy
 
 end
 
@@ -789,6 +583,7 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 function job_post_precast(spell, action, spellMap, eventArgs)
+
     if spell.type == 'WeaponSkill' then
         if elemental_ws:contains(spell.name) then
             -- Matching double weather (w/o day conflict).
@@ -831,6 +626,14 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
         --end
     end
 end
+
+
+
+
+
+
+
+
 
 -------------------------------------------------------------------------------------------------------------------
 -- Job-specific hooks for non-casting events.

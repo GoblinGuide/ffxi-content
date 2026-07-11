@@ -1,4 +1,5 @@
---todo: make sure one of the paeons has a specific set to have daurdabla + 0 other duration so that I can overwrite it as the dummy song
+--todo: make sure one of the paeons has a specific set to have daurdabla and is labelled as the dummy song (there's gotta be a better way than this?)
+--todo: destroy this
 
 -- Original: Motenten / Modified: Arislan / Gutted: me :)
 
@@ -113,43 +114,44 @@ function init_gear_sets()
     gear.Linos.TP = {range={ name="Linos", augments={'Accuracy+20','"Store TP"+4','Quadruple Attack +3',}},} --could be 15 acc+att, but that roll is too rare for me
     gear.Linos.WS = {range={ name="Linos", augments={'Attack+20','Weapon skill damage +3%','STR+6 DEX+6',}},} --never gonna make two distinct ws ones, so 6/6 rather than 8/0 on these two stats. see acc+att note above
     
+    --when on new character, check my notes about damage taken, some of these are wrong
     gear.AmbuCape = {}
     gear.AmbuCape.Savage = {back={ name="Intarabus's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%','Damage taken-5%',}},}
-    gear.AmbuCape.Rudras = gear.AmbuCape.Savage --need to make same stats except dex (can reuse for mordant rime, or mordant rime can use chr which is better (70/30 ws mods) but -1 inv slot)
+    gear.AmbuCape.Rudras = gear.AmbuCape.Savage --need to make another with same stats except dex (reuse this one for Mordant Rime too, it's good enough)
     gear.AmbuCape.TP = {back={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dual Wield"+10','Damage taken-5%',}},}
     gear.AmbuCape.MAcc = {back={ name="Intarabus's Cape", augments={'CHR+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Fast Cast"+10','Damage taken-5%',}},}
 
-    --leftover rdm pieces that cost me nothing but inventory... but I still need inventory slots so I might not keep all these
-    gear.TelchineHead = { name="Telchine Cap", augments={'Enh. Mag. eff. dur. +10',}}
-	gear.TelchineBody = { name="Telchine Chas.", augments={'Enh. Mag. eff. dur. +10',}}
-	gear.TelchineLegs = { name="Telchine Braconi", augments={'Enh. Mag. eff. dur. +10',}}
+    --leftover rdm pieces that cost me nothing but inventory... but I still need inventory slots so I might not keep all these, at least not in wardrobe 2 (they're in w3 for now)
+    --gear.TelchineHead = { name="Telchine Cap", augments={'Enh. Mag. eff. dur. +10',}}
+	--gear.TelchineBody = { name="Telchine Chas.", augments={'Enh. Mag. eff. dur. +10',}}
+	--gear.TelchineLegs = { name="Telchine Braconi", augments={'Enh. Mag. eff. dur. +10',}}
 
-    gear.AFHead = {name="Brioso Roundlet +3"} --macc (+15 per piece of set / regal ear in addition to what's on here natively) (need +4 for lullaby)
-    gear.AFBody = {name="Brioso Justaucorps +3"} --macc (can skip +4 for lullaby specifically here to save units, but eventually I'll care so might as well)
-    gear.AFHands = {name="Brioso Cuffs +3"} --lullaby only, really, but we still care
-    gear.AFLegs = {name="Brioso Cannions +3"} --UNUSED
-    gear.AFFeet = {name="Brioso Slippers +4"} --song duration, also macc
-    gear.RelicHead = {name="Bard's Roundlet"} --UNUSED, raw stat piece without wsd + useless augment
-    gear.RelicBody = {name="Bihu Justaucorps +4"} --ws piece at +4, troubadour augment
-    gear.RelicHands = {name="Bard's Cuffs"} --UNUSED, useless stats + useless augment
-    gear.RelicLegs = {name="Bihu Cannions +3"} --soul voice duration augment (didn't need to +3 this but I guess I'm just that swag huh)
-    gear.RelicFeet = {name="Bihu Slippers +3"} --nightingale duration, string skill (need +4 for lullaby)
+    gear.AFHead = {name="Brioso Roundlet +4"} --macc, string skill for lullaby (set bonus on these is +15 per piece of set / regal ear up to 5)
+    gear.AFBody = {name="Brioso Justaucorps +3"} --macc (can skip +4 for lullaby string skill here to save units, but macc is great, might as well)
+    gear.AFHands = {name="Brioso Cuffs +3"} --macc / +2 lullaby
+    gear.AFLegs = {name="Brioso Cannions +3"} --UNUSED (leg slot has song duration, total of -13 macc to use regal ear instead of this+macc ear)
+    gear.AFFeet = {name="Brioso Slippers +4"} --song duration! also best in slot macc. they're really nice
+
+    gear.RelicHead = {name="Bard's Roundlet"} --UNUSED
+    gear.RelicBody = {name="Bihu Justaucorps"} --troubadour duration, wsd (to +4)
+    gear.RelicHands = {name="Bard's Cuffs"} --UNUSED
+    gear.RelicLegs = {name="Bihu Cannions"} --soul voice duration (to +1)
+    gear.RelicFeet = {name="Bihu Slippers"} --nightingale duration, string skill for lullaby (to +4)
+    
     gear.EmpyHead = {name="Fili Calot +2"} --madrigal
     gear.EmpyBody = {name="Fili Hongreline +2"} --minuet, 14 duration
     gear.EmpyHands = {name="Fili Manchettes +2"} --march, 11 dt
-    gear.EmpyLegs = {name="Fili Rhingrave +1"} --UNUSED FOR NOW. ballad, 13 dt, 1 mp/tick from ballad not worth inventory slot / loss of duration from ambu pants, do I want this at all? it beats nyame on dt / meva? 
-    gear.EmpyFeet = {name="Fili Cothurnes +1"} --fast cast 10 at +2 -> 13 at +3. generates more inventory slots than it consumes.
+    gear.EmpyLegs = {name="Fili Rhingrave +1"} --13 dt and also more meva than nyame, idle pants
+    gear.EmpyFeet = {name="Fili Cothurnes +2"} --fast cast 10 -> 13 at +3. generates more inventory slots than it consumes.
 
     ------------------------------------------------------------------------------------------------
     ---------------------------------------- Precast Sets ------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    --honestly, I don't expect to do ANY solo content on bard, but I'm still going to define this just in case I end up using it for some weird reason.
-    --may be optimal to change Volte pieces at some point, or use Hoxne Ring with HP swaps, or whatever. this is fine for now.
-    --TH 2+1+1, all items work on all jobs and are i119
+    --TH 3 for now until I get the body
 	sets.TreasureHunter = {
-		body="Volte Jupon", --2
-		hands="Volte Bracers", --1
+		--body="Volte Jupon", --2
+        left_ring="Hoxne Ring", --1
         waist="Chaac Belt", --1
 		}
 
@@ -292,7 +294,7 @@ function init_gear_sets()
         neck="Sibyl Scarf",
         waist="Orpheus's Sash",
         left_ear="Friomisi Earring",
-        --back="Argocham. Mantle", --what even is this? if we have a mab cape, put it here, otherwise don't bother
+        --back="Argocham. Mantle", --if have a mab cape, put it here, otherwise don't bother with whatever this is
         })
 
 
@@ -319,26 +321,27 @@ function init_gear_sets()
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 
     -- Gear to enhance certain classes of songs.
-    --likely I won't have to ever change any of this unless they drop some really hot new items
-    --sets.midcast.Ballad = {legs=gear.EmpyLegs} --this makes you lose duration from ambu pants so it's a bad idea because that messes with song overwriting, apparently
     sets.midcast.Carol = {hands="Mousai Gages +1"}
-    --sets.midcast.Etude = {head="Mousai Turban +1"} --not going with -1 inventory for +4 stat
     sets.midcast.HonorMarch = {range="Marsyas", hands=gear.EmpyHands}
     sets.midcast.Lullaby = {body=gear.EmpyBody, hands=gear.AFHands}
     sets.midcast.Madrigal = {head=gear.EmpyHead, feet=gear.EmpyFeet}
-    --sets.midcast.Mambo = {feet="Mou. Crackows +1"} --lol evasion song, inventory
     sets.midcast.March = {hands=gear.EmpyHands}
-    sets.midcast.Minne = {legs="Mou. Seraweels +1"}
     sets.midcast.Minuet = {body=gear.EmpyBody}
     sets.midcast.Paeon = {head=gear.AFHead}
     sets.midcast.Prelude = {feet=gear.EmpyFeet}
     sets.midcast.Threnody = {body="Mou. Manteel +1"} --20 resist and 10 meva extra taken away from target
-    sets.midcast['Adventurer\'s Dirge'] = {range="Marsyas"} --for some reason there were relic hands in this set and I don't know why, I think it was some kind of placeholder thing to avoid buffing duration?
+    sets.midcast['Adventurer\'s Dirge'] = {range="Marsyas"} --for some reason there were also relic hands in this set - why, to avoid buffing duration?
     sets.midcast['Foe Sirvente'] = {head=gear.RelicHead}
-    --sets.midcast['Magic Finale'] = {legs=gear.EmpyLegs} --there is no reason for this that I can tell
     sets.midcast["Sentinel's Scherzo"] = {feet=gear.EmpyFeet}
-    sets.midcast["Chocobo Mazurka"] = {range="Marsyas"} --this is probably for range?
+    sets.midcast["Chocobo Mazurka"] = {range="Marsyas"} --this is probably for range? horns are loud strings are soft, right?
 
+    --ones that I don't care about
+    --sets.midcast.Ballad = {legs=gear.EmpyLegs} --this makes you lose duration from ambu pants so it's a bad idea because that messes with song overwriting, apparently
+    --sets.midcast.Etude = {head="Mousai Turban +1"} --not going with -1 inventory for +4 stat
+    --sets.midcast.Mambo = {feet="Mou. Crackows +1"} --lol evasion song, inventory
+    --sets.midcast.Minne = {legs="Mou. Seraweels +1"} --inventory
+    --sets.midcast['Magic Finale'] = {legs=gear.EmpyLegs} --there is no reason for this that I can tell - to have dt because no other stat matters?
+    
     -- For song buffs (duration and AF3 set bonus)
     sets.midcast.SongEnhancing = {
         main="Carnwenhan",
@@ -353,8 +356,8 @@ function init_gear_sets()
         right_ear="Fili Earring +1", --8 dt, 15 singing skill
         left_ring="Moonlight Ring", --only 5 dt
         right_ring="Murky Ring", --10 dt
-        --waist="Plat. Mog. Belt", --blood aggro will drive me insane
-        back=gear.AmbuCape.MAcc, --think this is the one I want, will confirm someday
+        --waist="Plat. Mog. Belt", --blood aggro will drive me insane, figure out what actually goes here
+        back=gear.AmbuCape.MAcc, --good enough
         }
 
     -- For song defbuffs (duration primary, accuracy secondary)
@@ -377,32 +380,29 @@ function init_gear_sets()
         }
 
     -- For song defbuffs (accuracy primary, duration secondary)
-    sets.midcast.SongEnfeebleAcc = set_combine(sets.midcast.SongEnfeeble, {legs="Brioso Cannions +3"})
+    sets.midcast.SongEnfeebleAcc = set_combine(sets.midcast.SongEnfeeble, {}) --this had AF Legs, but it's only 13 more macc to swap that+regal ear and that isn't worth -1 inv
 
-    --For NOTHING BUT Horde Lullaby maxiumum AOE range.
-    --String skill breakpoints: 6, 7, 8 yalms at 486, 567, 648. (last one basically impossible with current gear, need bis + hoxne torque + ML46+, sacrifices Moonbow Neck, which is 30 macc + 9 seconds duration)
-    --425 base with merits, 1 skill per ML, so say ML20 for 445 means we need 122 to hit the 7 yalm breakpoint
-    --need the empy +3 hands (+5 skill vs +3) and 2/3 of af head/af body/relic feet +4 for +1 each over +3.
-    --alternatives: Kali has 10 string skill augment. still consumes an inventory slot but lets me use the Lullaby +2 Relic Hands at ML32, or 37 if I just swap Harfner's for it
-    --theoretical minimum to use the relic hands: Erato's Cape, *two* Kalis, ML18 (no skill on legs, every other slot bis)
+    --For NOTHING BUT Horde Lullaby maxiumum AOE range. String skill breakpoints: 6, 7, 8 yalms at 486, 567, 648. (last one requires ML46+Hoxne, no thanks)
+    --425 base with merits, 1 skill per ML. want 567, this set is 111 for 536 before MLs, need ML29 => go to 30 and call it good. (this is all +4 reforged AF/Relic in skill math)
     sets.midcast.SongStringSkill = {
-        --main="Kali", --10, but inventory
-        --sub="Kali", --10, but inventory
-        range="Daurdabla", --20 (20)
-        head=gear.AFHead, --14 at +4 (34)
-        body=gear.AFBody, --15 at +4 (49)
-        hands=gear.EmpyHands, --22 at +3 (71) --see all the above notes
-        feet=gear.RelicFeet, --16 at +4 (87)
-        waist="Harfner's Sash", --5 (92)
-        --back="Erato's Cape", --4, but inventory
-        left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8 (100)
-        right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8 (108)
-        left_ear="Gersemi Earring", --10 (118)
-        right_ear="Darkside Earring", --5 (123)
+        main="Kali", --10 (10) --alternatively to the below, can Carnwenhan here instead if I truly want to
+        --sub="Kali", --10, inventory
+        range="Daurdabla", --20 (30)
+        head=gear.AFHead, --14 (44)
+        body=gear.AFBody, --15 (59)
+        hands=gear.RelicHands, --lullaby +2
+        legs="Inyanga Shalwar +2", --duration, but can put macc here instead if needed?
+        feet=gear.RelicFeet, --16 (75)
+        waist="Harfner's Sash", --5 (80) --can ditch this at ML39
+        back=gear.AmbuCape.MAcc, --"Erato's Cape" 4 skill and never want to have to get that
+        left_ring={name="Stikini Ring +1", bag="wardrobe1"}, --8 (88)
+        right_ring={name="Stikini Ring +1", bag="wardrobe2"}, --8 (96)
+        left_ear="Gersemi Earring", --10 (106)
+        right_ear="Darkside Earring", --5 (111) --can ditch this at ML34
         }
 
     -- Placeholder song; minimize duration to make it easy to overwrite.
-    sets.midcast.SongPlaceholder = set_combine(sets.midcast.SongEnhancing, {range=info.ExtraSongInstrument})
+    sets.midcast.SongPlaceholder = set_combine(sets.midcast.SongEnhancing, {main="Tauret", range=info.ExtraSongInstrument}) --loses duration from Carnwenhan to be lower duration guaranteed
 
     -- Other general spells and classes.
     --this has no respect for inventory space
@@ -496,17 +496,16 @@ function init_gear_sets()
     ----------------------------------------- Idle Sets --------------------------------------------
     ------------------------------------------------------------------------------------------------
 
-    --dt capped, 18 magic absorb
-    --higher dt on empy head, legs, hands if I truly care, other options do exist as well - broadly, swap empy in when I get them for more meva
+    --dt capped
     sets.idle = {
-        range="Daurdabla", --should this be a horn?
-        head="Null Masque", --10 dt (also regen/regain) (10)
+        range="Daurdabla", --should this be a horn? think it doesn't matter at all
+        head="Null Masque", --10 dt (also regen/regain) (10) (1 dt more on empy +3 but I like regen and regain)
         body="Nyame Mail", --9 dt (19)
-        hands="Bunzi's Gloves", --8 dt (27)
-        legs="Nyame Flanchard", --8 dt (35) (could by empy piece?)
+        hands="Bunzi's Gloves", --8 dt (27) (3 dt more on empy +3, swap when I make it for more meva)
+        legs="Nyame Flanchard", --8 dt (35) (5 dt more on empy +3 but inventory)
         feet="Nyame Sollerets", --7 dt (42)
         neck="Warder's Charm +1", --elemental resistance/magic absorb
-        waist="Carrier's Sash", --elemental resistance, plat mog belt has meva but I hate the hp bump to the idle set
+        waist="Carrier's Sash", --elemental resistance, plat mog belt has meva
         left_ear="Alabaster Earring", -- 5 DT (47)
         right_ear="Fili Earring +1", --5 DT (52, capped)
         left_ring="Shneddick Ring +1", --movespeed
@@ -519,6 +518,7 @@ function init_gear_sets()
     ------------------------------------------------------------------------------------------------
 
     --42 dt. melee DT options are thin on the ground, and switching one Moonlight to Murky doesn't fix it on its own so I'm not gonna bother
+    --TODO: CHECK WHETHER THE MOONLIGHT RINGS SET OFF BLOOD AGGRO WHEN GOING IDLE -> ENGAGED OR ENGAGED -> WS -> ENGAGED (yes, I'm worried lol)
     sets.engaged = {
         range=gear.Linos.TP,
         head="Bunzi's Hat", --7 dt (7)
@@ -552,9 +552,9 @@ function init_gear_sets()
 
     sets.Obi = {waist="Hachirin-no-Obi"}
     
-    sets.Carnwenhan = {main="Carnwenhan", sub="Gleti's Knife"} --is this actually Gleti's? I have no idea
+    sets.Carnwenhan = {main="Carnwenhan", sub="Crepuscular Knife"} --is this actually Gleti's? I have no idea
     sets.Twashtar = {main="Twashtar", sub="Centovente"} --is this always Centovente?
-    sets.Tauret = {main="Tauret", sub="Gleti's Knife"} --so many questions
+    sets.Tauret = {main="Tauret", sub="Crepuscular Knife"} --also not sure
     sets.Naegling = {main="Naegling", sub="Centovente"} --this one I'm pretty sure on at least!
 
     sets.DefaultShield = {sub="Ammurapi Shield"}

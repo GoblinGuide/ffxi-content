@@ -96,11 +96,13 @@ function user_setup()
     gear.AFHands = {name="Atrophy Gloves +3"} --20 enhance duration normal
     gear.AFLegs = {name="Atrophy Tights +3"} --21 enhance skill, 12 cure pot
     gear.AFFeet = {name="Atrophy Boots +2"} --nope (reforged +4 has max macc for slot, but I cannot bring myself to care at this time since I'm off rdm)
+
     gear.RelicHead = {name="Vitiation Chapeau +3"} --26 enfeeble skill, 3 refresh, 15 macc augment if merited (it is)
     gear.RelicBody = {name="Vitiation Tabard +3"} --23 enhance skill, 15 enhance duration, 15 fc, +20 sec chainspell duration
     gear.RelicHands = {name="Vitiation Gloves +3"} --24 enhance skill, 30 gain-spell stat, 15 enh duration if merited (it isn't)
     gear.RelicLegs = {name="Vitiation Tights +3"} --enspell piece
     gear.RelicFeet = {name="Vitiation Boots +3"} --16 enfeeble skill, 10 enfeeble effect, 5 immunobreak chance if merited
+    
     gear.EmpyHead = {name="Lethargy Chappel +2"} --10 dt, composure set bonus
     gear.EmpyBody = {name="Lethargy Sayon +2"} --3 refresh, 13 dt, 16 enfeeble effect, composure set bonus
     gear.EmpyHands = {name="Lethargy Gantherots +2"} --24 enfeeble skill, saboteur +13% potency/duration, 10 dt, composure set bonus
@@ -203,7 +205,7 @@ function init_gear_sets()
 	}
 
 	--sanguine: magical, 50% mnd 30% str, but dstat is based on target's int like black magic for some reason? tp bonus blank because tp only affects damage -> HP gain conversion rate
-    --relative to savage blade set, this is -7 dt from nyame helm +5 from Null Loop = 51, still capped
+    --relative to savage blade set, this is -7 dt from nyame helm +5 from Alabaster Earring = 51, still capped
     sets.precast.WS['Sanguine Blade'] = {
 	ammo="Coiste Bodhar", --over "Sroda Tathlum" for inventory
 	head="Pixie Hairpin +1", --28% (stacks w/archon+sash)
@@ -211,10 +213,10 @@ function init_gear_sets()
     hands="Nyame Gauntlets", --dt
     legs="Nyame Flanchard", --dt
     feet="Nyame Sollerets", --dt
-    neck="Null Loop", --dt
+    neck="Sibyl Scarf", --yeah sure mab
 	waist="Orpheus's Sash", --15% (stacks w/pixie+archon)
-    left_ear="Malignance Earring",
-    right_ear="Regal Earring",
+    left_ear="Alabaster Earring", --dt
+    right_ear="Malignance Earring",
     left_ring="Archon Ring", --5% (stacks w/pixie+sash)
 	right_ring="Murky Ring", --10 dt
     back=gear.AmbuCape.Seraph, --10 wsd and mnd, even if it was not the intended main use
@@ -330,7 +332,7 @@ function init_gear_sets()
 	hands={name="Nyame Gauntlets",priority=70}, --HP, priority fake
 	legs=gear.AFLegs, --12 (42)
     feet={name="Nyame Sollerets",priority=68}, --68 HP
-    neck="Null Loop", --50 HP to try to drop less, why was I even losing so much max HP here anyway?
+    --neck="Null Loop", --50 HP to try to drop less, why was I even losing so much max HP here anyway?
     back="Ghostfyre Cape", --6 (48)
 	}
 
@@ -451,7 +453,7 @@ function init_gear_sets()
     head=gear.RelicHead, --26 skill, 15 skill merits augment, 37 macc
     body=gear.EmpyBody, --18 pot, 54 macc
     hands="Regal Cuffs", --20 duration (alternatives are 24 enf skill, +7 macc over this from empy hands +2, which are always on during saboteur)
-    legs=gear.EmpyLegs, --"Psycloth Lappas", better until +3, this is +2, I'm lazy
+    legs="Chironic Hose", --hardcoding +1 immunobreak on EVERYTHING over empy legs (same macc as empy legs, no set bonus, 13 enfeeble skill, this is actually better isn't it huh)
     feet=gear.RelicFeet, --10 pot, 16 skill, 43 macc
     neck="Dls. Torque +2", --10 pot, 30 macc, 15 mnd, 25 duration, this thing has it all
 	waist="Obstin. Sash", --5 mnd, 5 duration vs "Luminary Sash", --10 macc 10 mnd
@@ -673,7 +675,7 @@ function init_gear_sets()
     hands="Nyame Gauntlets", --91 HP
     legs="Nyame Flanchard", --114 HP
     feet="Nyame Sollerets", --68 HP
-	neck="Null Loop", --100 HP
+	--neck="Null Loop", --100 HP
 	--waist="Plat. Mog. Belt", --10% HP lol inventory
 	left_ear="Eabani Earring", --45 HP
 	right_ear="Malignance Earring", --4 FC
